@@ -1,8 +1,13 @@
 /.idea
+/.vs
 /obj
-/HellDivers2Input.csproj.user
+/*.csproj.user
 /bin/HellDivers2OneKeyStratagem.deps.json
 /bin/HellDivers2OneKeyStratagem.dll
 /bin/HellDivers2OneKeyStratagem.exe
 /bin/HellDivers2OneKeyStratagem.pdb
 /bin/HellDivers2OneKeyStratagem.runtimeconfig.json
+/bin/AutoHotkey/HellDivers2OneKeyStratagem.ahk
+/bin/AutoHotkey/HellDivers2OneKeyStratagem.exe
+/bin/AutoHotkey/Keys.ahk
+/bin/Settings.json

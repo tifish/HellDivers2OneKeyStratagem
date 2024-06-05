@@ -46,9 +46,11 @@ public partial class MainForm : Form
     {
         public string Name = "";
         public string Keys = "";
+        public CheckBox CheckBox = null!;
     }
 
     private readonly Dictionary<string, List<Stratagem>> _stratagemGroups = [];
+    private readonly Dictionary<string, Stratagem> _stratagems = [];
     private const string StratagemsFile = "Stratagems.tab";
 
     private async Task LoadStratagems()
@@ -57,6 +59,7 @@ public partial class MainForm : Form
             return;
 
         _stratagemGroups.Clear();
+        _stratagems.Clear();
         List<Stratagem>? currentGroup = null;
 
         await foreach (var line in File.ReadLinesAsync(StratagemsFile))
@@ -67,7 +70,9 @@ public partial class MainForm : Form
                     throw new InvalidOperationException($"Invalid line: {line}");
                 if (currentGroup == null)
                     throw new InvalidOperationException($"No group found for stratagem {items[0]}");
-                currentGroup.Add(new Stratagem { Name = items[0], Keys = items[1] });
+                var stratagem = new Stratagem { Name = items[0], Keys = items[1] };
+                currentGroup.Add(stratagem);
+                _stratagems.Add(stratagem.Name, stratagem);
             }
             else
             {
@@ -108,22 +113,33 @@ public partial class MainForm : Form
 
         if (_settings.StratagemSets.Count > 0)
         {
-            var names = _settings.StratagemSets[0].Split(';');
-            var count = Math.Min(names.Length, 12);
-            for (var i = 0; i < count; i++)
-            {
-                var name = names[i];
-                if (string.IsNullOrWhiteSpace(name))
-                    continue;
+            SetFKeyStratagemString(_settings.StratagemSets[0]);
 
-                var stratagem = _stratagemGroups.Values.SelectMany(g => g).FirstOrDefault(s => s.Name == name);
-                if (stratagem == null)
-                    continue;
+            stratagemSetsComboBox.Items.Clear();
+            foreach (var stratagemSet in _settings.StratagemSets.Skip(1))
+                stratagemSetsComboBox.Items.Add(stratagemSet);
+        }
+    }
 
-                _fKeyStratagems[i] = stratagem;
-                _fKeyLabels[i].Text = stratagem.Name;
-                _stratagemCheckBoxes.First(cb => cb.Text == name).Checked = true;
-            }
+    private string GetFKeyStratagemString()
+    {
+        return string.Join(';', _fKeyStratagems.Select(s => s?.Name ?? ""));
+    }
+
+    private void SetFKeyStratagemString(string value)
+    {
+        var names = value.Split(';');
+        var count = Math.Min(names.Length, 12);
+        for (var i = 0; i < count; i++)
+        {
+            var name = names[i];
+            if (string.IsNullOrWhiteSpace(name))
+                continue;
+
+            if (!_stratagems.TryGetValue(name, out var stratagem))
+                continue;
+
+            SetFKeyStratagem(i, stratagem);
         }
     }
 
@@ -135,7 +151,9 @@ public partial class MainForm : Form
         _settings.OperateKeys = wasdRadioButton.Checked ? "WASD" : "Arrow";
 
         _settings.StratagemSets.Clear();
-        _settings.StratagemSets.Add(string.Join(';', _fKeyStratagems.Select(s => s?.Name ?? "")));
+        _settings.StratagemSets.Add(GetFKeyStratagemString());
+        foreach (var item in stratagemSetsComboBox.Items)
+            _settings.StratagemSets.Add((string)item);
 
         await _settingsFile.Save(_settings);
     }
@@ -206,12 +224,23 @@ public partial class MainForm : Form
         _fKeyRoots.Last().BorderStyle = BorderStyle.FixedSingle;
     }
 
-    private readonly List<CheckBox> _stratagemCheckBoxes = [];
+    private void SetFKeyStratagem(int index, Stratagem stratagem)
+    {
+        var currentStratagem = _fKeyStratagems[index];
+        if (currentStratagem != null)
+            currentStratagem.CheckBox.Checked = false;
+
+        _fKeyStratagems[index] = stratagem;
+        stratagem.CheckBox.Checked = true;
+        _settingsChanged = true;
+
+        _fKeyLabels[index].Text = stratagem.Name;
+    }
+
 
     private void InitStratagemGroups()
     {
         stratagemGroupsFlowLayoutPanel.Controls.Clear();
-        _stratagemCheckBoxes.Clear();
 
         foreach (var group in _stratagemGroups)
         {
@@ -222,20 +251,14 @@ public partial class MainForm : Form
             foreach (var stratagem in group.Value)
             {
                 var stratagemCheckBox = new CheckBox { Text = stratagem.Name, AutoSize = true, Anchor = AnchorStyles.Left };
+                stratagem.CheckBox = stratagemCheckBox;
                 root.Controls.Add(stratagemCheckBox);
-                _stratagemCheckBoxes.Add(stratagemCheckBox);
 
                 stratagemCheckBox.Click += (_, _) =>
                 {
                     if (stratagemCheckBox.Checked)
                     {
-                        var selectedStratagem = _fKeyStratagems[SelectedFKeyIndex];
-                        var selectedFKeyLabel = _fKeyLabels[SelectedFKeyIndex];
-                        if (selectedStratagem != null)
-                            _stratagemCheckBoxes.First(cb => cb.Text == selectedStratagem.Name).Checked = false;
-                        _fKeyStratagems[SelectedFKeyIndex] = stratagem;
-                        _settingsChanged = true;
-                        selectedFKeyLabel.Text = stratagem.Name;
+                        SetFKeyStratagem(SelectedFKeyIndex, stratagem);
 
                         if (SelectedFKeyIndex > 0)
                             if (_fKeyLabels[SelectedFKeyIndex - 1].Text == NoStratagem)
@@ -363,7 +386,7 @@ public partial class MainForm : Form
         if (_ahkProcess != null)
         {
             runningLabel.Text = @"为了民主！";
-            startButton.Text = @"重启(&S)";
+            startButton.Text = @"重启(&W)";
             stopButton.Enabled = true;
         }
     }
@@ -417,12 +440,42 @@ public partial class MainForm : Form
         _ahkProcess = null;
 
         runningLabel.Text = @"已阵亡...";
-        startButton.Text = @"启动(&S)";
+        startButton.Text = @"启动(&W)";
         stopButton.Enabled = false;
     }
 
     private void stopButton_Click(object sender, EventArgs e)
     {
         KillAhkProcess();
+    }
+
+    private async void saveStratagemSetButton_Click(object sender, EventArgs e)
+    {
+        var fKeyStratagemString = GetFKeyStratagemString();
+        if (stratagemSetsComboBox.Items.Contains(fKeyStratagemString))
+            return;
+
+        stratagemSetsComboBox.Items.Add(fKeyStratagemString);
+        stratagemSetsComboBox.SelectedIndex = stratagemSetsComboBox.Items.Count - 1;
+        await SaveSettings();
+    }
+
+    private async void deleteStratagemSetButton_Click(object sender, EventArgs e)
+    {
+        if (stratagemSetsComboBox.SelectedIndex == -1)
+            return;
+
+        stratagemSetsComboBox.Items.RemoveAt(stratagemSetsComboBox.SelectedIndex);
+        await SaveSettings();
+    }
+
+    private void stratagemSetsComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        var selectedItem = (string?)stratagemSetsComboBox.SelectedItem;
+        if (selectedItem == null)
+            return;
+
+        SetFKeyStratagemString(selectedItem);
+        _settingsChanged = true;
     }
 }
