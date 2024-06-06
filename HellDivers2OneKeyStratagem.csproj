@@ -9,4 +9,9 @@
         <OutDir>bin</OutDir>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="EdgeTTS" Version="1.0.3" />
+      <PackageReference Include="NAudio" Version="2.2.1" />
+    </ItemGroup>
+
 </Project>

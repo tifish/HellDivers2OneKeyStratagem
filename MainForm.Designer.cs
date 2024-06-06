@@ -42,6 +42,19 @@
             stopButton = new Button();
             runningLabel = new Label();
             label4 = new Label();
+            flowLayoutPanel5 = new FlowLayoutPanel();
+            enableVoiceCheckBox = new CheckBox();
+            voiceTypeComboBox = new ComboBox();
+            tryVoiceButton = new Button();
+            flowLayoutPanel6 = new FlowLayoutPanel();
+            label7 = new Label();
+            voiceRateTextBox = new TextBox();
+            label8 = new Label();
+            voiceVolumeTextBox = new TextBox();
+            label9 = new Label();
+            voicePitchTextBox = new TextBox();
+            generateVoiceButton = new Button();
+            generateVoiceMessageLabel = new Label();
             flowLayoutPanel4 = new FlowLayoutPanel();
             stratagemSetsComboBox = new ComboBox();
             saveStratagemSetButton = new Button();
@@ -59,6 +72,8 @@
             buttonsFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             flowLayoutPanel3.SuspendLayout();
+            flowLayoutPanel5.SuspendLayout();
+            flowLayoutPanel6.SuspendLayout();
             flowLayoutPanel4.SuspendLayout();
             fKeysFlowLayoutPanel.SuspendLayout();
             fKeyFlowLayoutPanel.SuspendLayout();
@@ -72,6 +87,8 @@
             rootFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             rootFlowLayoutPanel.Controls.Add(buttonsFlowLayoutPanel);
             rootFlowLayoutPanel.Controls.Add(label4);
+            rootFlowLayoutPanel.Controls.Add(flowLayoutPanel5);
+            rootFlowLayoutPanel.Controls.Add(flowLayoutPanel6);
             rootFlowLayoutPanel.Controls.Add(flowLayoutPanel4);
             rootFlowLayoutPanel.Controls.Add(fKeysFlowLayoutPanel);
             rootFlowLayoutPanel.Controls.Add(stratagemGroupsFlowLayoutPanel);
@@ -79,7 +96,7 @@
             rootFlowLayoutPanel.Location = new Point(0, 0);
             rootFlowLayoutPanel.Margin = new Padding(10);
             rootFlowLayoutPanel.Name = "rootFlowLayoutPanel";
-            rootFlowLayoutPanel.Size = new Size(1011, 254);
+            rootFlowLayoutPanel.Size = new Size(1011, 336);
             rootFlowLayoutPanel.TabIndex = 0;
             // 
             // buttonsFlowLayoutPanel
@@ -238,6 +255,150 @@
             label4.TabIndex = 4;
             label4.Text = "强烈建议把呼叫战略的按键改为上下左右，可以在跑动中呼叫战略。";
             // 
+            // flowLayoutPanel5
+            // 
+            flowLayoutPanel5.Anchor = AnchorStyles.Left;
+            flowLayoutPanel5.AutoSize = true;
+            flowLayoutPanel5.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            flowLayoutPanel5.Controls.Add(enableVoiceCheckBox);
+            flowLayoutPanel5.Controls.Add(voiceTypeComboBox);
+            flowLayoutPanel5.Controls.Add(tryVoiceButton);
+            flowLayoutPanel5.Location = new Point(3, 70);
+            flowLayoutPanel5.Name = "flowLayoutPanel5";
+            flowLayoutPanel5.Size = new Size(492, 35);
+            flowLayoutPanel5.TabIndex = 6;
+            // 
+            // enableVoiceCheckBox
+            // 
+            enableVoiceCheckBox.Anchor = AnchorStyles.Left;
+            enableVoiceCheckBox.AutoSize = true;
+            enableVoiceCheckBox.Location = new Point(3, 6);
+            enableVoiceCheckBox.Name = "enableVoiceCheckBox";
+            enableVoiceCheckBox.Size = new Size(145, 23);
+            enableVoiceCheckBox.TabIndex = 6;
+            enableVoiceCheckBox.Text = "呼叫时播放战略名字";
+            enableVoiceCheckBox.UseVisualStyleBackColor = true;
+            enableVoiceCheckBox.Click += enableVoiceCheckBox_Click;
+            // 
+            // voiceTypeComboBox
+            // 
+            voiceTypeComboBox.Anchor = AnchorStyles.Left;
+            voiceTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            voiceTypeComboBox.FormattingEnabled = true;
+            voiceTypeComboBox.Location = new Point(154, 6);
+            voiceTypeComboBox.Name = "voiceTypeComboBox";
+            voiceTypeComboBox.Size = new Size(254, 27);
+            voiceTypeComboBox.TabIndex = 5;
+            voiceTypeComboBox.SelectionChangeCommitted += voiceTypeComboBox_SelectionChangeCommitted;
+            // 
+            // tryVoiceButton
+            // 
+            tryVoiceButton.Anchor = AnchorStyles.Left;
+            tryVoiceButton.AutoSize = true;
+            tryVoiceButton.Location = new Point(414, 3);
+            tryVoiceButton.Name = "tryVoiceButton";
+            tryVoiceButton.Size = new Size(75, 29);
+            tryVoiceButton.TabIndex = 8;
+            tryVoiceButton.Text = "试听";
+            tryVoiceButton.UseVisualStyleBackColor = true;
+            tryVoiceButton.Click += tryVoiceButton_Click;
+            // 
+            // flowLayoutPanel6
+            // 
+            flowLayoutPanel6.Anchor = AnchorStyles.Left;
+            flowLayoutPanel6.AutoSize = true;
+            flowLayoutPanel6.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            flowLayoutPanel6.Controls.Add(label7);
+            flowLayoutPanel6.Controls.Add(voiceRateTextBox);
+            flowLayoutPanel6.Controls.Add(label8);
+            flowLayoutPanel6.Controls.Add(voiceVolumeTextBox);
+            flowLayoutPanel6.Controls.Add(label9);
+            flowLayoutPanel6.Controls.Add(voicePitchTextBox);
+            flowLayoutPanel6.Controls.Add(generateVoiceButton);
+            flowLayoutPanel6.Controls.Add(generateVoiceMessageLabel);
+            flowLayoutPanel6.Location = new Point(3, 111);
+            flowLayoutPanel6.Name = "flowLayoutPanel6";
+            flowLayoutPanel6.Size = new Size(434, 35);
+            flowLayoutPanel6.TabIndex = 15;
+            // 
+            // label7
+            // 
+            label7.Anchor = AnchorStyles.Left;
+            label7.AutoSize = true;
+            label7.Location = new Point(3, 8);
+            label7.Name = "label7";
+            label7.Size = new Size(38, 19);
+            label7.TabIndex = 9;
+            label7.Text = "速率:";
+            // 
+            // voiceRateTextBox
+            // 
+            voiceRateTextBox.Anchor = AnchorStyles.Left;
+            voiceRateTextBox.Location = new Point(47, 5);
+            voiceRateTextBox.Name = "voiceRateTextBox";
+            voiceRateTextBox.Size = new Size(59, 25);
+            voiceRateTextBox.TabIndex = 12;
+            voiceRateTextBox.Text = "+0%";
+            // 
+            // label8
+            // 
+            label8.Anchor = AnchorStyles.Left;
+            label8.AutoSize = true;
+            label8.Location = new Point(112, 8);
+            label8.Name = "label8";
+            label8.Size = new Size(48, 19);
+            label8.TabIndex = 10;
+            label8.Text = "音量：";
+            // 
+            // voiceVolumeTextBox
+            // 
+            voiceVolumeTextBox.Anchor = AnchorStyles.Left;
+            voiceVolumeTextBox.Location = new Point(166, 5);
+            voiceVolumeTextBox.Name = "voiceVolumeTextBox";
+            voiceVolumeTextBox.Size = new Size(59, 25);
+            voiceVolumeTextBox.TabIndex = 13;
+            voiceVolumeTextBox.Text = "+0%";
+            // 
+            // label9
+            // 
+            label9.Anchor = AnchorStyles.Left;
+            label9.AutoSize = true;
+            label9.Location = new Point(231, 8);
+            label9.Name = "label9";
+            label9.Size = new Size(48, 19);
+            label9.TabIndex = 11;
+            label9.Text = "音调：";
+            // 
+            // voicePitchTextBox
+            // 
+            voicePitchTextBox.Anchor = AnchorStyles.Left;
+            voicePitchTextBox.Location = new Point(285, 5);
+            voicePitchTextBox.Name = "voicePitchTextBox";
+            voicePitchTextBox.Size = new Size(59, 25);
+            voicePitchTextBox.TabIndex = 14;
+            voicePitchTextBox.Text = "+0Hz";
+            // 
+            // generateVoiceButton
+            // 
+            generateVoiceButton.Anchor = AnchorStyles.Left;
+            generateVoiceButton.AutoSize = true;
+            generateVoiceButton.Location = new Point(350, 3);
+            generateVoiceButton.Name = "generateVoiceButton";
+            generateVoiceButton.Size = new Size(75, 29);
+            generateVoiceButton.TabIndex = 7;
+            generateVoiceButton.Text = "生成语音";
+            generateVoiceButton.UseVisualStyleBackColor = true;
+            generateVoiceButton.Click += generateVoiceButton_Click;
+            // 
+            // generateVoiceMessageLabel
+            // 
+            generateVoiceMessageLabel.Anchor = AnchorStyles.Left;
+            generateVoiceMessageLabel.AutoSize = true;
+            generateVoiceMessageLabel.Location = new Point(431, 8);
+            generateVoiceMessageLabel.Name = "generateVoiceMessageLabel";
+            generateVoiceMessageLabel.Size = new Size(0, 19);
+            generateVoiceMessageLabel.TabIndex = 8;
+            // 
             // flowLayoutPanel4
             // 
             flowLayoutPanel4.Anchor = AnchorStyles.Left;
@@ -246,7 +407,7 @@
             flowLayoutPanel4.Controls.Add(stratagemSetsComboBox);
             flowLayoutPanel4.Controls.Add(saveStratagemSetButton);
             flowLayoutPanel4.Controls.Add(deleteStratagemSetButton);
-            flowLayoutPanel4.Location = new Point(3, 70);
+            flowLayoutPanel4.Location = new Point(3, 152);
             flowLayoutPanel4.Name = "flowLayoutPanel4";
             flowLayoutPanel4.Size = new Size(1005, 35);
             flowLayoutPanel4.TabIndex = 5;
@@ -256,7 +417,7 @@
             stratagemSetsComboBox.Anchor = AnchorStyles.Left;
             stratagemSetsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             stratagemSetsComboBox.FormattingEnabled = true;
-            stratagemSetsComboBox.Location = new Point(3, 4);
+            stratagemSetsComboBox.Location = new Point(3, 6);
             stratagemSetsComboBox.Name = "stratagemSetsComboBox";
             stratagemSetsComboBox.Size = new Size(810, 27);
             stratagemSetsComboBox.TabIndex = 5;
@@ -289,7 +450,7 @@
             fKeysFlowLayoutPanel.AutoSize = true;
             fKeysFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             fKeysFlowLayoutPanel.Controls.Add(fKeyFlowLayoutPanel);
-            fKeysFlowLayoutPanel.Location = new Point(3, 111);
+            fKeysFlowLayoutPanel.Location = new Point(3, 193);
             fKeysFlowLayoutPanel.Margin = new Padding(3, 3, 3, 10);
             fKeysFlowLayoutPanel.Name = "fKeysFlowLayoutPanel";
             fKeysFlowLayoutPanel.Size = new Size(73, 44);
@@ -332,7 +493,7 @@
             stratagemGroupsFlowLayoutPanel.AutoSize = true;
             stratagemGroupsFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             stratagemGroupsFlowLayoutPanel.Controls.Add(flowLayoutPanel1);
-            stratagemGroupsFlowLayoutPanel.Location = new Point(3, 168);
+            stratagemGroupsFlowLayoutPanel.Location = new Point(3, 250);
             stratagemGroupsFlowLayoutPanel.Name = "stratagemGroupsFlowLayoutPanel";
             stratagemGroupsFlowLayoutPanel.Size = new Size(118, 83);
             stratagemGroupsFlowLayoutPanel.TabIndex = 2;
@@ -408,6 +569,10 @@
             flowLayoutPanel2.PerformLayout();
             flowLayoutPanel3.ResumeLayout(false);
             flowLayoutPanel3.PerformLayout();
+            flowLayoutPanel5.ResumeLayout(false);
+            flowLayoutPanel5.PerformLayout();
+            flowLayoutPanel6.ResumeLayout(false);
+            flowLayoutPanel6.PerformLayout();
             flowLayoutPanel4.ResumeLayout(false);
             flowLayoutPanel4.PerformLayout();
             fKeysFlowLayoutPanel.ResumeLayout(false);
@@ -451,5 +616,18 @@
         private ComboBox stratagemSetsComboBox;
         private Button saveStratagemSetButton;
         private Button deleteStratagemSetButton;
+        private FlowLayoutPanel flowLayoutPanel5;
+        private ComboBox voiceTypeComboBox;
+        private CheckBox enableVoiceCheckBox;
+        private Button generateVoiceButton;
+        private Label generateVoiceMessageLabel;
+        private Label label7;
+        private Label label8;
+        private Label label9;
+        private TextBox voiceRateTextBox;
+        private TextBox voiceVolumeTextBox;
+        private TextBox voicePitchTextBox;
+        private FlowLayoutPanel flowLayoutPanel6;
+        private Button tryVoiceButton;
     }
 }

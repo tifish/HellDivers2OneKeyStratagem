@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using EdgeTTS;
+using NAudio.Wave;
+using System.Diagnostics;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -21,6 +23,8 @@ public partial class MainForm : Form
             InitStratagemGroups();
             await LoadSettings();
             await LoadTemplate();
+
+            await LoadVoiceTypes();
         }
         finally
         {
@@ -29,6 +33,19 @@ public partial class MainForm : Form
         }
 
         CenterToScreen();
+    }
+
+    private List<Voice> _voices = null!;
+
+    private async Task LoadVoiceTypes()
+    {
+        var manager = await VoicesManager.Create();
+        _voices = manager.Find(language: "zh");
+
+        foreach (var voice in _voices)
+            voiceTypeComboBox.Items.Add(voice.ShortName);
+
+        voiceTypeComboBox.SelectedIndex = voiceTypeComboBox.Items.Count - 1;
     }
 
     private static readonly string ExeDirectory = Path.GetDirectoryName(Application.ExecutablePath)!;
@@ -111,6 +128,8 @@ public partial class MainForm : Form
                 break;
         }
 
+        enableVoiceCheckBox.Checked = _settings.EnableVoice;
+
         if (_settings.StratagemSets.Count > 0)
         {
             SetFKeyStratagemString(_settings.StratagemSets[0]);
@@ -149,6 +168,8 @@ public partial class MainForm : Form
 
         _settings.TriggerKey = ctrlRadioButton.Checked ? "Ctrl" : "Alt";
         _settings.OperateKeys = wasdRadioButton.Checked ? "WASD" : "Arrow";
+
+        _settings.EnableVoice = enableVoiceCheckBox.Checked;
 
         _settings.StratagemSets.Clear();
         _settings.StratagemSets.Add(GetFKeyStratagemString());
@@ -401,7 +422,11 @@ public partial class MainForm : Form
             if (stratagem == null)
                 continue;
 
-            lines.Add($"""F{i + 1}:: CallStratagem("{stratagem.Keys}")""");
+            lines.Add($$"""F{{i + 1}}:: {""");
+            lines.Add($"    CallStratagem \"{stratagem.Keys}\"");
+            if (enableVoiceCheckBox.Checked)
+                lines.Add($"    SoundPlay \"..\\Voice\\{stratagem.Name}.mp3\"");
+            lines.Add("}");
         }
 
         await File.WriteAllLinesAsync(ScriptFile, lines);
@@ -477,5 +502,102 @@ public partial class MainForm : Form
 
         SetFKeyStratagemString(selectedItem);
         _settingsChanged = true;
+    }
+
+    private async void enableVoiceCheckBox_Click(object sender, EventArgs e)
+    {
+        await SaveSettings();
+    }
+
+    private static readonly string VoicePath = Path.Combine(ExeDirectory, "Voice");
+
+    private bool _isGeneratingVoice;
+
+    private async void generateVoiceButton_Click(object sender, EventArgs e)
+    {
+        if (voiceTypeComboBox.SelectedIndex == -1)
+            return;
+
+        if (!Directory.Exists(VoicePath))
+            Directory.CreateDirectory(VoicePath);
+
+        if (_isGeneratingVoice)
+        {
+            _isGeneratingVoice = false;
+            return;
+        }
+
+        _isGeneratingVoice = true;
+        generateVoiceButton.Text = "停止生成";
+
+        try
+        {
+            var count = 0;
+            var total = _stratagems.Count;
+            foreach (var stratagem in _stratagems.Values)
+            {
+                if (!_isGeneratingVoice)
+                    break;
+
+                count++;
+                await GenerateVoiceFile(stratagem.Name, Path.Combine(VoicePath, stratagem.Name + ".mp3"));
+                generateVoiceMessageLabel.Text = @$"正在生成民主语音（{count}/{total}）：{stratagem.Name}";
+            }
+        }
+        catch (Exception)
+        {
+            generateVoiceMessageLabel.Text = "民主语音生成失败...";
+        }
+        finally
+        {
+            generateVoiceMessageLabel.Text = _isGeneratingVoice
+                ? @"民主语音生成完毕！"
+                : @"民主语音进程中断...";
+
+            _isGeneratingVoice = false;
+            generateVoiceButton.Text = "生成语音";
+        }
+    }
+
+    private async void voiceTypeComboBox_SelectionChangeCommitted(object sender, EventArgs e)
+    {
+        await TryVoice();
+    }
+
+    private async Task TryVoice()
+    {
+        try
+        {
+            var text = _fKeyStratagems[SelectedFKeyIndex]?.Name ?? "飞鹰空袭";
+            var tmpMp3 = Path.GetTempFileName() + ".mp3";
+            await GenerateVoiceFile(text, tmpMp3);
+
+            var reader = new Mp3FileReader(tmpMp3);
+            var waveOut = new WaveOutEvent();
+            waveOut.Init(reader);
+            waveOut.PlaybackStopped += (_, _) =>
+            {
+                reader.Dispose();
+                waveOut.Dispose();
+                File.Delete(tmpMp3);
+            };
+            waveOut.Play();
+        }
+        catch (Exception)
+        {
+            generateVoiceMessageLabel.Text = "民主语音生成失败...";
+        }
+    }
+
+    private async Task GenerateVoiceFile(string text, string filePath)
+    {
+        var voiceName = (string)voiceTypeComboBox.SelectedItem!;
+        var communicate = new Communicate(text, voiceName, voiceRateTextBox.Text, voiceVolumeTextBox.Text, voicePitchTextBox.Text);
+        await communicate.Save(filePath);
+    }
+
+    private async void tryVoiceButton_Click(object sender, EventArgs e)
+    {
+        await TryVoice();
     }
 }
