@@ -129,8 +129,7 @@ public partial class MainForm : Form
     private async Task LoadSettings()
     {
         _settings = await _settingsFile.Load();
-        if (_settings == null)
-            return;
+        _settings ??= new Settings();
 
         switch (_settings.TriggerKey)
         {

@@ -2,9 +2,9 @@
 
 public class Settings
 {
-    public string TriggerKey { get; set; } = "";
-    public string OperateKeys { get; set; } = "";
-    public bool EnableVoice { get; set; } = false;
-    public string VoiceName { get; set; } = "";
+    public string TriggerKey { get; set; } = "Ctrl";
+    public string OperateKeys { get; set; } = "WASD";
+    public bool EnableVoice { get; set; } = true;
+    public string VoiceName { get; set; } = "晓妮";
     public List<string> StratagemSets { get; set; } = [];
 }
