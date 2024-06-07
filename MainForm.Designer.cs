@@ -38,9 +38,6 @@
             label6 = new Label();
             wasdRadioButton = new RadioButton();
             arrowRadioButton = new RadioButton();
-            startButton = new Button();
-            stopButton = new Button();
-            runningLabel = new Label();
             label4 = new Label();
             flowLayoutPanel5 = new FlowLayoutPanel();
             enableVoiceCheckBox = new CheckBox();
@@ -105,13 +102,10 @@
             buttonsFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             buttonsFlowLayoutPanel.Controls.Add(flowLayoutPanel2);
             buttonsFlowLayoutPanel.Controls.Add(flowLayoutPanel3);
-            buttonsFlowLayoutPanel.Controls.Add(startButton);
-            buttonsFlowLayoutPanel.Controls.Add(stopButton);
-            buttonsFlowLayoutPanel.Controls.Add(runningLabel);
             buttonsFlowLayoutPanel.Location = new Point(3, 3);
             buttonsFlowLayoutPanel.Margin = new Padding(3, 3, 3, 10);
             buttonsFlowLayoutPanel.Name = "buttonsFlowLayoutPanel";
-            buttonsFlowLayoutPanel.Size = new Size(605, 35);
+            buttonsFlowLayoutPanel.Size = new Size(380, 35);
             buttonsFlowLayoutPanel.TabIndex = 3;
             // 
             // flowLayoutPanel2
@@ -211,39 +205,6 @@
             arrowRadioButton.Text = "上下左右";
             arrowRadioButton.UseVisualStyleBackColor = true;
             arrowRadioButton.Click += wasdRadioButton_Click;
-            // 
-            // startButton
-            // 
-            startButton.AutoSize = true;
-            startButton.Location = new Point(383, 3);
-            startButton.Name = "startButton";
-            startButton.Size = new Size(75, 29);
-            startButton.TabIndex = 7;
-            startButton.Text = "启动(&W)";
-            startButton.UseVisualStyleBackColor = true;
-            startButton.Click += startButton_Click;
-            // 
-            // stopButton
-            // 
-            stopButton.AutoSize = true;
-            stopButton.Enabled = false;
-            stopButton.Location = new Point(464, 3);
-            stopButton.Name = "stopButton";
-            stopButton.Size = new Size(75, 29);
-            stopButton.TabIndex = 8;
-            stopButton.Text = "停止(&E)";
-            stopButton.UseVisualStyleBackColor = true;
-            stopButton.Click += stopButton_Click;
-            // 
-            // runningLabel
-            // 
-            runningLabel.Anchor = AnchorStyles.Left;
-            runningLabel.AutoSize = true;
-            runningLabel.Location = new Point(545, 8);
-            runningLabel.Name = "runningLabel";
-            runningLabel.Size = new Size(57, 19);
-            runningLabel.TabIndex = 9;
-            runningLabel.Text = "修养中...";
             // 
             // label4
             // 
@@ -558,6 +519,7 @@
             SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "HellDivers 2 一键战略";
+            Deactivate += MainForm_Deactivate;
             FormClosed += MainForm_FormClosed;
             Load += MainForm_Load;
             KeyDown += MainForm_KeyDown;
@@ -609,9 +571,6 @@
         private Label label6;
         private RadioButton wasdRadioButton;
         private RadioButton arrowRadioButton;
-        private Button startButton;
-        private Button stopButton;
-        private Label runningLabel;
         private FlowLayoutPanel flowLayoutPanel4;
         private ComboBox stratagemSetsComboBox;
         private Button saveStratagemSetButton;

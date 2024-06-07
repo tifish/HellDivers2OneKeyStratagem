@@ -33,6 +33,8 @@ public partial class MainForm : Form
         }
 
         CenterToScreen();
+
+        await Start();
     }
 
     private List<Voice> _voices = null!;
@@ -366,16 +368,8 @@ public partial class MainForm : Form
     private static readonly string Ahk2Exe = Path.Combine(AutoHotkeyDirectory, "Ahk2Exe.exe");
     private static readonly string ScriptFile = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKeyStratagem.ahk");
 
-    private bool _settingsChanged;
-
-    private async void startButton_Click(object sender, EventArgs e)
+    private async Task Start()
     {
-        if (_settingsChanged)
-        {
-            await SaveSettings();
-            _settingsChanged = false;
-        }
-
         KillAhkProcess();
 
         await GenerateScript();
@@ -403,13 +397,6 @@ public partial class MainForm : Form
             WorkingDirectory = AutoHotkeyDirectory,
             UseShellExecute = true,
         });
-
-        if (_ahkProcess != null)
-        {
-            runningLabel.Text = @"为了民主！";
-            startButton.Text = @"重启(&W)";
-            stopButton.Enabled = true;
-        }
     }
 
     private async Task GenerateScript()
@@ -463,15 +450,6 @@ public partial class MainForm : Form
 
         _ahkProcess.Kill();
         _ahkProcess = null;
-
-        runningLabel.Text = @"已阵亡...";
-        startButton.Text = @"启动(&W)";
-        stopButton.Enabled = false;
-    }
-
-    private void stopButton_Click(object sender, EventArgs e)
-    {
-        KillAhkProcess();
     }
 
     private async void saveStratagemSetButton_Click(object sender, EventArgs e)
@@ -482,7 +460,8 @@ public partial class MainForm : Form
 
         stratagemSetsComboBox.Items.Add(fKeyStratagemString);
         stratagemSetsComboBox.SelectedIndex = stratagemSetsComboBox.Items.Count - 1;
-        await SaveSettings();
+
+        _settingsChanged = true;
     }
 
     private async void deleteStratagemSetButton_Click(object sender, EventArgs e)
@@ -491,7 +470,8 @@ public partial class MainForm : Form
             return;
 
         stratagemSetsComboBox.Items.RemoveAt(stratagemSetsComboBox.SelectedIndex);
-        await SaveSettings();
+
+        _settingsChanged = true;
     }
 
     private void stratagemSetsComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -504,9 +484,9 @@ public partial class MainForm : Form
         _settingsChanged = true;
     }
 
-    private async void enableVoiceCheckBox_Click(object sender, EventArgs e)
+    private void enableVoiceCheckBox_Click(object sender, EventArgs e)
     {
-        await SaveSettings();
+        _settingsChanged = true;
     }
 
     private static readonly string VoicePath = Path.Combine(ExeDirectory, "Voice");
@@ -585,7 +565,7 @@ public partial class MainForm : Form
         }
         catch (Exception)
         {
-            generateVoiceMessageLabel.Text = "民主语音生成失败...";
+            generateVoiceMessageLabel.Text = @"民主语音生成失败...";
         }
     }
 
@@ -599,5 +579,18 @@ public partial class MainForm : Form
     private async void tryVoiceButton_Click(object sender, EventArgs e)
     {
         await TryVoice();
+    }
+
+    private bool _settingsChanged;
+
+    private async void MainForm_Deactivate(object sender, EventArgs e)
+    {
+        if (!_settingsChanged)
+            return;
+
+        await SaveSettings();
+        _settingsChanged = false;
+
+        await Start();
     }
 }
