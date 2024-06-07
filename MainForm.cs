@@ -424,6 +424,7 @@ public partial class MainForm : Form
     private async Task GenerateScript()
     {
         var lines = new List<string>(_templateLines) { "" };
+        var voiceName = (voiceNamesComboBox.SelectedItem as string) ?? "";
 
         for (var i = 0; i < _fKeyLabels.Length; i++)
         {
@@ -434,7 +435,10 @@ public partial class MainForm : Form
             lines.Add($$"""F{{i + 1}}:: {""");
             lines.Add($"    CallStratagem \"{stratagem.Keys}\"");
             if (enableVoiceCheckBox.Checked)
-                lines.Add($"    SoundPlay \"..\\Voice\\{stratagem.Name}.mp3\"");
+            {
+                lines.Add($"    SoundPlay \"..\\Voice\\{voiceName}\\{stratagem.Name}.mp3\"");
+            }
+
             lines.Add("}");
         }
 

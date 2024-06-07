@@ -228,7 +228,7 @@
             voiceNamesComboBox.Anchor = AnchorStyles.Left;
             voiceNamesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             voiceNamesComboBox.FormattingEnabled = true;
-            voiceNamesComboBox.Location = new Point(534, 6);
+            voiceNamesComboBox.Location = new Point(534, 4);
             voiceNamesComboBox.Name = "voiceNamesComboBox";
             voiceNamesComboBox.Size = new Size(140, 27);
             voiceNamesComboBox.TabIndex = 7;
@@ -284,7 +284,7 @@
             generateVoiceStyleComboBox.Anchor = AnchorStyles.Left;
             generateVoiceStyleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             generateVoiceStyleComboBox.FormattingEnabled = true;
-            generateVoiceStyleComboBox.Location = new Point(3, 4);
+            generateVoiceStyleComboBox.Location = new Point(3, 6);
             generateVoiceStyleComboBox.Name = "generateVoiceStyleComboBox";
             generateVoiceStyleComboBox.Size = new Size(254, 27);
             generateVoiceStyleComboBox.TabIndex = 5;
@@ -410,7 +410,7 @@
             stratagemSetsComboBox.Anchor = AnchorStyles.Left;
             stratagemSetsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             stratagemSetsComboBox.FormattingEnabled = true;
-            stratagemSetsComboBox.Location = new Point(3, 4);
+            stratagemSetsComboBox.Location = new Point(3, 6);
             stratagemSetsComboBox.Name = "stratagemSetsComboBox";
             stratagemSetsComboBox.Size = new Size(810, 27);
             stratagemSetsComboBox.TabIndex = 5;
