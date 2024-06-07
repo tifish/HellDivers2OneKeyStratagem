@@ -52,6 +52,7 @@
             label9 = new Label();
             voicePitchTextBox = new TextBox();
             generateVoiceButton = new Button();
+            generateTxtButton = new Button();
             generateVoiceMessageLabel = new Label();
             flowLayoutPanel4 = new FlowLayoutPanel();
             stratagemSetsComboBox = new ComboBox();
@@ -270,10 +271,11 @@
             generateVoiceFlowLayoutPanel.Controls.Add(label9);
             generateVoiceFlowLayoutPanel.Controls.Add(voicePitchTextBox);
             generateVoiceFlowLayoutPanel.Controls.Add(generateVoiceButton);
+            generateVoiceFlowLayoutPanel.Controls.Add(generateTxtButton);
             generateVoiceFlowLayoutPanel.Controls.Add(generateVoiceMessageLabel);
             generateVoiceFlowLayoutPanel.Location = new Point(3, 70);
             generateVoiceFlowLayoutPanel.Name = "generateVoiceFlowLayoutPanel";
-            generateVoiceFlowLayoutPanel.Size = new Size(775, 35);
+            generateVoiceFlowLayoutPanel.Size = new Size(856, 35);
             generateVoiceFlowLayoutPanel.TabIndex = 6;
             generateVoiceFlowLayoutPanel.Visible = false;
             // 
@@ -369,11 +371,23 @@
             generateVoiceButton.UseVisualStyleBackColor = true;
             generateVoiceButton.Click += generateVoiceButton_Click;
             // 
+            // generateTxtButton
+            // 
+            generateTxtButton.Anchor = AnchorStyles.Left;
+            generateTxtButton.AutoSize = true;
+            generateTxtButton.Location = new Point(772, 3);
+            generateTxtButton.Name = "generateTxtButton";
+            generateTxtButton.Size = new Size(75, 29);
+            generateTxtButton.TabIndex = 22;
+            generateTxtButton.Text = "生成 txt";
+            generateTxtButton.UseVisualStyleBackColor = true;
+            generateTxtButton.Click += generateTxtButton_Click;
+            // 
             // generateVoiceMessageLabel
             // 
             generateVoiceMessageLabel.Anchor = AnchorStyles.Left;
             generateVoiceMessageLabel.AutoSize = true;
-            generateVoiceMessageLabel.Location = new Point(772, 8);
+            generateVoiceMessageLabel.Location = new Point(853, 8);
             generateVoiceMessageLabel.Name = "generateVoiceMessageLabel";
             generateVoiceMessageLabel.Size = new Size(0, 19);
             generateVoiceMessageLabel.TabIndex = 8;
@@ -605,5 +619,6 @@
         private Button generateVoiceButton;
         private ComboBox voiceNamesComboBox;
         private Button refreshVoiceNamesButton;
+        private Button generateTxtButton;
     }
 }

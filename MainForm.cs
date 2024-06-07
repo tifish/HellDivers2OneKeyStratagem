@@ -644,4 +644,13 @@ public partial class MainForm : Form
         _settings!.VoiceName = voiceNamesComboBox.SelectedItem as string ?? "";
         LoadVoiceNames();
     }
+
+    private void generateTxtButton_Click(object sender, EventArgs e)
+    {
+        var folder = "VoiceTxt";
+        Directory.CreateDirectory(folder);
+        foreach (var stratagem in _stratagems.Values)
+            File.WriteAllText(Path.Combine(folder, stratagem.Name), stratagem.Name);
+        generateVoiceMessageLabel.Text = @"txt 生成完毕";
+    }
 }
