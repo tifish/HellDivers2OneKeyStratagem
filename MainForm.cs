@@ -1,6 +1,6 @@
-﻿using EdgeTTS;
+﻿using System.Diagnostics;
+using EdgeTTS;
 using NAudio.Wave;
-using System.Diagnostics;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -22,9 +22,12 @@ public partial class MainForm : Form
             InitFKeys();
             InitStratagemGroups();
             await LoadSettings();
+
+            LoadVoiceNames();
+
             await LoadTemplate();
 
-            await LoadVoiceTypes();
+            await LoadGeneratingVoiceStyles();
         }
         finally
         {
@@ -37,17 +40,36 @@ public partial class MainForm : Form
         await Start();
     }
 
+    private void LoadVoiceNames()
+    {
+        var styles = Directory.GetDirectories(VoiceRootPath)
+            .Select(Path.GetFileName)
+            .Where(style => style != null)
+            .ToList();
+
+        voiceNamesComboBox.Items.Clear();
+        foreach (var style in styles)
+            voiceNamesComboBox.Items.Add(style!);
+
+        voiceNamesComboBox.SelectedItem =
+            styles.Contains(_settings!.VoiceName)
+                ? _settings.VoiceName
+                : styles.Contains("晓妮")
+                    ? "晓妮"
+                    : styles.FirstOrDefault();
+    }
+
     private List<Voice> _voices = null!;
 
-    private async Task LoadVoiceTypes()
+    private async Task LoadGeneratingVoiceStyles()
     {
         var manager = await VoicesManager.Create();
         _voices = manager.Find(language: "zh");
 
         foreach (var voice in _voices)
-            voiceTypeComboBox.Items.Add(voice.ShortName);
+            generateVoiceStyleComboBox.Items.Add(voice.ShortName);
 
-        voiceTypeComboBox.SelectedIndex = voiceTypeComboBox.Items.Count - 1;
+        generateVoiceStyleComboBox.SelectedIndex = generateVoiceStyleComboBox.Items.Count - 1;
     }
 
     private static readonly string ExeDirectory = Path.GetDirectoryName(Application.ExecutablePath)!;
@@ -172,6 +194,7 @@ public partial class MainForm : Form
         _settings.OperateKeys = wasdRadioButton.Checked ? "WASD" : "Arrow";
 
         _settings.EnableVoice = enableVoiceCheckBox.Checked;
+        _settings.VoiceName = voiceNamesComboBox.SelectedItem as string ?? "";
 
         _settings.StratagemSets.Clear();
         _settings.StratagemSets.Add(GetFKeyStratagemString());
@@ -452,7 +475,7 @@ public partial class MainForm : Form
         _ahkProcess = null;
     }
 
-    private async void saveStratagemSetButton_Click(object sender, EventArgs e)
+    private void saveStratagemSetButton_Click(object sender, EventArgs e)
     {
         var fKeyStratagemString = GetFKeyStratagemString();
         if (stratagemSetsComboBox.Items.Contains(fKeyStratagemString))
@@ -464,7 +487,7 @@ public partial class MainForm : Form
         _settingsChanged = true;
     }
 
-    private async void deleteStratagemSetButton_Click(object sender, EventArgs e)
+    private void deleteStratagemSetButton_Click(object sender, EventArgs e)
     {
         if (stratagemSetsComboBox.SelectedIndex == -1)
             return;
@@ -489,17 +512,14 @@ public partial class MainForm : Form
         _settingsChanged = true;
     }
 
-    private static readonly string VoicePath = Path.Combine(ExeDirectory, "Voice");
+    private static readonly string VoiceRootPath = Path.Combine(ExeDirectory, "Voice");
 
     private bool _isGeneratingVoice;
 
     private async void generateVoiceButton_Click(object sender, EventArgs e)
     {
-        if (voiceTypeComboBox.SelectedIndex == -1)
+        if (generateVoiceStyleComboBox.SelectedIndex == -1)
             return;
-
-        if (!Directory.Exists(VoicePath))
-            Directory.CreateDirectory(VoicePath);
 
         if (_isGeneratingVoice)
         {
@@ -520,7 +540,9 @@ public partial class MainForm : Form
                     break;
 
                 count++;
-                await GenerateVoiceFile(stratagem.Name, Path.Combine(VoicePath, stratagem.Name + ".mp3"));
+
+                var voiceName = (string)generateVoiceStyleComboBox.SelectedItem!;
+                await GenerateVoiceFile(stratagem.Name, Path.Combine(VoiceRootPath, voiceName, stratagem.Name + ".mp3"));
                 generateVoiceMessageLabel.Text = @$"正在生成民主语音（{count}/{total}）：{stratagem.Name}";
             }
         }
@@ -539,7 +561,7 @@ public partial class MainForm : Form
         }
     }
 
-    private async void voiceTypeComboBox_SelectionChangeCommitted(object sender, EventArgs e)
+    private async void generateVoiceTypeComboBox_SelectionChangeCommitted(object sender, EventArgs e)
     {
         await TryVoice();
     }
@@ -551,17 +573,7 @@ public partial class MainForm : Form
             var text = _fKeyStratagems[SelectedFKeyIndex]?.Name ?? "飞鹰空袭";
             var tmpMp3 = Path.GetTempFileName() + ".mp3";
             await GenerateVoiceFile(text, tmpMp3);
-
-            var reader = new Mp3FileReader(tmpMp3);
-            var waveOut = new WaveOutEvent();
-            waveOut.Init(reader);
-            waveOut.PlaybackStopped += (_, _) =>
-            {
-                reader.Dispose();
-                waveOut.Dispose();
-                File.Delete(tmpMp3);
-            };
-            waveOut.Play();
+            PlayVoice(tmpMp3, true);
         }
         catch (Exception)
         {
@@ -569,9 +581,30 @@ public partial class MainForm : Form
         }
     }
 
+    private static void PlayVoice(string filePath, bool deleteAfterPlay = false)
+    {
+        var reader = new Mp3FileReader(filePath);
+        var waveOut = new WaveOutEvent();
+        waveOut.Init(reader);
+        waveOut.PlaybackStopped += (_, _) =>
+        {
+            reader.Dispose();
+            waveOut.Dispose();
+            if (deleteAfterPlay)
+                File.Delete(filePath);
+        };
+        waveOut.Play();
+    }
+
     private async Task GenerateVoiceFile(string text, string filePath)
     {
-        var voiceName = (string)voiceTypeComboBox.SelectedItem!;
+        var voiceDir = Path.GetDirectoryName(filePath);
+        if (voiceDir == null)
+            return;
+        if (!Directory.Exists(voiceDir))
+            Directory.CreateDirectory(voiceDir);
+
+        var voiceName = (string)generateVoiceStyleComboBox.SelectedItem!;
         var communicate = new Communicate(text, voiceName, voiceRateTextBox.Text, voiceVolumeTextBox.Text, voicePitchTextBox.Text);
         await communicate.Save(filePath);
     }
@@ -592,5 +625,23 @@ public partial class MainForm : Form
         _settingsChanged = false;
 
         await Start();
+    }
+
+    private void suggestionLabel_Click(object sender, EventArgs e)
+    {
+        generateVoiceFlowLayoutPanel.Visible = !generateVoiceFlowLayoutPanel.Visible;
+    }
+
+    private void voiceNamesComboBox_SelectionChangeCommitted(object sender, EventArgs e)
+    {
+        var style = (string)voiceNamesComboBox.SelectedItem!;
+        var text = _fKeyStratagems[SelectedFKeyIndex]?.Name ?? "飞鹰空袭";
+        PlayVoice(Path.Combine(VoiceRootPath, style, text + ".mp3"));
+    }
+
+    private void refreshVoiceNamesButton_Click(object sender, EventArgs e)
+    {
+        _settings!.VoiceName = voiceNamesComboBox.SelectedItem as string ?? "";
+        LoadVoiceNames();
     }
 }
