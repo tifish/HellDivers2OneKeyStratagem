@@ -254,7 +254,7 @@
             voiceTriggerFlowLayoutPanel.Controls.Add(voiceTriggerKeyComboBox);
             voiceTriggerFlowLayoutPanel.Location = new Point(3, 51);
             voiceTriggerFlowLayoutPanel.Name = "voiceTriggerFlowLayoutPanel";
-            voiceTriggerFlowLayoutPanel.Size = new Size(661, 33);
+            voiceTriggerFlowLayoutPanel.Size = new Size(749, 33);
             voiceTriggerFlowLayoutPanel.TabIndex = 7;
             // 
             // suggestionLabel
@@ -289,7 +289,7 @@
             voiceTriggerKeyComboBox.FormattingEnabled = true;
             voiceTriggerKeyComboBox.Location = new Point(598, 3);
             voiceTriggerKeyComboBox.Name = "voiceTriggerKeyComboBox";
-            voiceTriggerKeyComboBox.Size = new Size(60, 27);
+            voiceTriggerKeyComboBox.Size = new Size(148, 27);
             voiceTriggerKeyComboBox.TabIndex = 8;
             voiceTriggerKeyComboBox.SelectionChangeCommitted += voiceTriggerKeyComboBox_SelectionChangeCommitted;
             // 
