@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
-using EdgeTTS;
+﻿using EdgeTTS;
 using NAudio.Wave;
+using NHotkey.WindowsForms;
+using System.Diagnostics;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -11,6 +12,8 @@ public partial class MainForm : Form
         InitializeComponent();
     }
 
+    private bool _isLoading = true;
+
     private async void MainForm_Load(object sender, EventArgs e)
     {
         SuspendLayout();
@@ -18,14 +21,17 @@ public partial class MainForm : Form
 
         try
         {
-            await LoadStratagems();
+            await StratagemManager.Load();
+
+            InitVoiceTriggerKeys();
             InitFKeys();
             InitStratagemGroups();
+
             await LoadSettings();
 
             LoadVoiceNames();
 
-            await LoadTemplate();
+            await LoadScriptTemplate();
 
             await LoadGeneratingVoiceStyles();
         }
@@ -37,7 +43,42 @@ public partial class MainForm : Form
 
         CenterToScreen();
 
-        await Start();
+        _isLoading = false;
+    }
+
+    private void InitVoiceTriggerKeys()
+    {
+        foreach (var key in Enum.GetNames<Keys>())
+            voiceTriggerKeyComboBox.Items.Add(key);
+    }
+
+    private readonly VoiceCommand _voiceCommand = new();
+
+    private void StartVoiceTrigger()
+    {
+        if (_voiceCommand.Commands.Count == 0)
+        {
+            foreach (var name in Stratagems.Keys)
+                _voiceCommand.Commands.Add(name);
+
+            _voiceCommand.CommandRecognized += (_, command) =>
+            {
+                if (!Stratagems.TryGetValue(command, out var stratagem))
+                    return;
+
+                if (Settings.PlayVoice)
+                    PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagem.Name + ".mp3"));
+                stratagem.PressKeys();
+            };
+        }
+
+        StopVoiceTrigger();
+        _voiceCommand.Start();
+    }
+
+    private void StopVoiceTrigger()
+    {
+        _voiceCommand.Stop();
     }
 
     private void LoadVoiceNames()
@@ -52,8 +93,8 @@ public partial class MainForm : Form
             voiceNamesComboBox.Items.Add(style!);
 
         voiceNamesComboBox.SelectedItem =
-            styles.Contains(_settings!.VoiceName)
-                ? _settings.VoiceName
+            styles.Contains(Settings.VoiceName)
+                ? Settings.VoiceName
                 : styles.Contains("晓妮")
                     ? "晓妮"
                     : styles.FirstOrDefault();
@@ -78,60 +119,21 @@ public partial class MainForm : Form
     private static readonly string TemplateAhk = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKeyStratagem.template.ahk");
     private string[] _templateLines = [];
 
-    private async Task LoadTemplate()
+    private async Task LoadScriptTemplate()
     {
         _templateLines = await File.ReadAllLinesAsync(TemplateAhk);
     }
 
-    private class Stratagem
-    {
-        public string Name = "";
-        public string Keys = "";
-        public CheckBox CheckBox = null!;
-    }
-
-    private readonly Dictionary<string, List<Stratagem>> _stratagemGroups = [];
-    private readonly Dictionary<string, Stratagem> _stratagems = [];
-    private const string StratagemsFile = "Stratagems.tab";
-
-    private async Task LoadStratagems()
-    {
-        if (!File.Exists(StratagemsFile))
-            return;
-
-        _stratagemGroups.Clear();
-        _stratagems.Clear();
-        List<Stratagem>? currentGroup = null;
-
-        await foreach (var line in File.ReadLinesAsync(StratagemsFile))
-            if (line.Contains('\t'))
-            {
-                var items = line.Split('\t');
-                if (items.Length != 2)
-                    throw new InvalidOperationException($"Invalid line: {line}");
-                if (currentGroup == null)
-                    throw new InvalidOperationException($"No group found for stratagem {items[0]}");
-                var stratagem = new Stratagem { Name = items[0], Keys = items[1] };
-                currentGroup.Add(stratagem);
-                _stratagems.Add(stratagem.Name, stratagem);
-            }
-            else
-            {
-                currentGroup = [];
-                _stratagemGroups.Add(line, currentGroup);
-            }
-    }
-
     private static readonly string SettingsFile = Path.Combine(ExeDirectory, "Settings.json");
-    private readonly JsonFile<Settings> _settingsFile = new(SettingsFile);
-    private Settings? _settings;
+    private readonly JsonFile<AppSettings> _settingsFile = new(SettingsFile);
 
     private async Task LoadSettings()
     {
-        _settings = await _settingsFile.Load();
-        _settings ??= new Settings();
+        var settings = await _settingsFile.Load();
+        if (settings != null)
+            Settings = settings;
 
-        switch (_settings.TriggerKey)
+        switch (Settings.TriggerKey)
         {
             case "Ctrl":
                 ctrlRadioButton.Checked = true;
@@ -141,7 +143,7 @@ public partial class MainForm : Form
                 break;
         }
 
-        switch (_settings.OperateKeys)
+        switch (Settings.OperateKeys)
         {
             case "WASD":
                 wasdRadioButton.Checked = true;
@@ -151,16 +153,20 @@ public partial class MainForm : Form
                 break;
         }
 
-        enableVoiceCheckBox.Checked = _settings.EnableVoice;
+        playVoiceCheckBox.Checked = Settings.PlayVoice;
 
-        if (_settings.StratagemSets.Count > 0)
+        if (Settings.StratagemSets.Count > 0)
         {
-            SetFKeyStratagemString(_settings.StratagemSets[0]);
+            SetFKeyStratagemString(Settings.StratagemSets[0]);
 
             stratagemSetsComboBox.Items.Clear();
-            foreach (var stratagemSet in _settings.StratagemSets.Skip(1))
+            foreach (var stratagemSet in Settings.StratagemSets.Skip(1))
                 stratagemSetsComboBox.Items.Add(stratagemSet);
         }
+
+        enableVoiceTriggerCheckBox.Checked = Settings.EnableVoiceTrigger;
+        voiceTriggerKeyComboBox.SelectedItem = Settings.VoiceTriggerKey;
+        AddOrRemoveTriggerHotkey();
     }
 
     private string GetFKeyStratagemString()
@@ -178,29 +184,21 @@ public partial class MainForm : Form
             if (string.IsNullOrWhiteSpace(name))
                 continue;
 
-            if (!_stratagems.TryGetValue(name, out var stratagem))
+            if (!Stratagems.TryGetValue(name, out var stratagem))
                 continue;
 
-            SetFKeyStratagem(i, stratagem);
+            SetFKeyStratagem(i, stratagem, false);
         }
     }
 
     private async Task SaveSettings()
     {
-        _settings ??= new Settings();
-
-        _settings.TriggerKey = ctrlRadioButton.Checked ? "Ctrl" : "Alt";
-        _settings.OperateKeys = wasdRadioButton.Checked ? "WASD" : "Arrow";
-
-        _settings.EnableVoice = enableVoiceCheckBox.Checked;
-        _settings.VoiceName = voiceNamesComboBox.SelectedItem as string ?? "";
-
-        _settings.StratagemSets.Clear();
-        _settings.StratagemSets.Add(GetFKeyStratagemString());
+        Settings.StratagemSets.Clear();
+        Settings.StratagemSets.Add(GetFKeyStratagemString());
         foreach (var item in stratagemSetsComboBox.Items)
-            _settings.StratagemSets.Add((string)item);
+            Settings.StratagemSets.Add((string)item);
 
-        await _settingsFile.Save(_settings);
+        await _settingsFile.Save(Settings);
     }
 
     private readonly Label[] _fKeyLabels = new Label[12];
@@ -260,8 +258,16 @@ public partial class MainForm : Form
 
             void OnFKeyMouseDown(object? o, MouseEventArgs e)
             {
-                if (e.Button == MouseButtons.Left)
-                    SelectedFKeyIndex = i1 - 1;
+                if (e.Button != MouseButtons.Left)
+                    return;
+                SelectedFKeyIndex = i1 - 1;
+
+                if (!Settings.PlayVoice)
+                    return;
+
+                var stratagem = _fKeyStratagems[SelectedFKeyIndex];
+                if (stratagem != null)
+                    PlayVoice(Path.Combine(VoiceRootPath, voiceNamesComboBox.SelectedItem as string ?? "", stratagem.Name + ".mp3"));
             }
         }
 
@@ -269,7 +275,7 @@ public partial class MainForm : Form
         _fKeyRoots.Last().BorderStyle = BorderStyle.FixedSingle;
     }
 
-    private void SetFKeyStratagem(int index, Stratagem stratagem)
+    private void SetFKeyStratagem(int index, Stratagem stratagem, bool playVoice = true)
     {
         var currentStratagem = _fKeyStratagems[index];
         if (currentStratagem != null)
@@ -277,17 +283,19 @@ public partial class MainForm : Form
 
         _fKeyStratagems[index] = stratagem;
         stratagem.CheckBox.Checked = true;
-        _settingsChanged = true;
-
         _fKeyLabels[index].Text = stratagem.Name;
+
+        if (!_isLoading)
+            _settingsChanged = true;
+
+        if (Settings.PlayVoice && playVoice)
+            PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagem.Name + ".mp3"));
     }
 
 
     private void InitStratagemGroups()
     {
-        stratagemGroupsFlowLayoutPanel.Controls.Clear();
-
-        foreach (var group in _stratagemGroups)
+        foreach (var group in StratagemGroups)
         {
             var root = new FlowLayoutPanel { FlowDirection = FlowDirection.TopDown, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
             var groupLabel = new Label { Text = group.Key, AutoSize = true, Anchor = AnchorStyles.Left, Font = new Font(Font, FontStyle.Bold) };
@@ -377,20 +385,24 @@ public partial class MainForm : Form
 
     private void ctrlRadioButton_Click(object sender, EventArgs e)
     {
-        _settingsChanged = true;
+        Settings.TriggerKey = ctrlRadioButton.Checked ? "Ctrl" : "Alt";
+        if (!_isLoading)
+            _settingsChanged = true;
     }
 
     private void wasdRadioButton_Click(object sender, EventArgs e)
     {
-        _settingsChanged = true;
+        Settings.OperateKeys = wasdRadioButton.Checked ? "WASD" : "Arrow";
+        if (!_isLoading)
+            _settingsChanged = true;
     }
 
     private Process? _ahkProcess;
 
     private static readonly string Ahk2Exe = Path.Combine(AutoHotkeyDirectory, "Ahk2Exe.exe");
-    private static readonly string ScriptFile = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKeyStratagem.ahk");
+    private static readonly string ScriptFile = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKey.ahk");
 
-    private async Task Start()
+    private async Task StartAutoHotkeyScript()
     {
         KillAhkProcess();
 
@@ -424,7 +436,7 @@ public partial class MainForm : Form
     private async Task GenerateScript()
     {
         var lines = new List<string>(_templateLines) { "" };
-        var voiceName = (voiceNamesComboBox.SelectedItem as string) ?? "";
+        var voiceName = voiceNamesComboBox.SelectedItem as string ?? "";
 
         for (var i = 0; i < _fKeyLabels.Length; i++)
         {
@@ -433,11 +445,9 @@ public partial class MainForm : Form
                 continue;
 
             lines.Add($$"""F{{i + 1}}:: {""");
-            lines.Add($"    CallStratagem \"{stratagem.Keys}\"");
-            if (enableVoiceCheckBox.Checked)
-            {
+            lines.Add($"    CallStratagem \"{stratagem.KeySequence}\"");
+            if (Settings.PlayVoice)
                 lines.Add($"    SoundPlay \"..\\Voice\\{voiceName}\\{stratagem.Name}.mp3\"");
-            }
 
             lines.Add("}");
         }
@@ -471,11 +481,21 @@ public partial class MainForm : Form
 
     private void KillAhkProcess()
     {
-        if (_ahkProcess == null)
-            return;
+        try
+        {
+            if (_ahkProcess != null)
+            {
+                _ahkProcess.Kill();
+                _ahkProcess = null;
+            }
 
-        _ahkProcess.Kill();
-        _ahkProcess = null;
+            foreach (var process in Process.GetProcessesByName("HellDivers2OneKey"))
+                process.Kill();
+        }
+        catch
+        {
+            // ignore permission error
+        }
     }
 
     private void saveStratagemSetButton_Click(object sender, EventArgs e)
@@ -510,8 +530,9 @@ public partial class MainForm : Form
         _settingsChanged = true;
     }
 
-    private void enableVoiceCheckBox_Click(object sender, EventArgs e)
+    private void playVoiceCheckBox_Click(object sender, EventArgs e)
     {
+        Settings.PlayVoice = playVoiceCheckBox.Checked;
         _settingsChanged = true;
     }
 
@@ -531,13 +552,13 @@ public partial class MainForm : Form
         }
 
         _isGeneratingVoice = true;
-        generateVoiceButton.Text = "停止生成";
+        generateVoiceButton.Text = @"停止生成";
 
         try
         {
             var count = 0;
-            var total = _stratagems.Count;
-            foreach (var stratagem in _stratagems.Values)
+            var total = Stratagems.Count;
+            foreach (var stratagem in Stratagems.Values)
             {
                 if (!_isGeneratingVoice)
                     break;
@@ -551,7 +572,7 @@ public partial class MainForm : Form
         }
         catch (Exception)
         {
-            generateVoiceMessageLabel.Text = "民主语音生成失败...";
+            generateVoiceMessageLabel.Text = @"民主语音生成失败...";
         }
         finally
         {
@@ -560,7 +581,7 @@ public partial class MainForm : Form
                 : @"民主语音进程中断...";
 
             _isGeneratingVoice = false;
-            generateVoiceButton.Text = "生成语音";
+            generateVoiceButton.Text = @"生成语音";
         }
     }
 
@@ -584,8 +605,11 @@ public partial class MainForm : Form
         }
     }
 
-    private static void PlayVoice(string filePath, bool deleteAfterPlay = false)
+    private void PlayVoice(string filePath, bool deleteAfterPlay = false)
     {
+        if (_isLoading)
+            return;
+
         var reader = new Mp3FileReader(filePath);
         var waveOut = new WaveOutEvent();
         waveOut.Init(reader);
@@ -621,13 +645,19 @@ public partial class MainForm : Form
 
     private async void MainForm_Deactivate(object sender, EventArgs e)
     {
-        if (!_settingsChanged)
-            return;
+        var shouldStart = _settingsChanged || _ahkProcess == null;
 
-        await SaveSettings();
-        _settingsChanged = false;
+        if (_settingsChanged)
+        {
+            await SaveSettings();
+            _settingsChanged = false;
+        }
 
-        await Start();
+        if (shouldStart)
+        {
+            await StartAutoHotkeyScript();
+            AddOrRemoveTriggerHotkey();
+        }
     }
 
     private void suggestionLabel_Click(object sender, EventArgs e)
@@ -637,14 +667,15 @@ public partial class MainForm : Form
 
     private void voiceNamesComboBox_SelectionChangeCommitted(object sender, EventArgs e)
     {
-        var style = (string)voiceNamesComboBox.SelectedItem!;
+        Settings.VoiceName = voiceNamesComboBox.SelectedItem as string ?? "";
+
         var text = _fKeyStratagems[SelectedFKeyIndex]?.Name ?? "飞鹰空袭";
-        PlayVoice(Path.Combine(VoiceRootPath, style, text + ".mp3"));
+        PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, text + ".mp3"));
     }
 
     private void refreshVoiceNamesButton_Click(object sender, EventArgs e)
     {
-        _settings!.VoiceName = voiceNamesComboBox.SelectedItem as string ?? "";
+        Settings.VoiceName = voiceNamesComboBox.SelectedItem as string ?? "";
         LoadVoiceNames();
     }
 
@@ -652,8 +683,34 @@ public partial class MainForm : Form
     {
         var folder = "VoiceTxt";
         Directory.CreateDirectory(folder);
-        foreach (var stratagem in _stratagems.Values)
+        foreach (var stratagem in Stratagems.Values)
             File.WriteAllText(Path.Combine(folder, stratagem.Name), stratagem.Name);
         generateVoiceMessageLabel.Text = @"txt 生成完毕";
+    }
+
+    private void voiceTriggerKeyComboBox_SelectionChangeCommitted(object sender, EventArgs e)
+    {
+        Settings.VoiceTriggerKey = (string)voiceTriggerKeyComboBox.SelectedItem!;
+        _settingsChanged = true;
+    }
+
+    private void enableVoiceTriggerCheckBox_Click(object sender, EventArgs e)
+    {
+        Settings.EnableVoiceTrigger = enableVoiceTriggerCheckBox.Checked;
+        _settingsChanged = true;
+    }
+
+    private void AddOrRemoveTriggerHotkey()
+    {
+        if (Settings.EnableVoiceTrigger)
+            HotkeyManager.Current.AddOrReplace("Trigger", Enum.Parse<Keys>(Settings.VoiceTriggerKey),
+                (_, _) =>
+                {
+                    var title = WindowHelper.GetActiveWindowTitle();
+                    if (title == @"HELLDIVERS™ 2")
+                        StartVoiceTrigger();
+                });
+        else
+            HotkeyManager.Current.Remove("Trigger");
     }
 }
