@@ -437,7 +437,12 @@ public partial class MainForm : Form
         }
 
         if (Settings.EnableVoiceTrigger)
-            lines.Add($"${Settings.VoiceTriggerKey}:: SendMessage 0x0111, 1, 0, , \"{Text}\"");
+        {
+            lines.Add($$"""${{Settings.VoiceTriggerKey}}:: {""");
+            lines.Add($"    SendMessage 0x0111, 1, 0, , \"{Text}\"");
+            lines.Add("    SoundBeep 400, 100");
+            lines.Add("}");
+        }
 
         await File.WriteAllLinesAsync(ScriptFile, lines);
     }
@@ -638,7 +643,7 @@ public partial class MainForm : Form
     {
         if (_isLoading)
             return;
-        
+
         var shouldStart = _settingsChanged || _ahkProcess == null;
 
         if (_settingsChanged)
