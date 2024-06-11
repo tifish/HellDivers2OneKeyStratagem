@@ -72,13 +72,7 @@ public partial class MainForm : Form
             };
         }
 
-        StopVoiceTrigger();
         _voiceCommand.Start();
-    }
-
-    private void StopVoiceTrigger()
-    {
-        _voiceCommand.Stop();
     }
 
     private void LoadVoiceNames()

@@ -16,10 +16,20 @@ public class VoiceCommand : IDisposable
         {
             CommandRecognized?.Invoke(this, e.Result.Text);
         };
+
+        _recognizer.RecognizeCompleted += (sender, args) =>
+        {
+            _isRecognizing = false;
+        };
     }
+
+    private bool _isRecognizing;
 
     public void Start()
     {
+        if (_isRecognizing)
+            return;
+
         var choices = new Choices();
         choices.Add(Commands.ToArray());
 
@@ -34,6 +44,8 @@ public class VoiceCommand : IDisposable
 
         // Start asynchronous, continuous speech recognition.
         _recognizer.RecognizeAsync(RecognizeMode.Single);
+
+        _isRecognizing = true;
     }
 
     public void Stop()
