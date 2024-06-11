@@ -1,6 +1,5 @@
 ﻿using EdgeTTS;
 using NAudio.Wave;
-using NHotkey.WindowsForms;
 using System.Diagnostics;
 
 namespace HellDivers2OneKeyStratagem;
@@ -23,7 +22,6 @@ public partial class MainForm : Form
         {
             await StratagemManager.Load();
 
-            InitVoiceTriggerKeys();
             InitFKeys();
             InitStratagemGroups();
 
@@ -46,12 +44,6 @@ public partial class MainForm : Form
         _isLoading = false;
     }
 
-    private void InitVoiceTriggerKeys()
-    {
-        foreach (var key in Enum.GetNames<Keys>())
-            voiceTriggerKeyComboBox.Items.Add(key);
-    }
-
     private readonly VoiceCommand _voiceCommand = new();
 
     private void StartVoiceTrigger()
@@ -68,6 +60,7 @@ public partial class MainForm : Form
 
                 if (Settings.PlayVoice)
                     PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagem.Name + ".mp3"));
+
                 stratagem.PressKeys();
             };
         }
@@ -159,8 +152,9 @@ public partial class MainForm : Form
         }
 
         enableVoiceTriggerCheckBox.Checked = Settings.EnableVoiceTrigger;
+        if (!voiceTriggerKeyComboBox.Items.Contains(Settings.VoiceTriggerKey))
+            Settings.VoiceTriggerKey = "`";
         voiceTriggerKeyComboBox.SelectedItem = Settings.VoiceTriggerKey;
-        AddOrRemoveTriggerHotkey();
     }
 
     private string GetFKeyStratagemString()
@@ -373,11 +367,6 @@ public partial class MainForm : Form
         }
     }
 
-    private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-    {
-        KillAhkProcess();
-    }
-
     private void ctrlRadioButton_Click(object sender, EventArgs e)
     {
         Settings.TriggerKey = ctrlRadioButton.Checked ? "Ctrl" : "Alt";
@@ -446,6 +435,9 @@ public partial class MainForm : Form
 
             lines.Add("}");
         }
+
+        if (Settings.EnableVoiceTrigger)
+            lines.Add($"${Settings.VoiceTriggerKey}:: SendMessage 0x0111, 1, 0, , \"{Text}\"");
 
         await File.WriteAllLinesAsync(ScriptFile, lines);
     }
@@ -653,10 +645,7 @@ public partial class MainForm : Form
         }
 
         if (shouldStart)
-        {
             await StartAutoHotkeyScript();
-            AddOrRemoveTriggerHotkey();
-        }
     }
 
     private void suggestionLabel_Click(object sender, EventArgs e)
@@ -699,17 +688,34 @@ public partial class MainForm : Form
         _settingsChanged = true;
     }
 
-    private void AddOrRemoveTriggerHotkey()
+    private const int WM_COMMAND = 0x0111;
+
+    protected override void WndProc(ref Message m)
     {
-        if (Settings.EnableVoiceTrigger)
-            HotkeyManager.Current.AddOrReplace("Trigger", Enum.Parse<Keys>(Settings.VoiceTriggerKey),
-                (_, _) =>
-                {
-                    var title = WindowHelper.GetActiveWindowTitle();
-                    if (title == @"HELLDIVERS™ 2")
-                        StartVoiceTrigger();
-                });
-        else
-            HotkeyManager.Current.Remove("Trigger");
+        if (m.Msg == WM_COMMAND)
+        {
+            var commandId = m.WParam.ToInt32() & 0xFFFF;
+            HandleCommand(commandId, m.LParam);
+            // Optionally, return without calling the base WndProc to prevent default handling
+            return;
+        }
+
+        // Call the base WndProc method for default processing of other messages
+        base.WndProc(ref m);
+    }
+
+    private void HandleCommand(int commandId, IntPtr param)
+    {
+        switch (commandId)
+        {
+            case 1:
+                StartVoiceTrigger();
+                break;
+        }
+    }
+
+    private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        KillAhkProcess();
     }
 }
