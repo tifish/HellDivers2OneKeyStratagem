@@ -492,6 +492,9 @@ public partial class MainForm : Form
 
             foreach (var process in Process.GetProcessesByName("HellDivers2OneKey"))
                 process.Kill();
+
+            foreach (var process in Process.GetProcessesByName("HellDivers2OneKeyStratagem"))
+                process.Kill();
         }
         catch
         {
