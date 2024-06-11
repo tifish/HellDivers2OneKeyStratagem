@@ -636,6 +636,9 @@ public partial class MainForm : Form
 
     private async void MainForm_Deactivate(object sender, EventArgs e)
     {
+        if (_isLoading)
+            return;
+        
         var shouldStart = _settingsChanged || _ahkProcess == null;
 
         if (_settingsChanged)
