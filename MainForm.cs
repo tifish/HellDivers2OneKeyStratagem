@@ -103,7 +103,7 @@ public partial class MainForm : Form
     private static readonly string ExeDirectory = Path.GetDirectoryName(Application.ExecutablePath)!;
     private static readonly string AutoHotkeyDirectory = Path.Combine(ExeDirectory, "AutoHotkey");
 
-    private static readonly string TemplateAhk = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKeyStratagem.template.ahk");
+    private static readonly string TemplateAhk = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKey.template.ahk");
     private string[] _templateLines = [];
 
     private async Task LoadScriptTemplate()
