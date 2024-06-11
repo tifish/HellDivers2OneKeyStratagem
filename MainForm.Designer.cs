@@ -66,6 +66,14 @@
             label2 = new Label();
             label1 = new Label();
             stratagemGroupsFlowLayoutPanel = new FlowLayoutPanel();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            label3 = new Label();
+            checkBox1 = new CheckBox();
+            checkBox2 = new CheckBox();
+            flowLayoutPanel5 = new FlowLayoutPanel();
+            label4 = new Label();
+            checkBox3 = new CheckBox();
+            checkBox4 = new CheckBox();
             rootFlowLayoutPanel.SuspendLayout();
             buttonsFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
@@ -75,6 +83,9 @@
             flowLayoutPanel4.SuspendLayout();
             fKeysFlowLayoutPanel.SuspendLayout();
             fKeyFlowLayoutPanel.SuspendLayout();
+            stratagemGroupsFlowLayoutPanel.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
+            flowLayoutPanel5.SuspendLayout();
             SuspendLayout();
             // 
             // rootFlowLayoutPanel
@@ -91,7 +102,7 @@
             rootFlowLayoutPanel.Location = new Point(0, 0);
             rootFlowLayoutPanel.Margin = new Padding(10);
             rootFlowLayoutPanel.Name = "rootFlowLayoutPanel";
-            rootFlowLayoutPanel.Size = new Size(1011, 232);
+            rootFlowLayoutPanel.Size = new Size(1011, 315);
             rootFlowLayoutPanel.TabIndex = 0;
             // 
             // buttonsFlowLayoutPanel
@@ -226,7 +237,7 @@
             voiceNamesComboBox.Anchor = AnchorStyles.Left;
             voiceNamesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             voiceNamesComboBox.FormattingEnabled = true;
-            voiceNamesComboBox.Location = new Point(586, 5);
+            voiceNamesComboBox.Location = new Point(586, 4);
             voiceNamesComboBox.Name = "voiceNamesComboBox";
             voiceNamesComboBox.Size = new Size(140, 27);
             voiceNamesComboBox.TabIndex = 7;
@@ -320,7 +331,7 @@
             generateVoiceStyleComboBox.Anchor = AnchorStyles.Left;
             generateVoiceStyleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             generateVoiceStyleComboBox.FormattingEnabled = true;
-            generateVoiceStyleComboBox.Location = new Point(3, 5);
+            generateVoiceStyleComboBox.Location = new Point(3, 4);
             generateVoiceStyleComboBox.Name = "generateVoiceStyleComboBox";
             generateVoiceStyleComboBox.Size = new Size(254, 27);
             generateVoiceStyleComboBox.TabIndex = 5;
@@ -446,7 +457,7 @@
             stratagemSetsComboBox.Anchor = AnchorStyles.Left;
             stratagemSetsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             stratagemSetsComboBox.FormattingEnabled = true;
-            stratagemSetsComboBox.Location = new Point(3, 5);
+            stratagemSetsComboBox.Location = new Point(3, 4);
             stratagemSetsComboBox.Name = "stratagemSetsComboBox";
             stratagemSetsComboBox.Size = new Size(810, 27);
             stratagemSetsComboBox.TabIndex = 5;
@@ -521,10 +532,104 @@
             // 
             stratagemGroupsFlowLayoutPanel.AutoSize = true;
             stratagemGroupsFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            stratagemGroupsFlowLayoutPanel.Controls.Add(flowLayoutPanel1);
+            stratagemGroupsFlowLayoutPanel.Controls.Add(flowLayoutPanel5);
             stratagemGroupsFlowLayoutPanel.Location = new Point(3, 229);
             stratagemGroupsFlowLayoutPanel.Name = "stratagemGroupsFlowLayoutPanel";
-            stratagemGroupsFlowLayoutPanel.Size = new Size(0, 0);
+            stratagemGroupsFlowLayoutPanel.Size = new Size(252, 83);
             stratagemGroupsFlowLayoutPanel.TabIndex = 2;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.AutoSize = true;
+            flowLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            flowLayoutPanel1.Controls.Add(label3);
+            flowLayoutPanel1.Controls.Add(checkBox1);
+            flowLayoutPanel1.Controls.Add(checkBox2);
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(3, 3);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(128, 77);
+            flowLayoutPanel1.TabIndex = 0;
+            // 
+            // label3
+            // 
+            label3.Anchor = AnchorStyles.Left;
+            label3.AutoSize = true;
+            label3.Font = new Font("Microsoft YaHei", 9.75F, FontStyle.Bold);
+            label3.Location = new Point(3, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(35, 19);
+            label3.TabIndex = 0;
+            label3.Text = "飞鹰";
+            // 
+            // checkBox1
+            // 
+            checkBox1.Anchor = AnchorStyles.Left;
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(3, 22);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(80, 23);
+            checkBox1.TabIndex = 1;
+            checkBox1.Text = "飞鹰空袭";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            checkBox2.Anchor = AnchorStyles.Left;
+            checkBox2.AutoSize = true;
+            checkBox2.Location = new Point(3, 51);
+            checkBox2.Name = "checkBox2";
+            checkBox2.Size = new Size(122, 23);
+            checkBox2.TabIndex = 2;
+            checkBox2.Text = "飞鹰500KG炸弹";
+            checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // flowLayoutPanel5
+            // 
+            flowLayoutPanel5.AutoSize = true;
+            flowLayoutPanel5.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            flowLayoutPanel5.Controls.Add(label4);
+            flowLayoutPanel5.Controls.Add(checkBox3);
+            flowLayoutPanel5.Controls.Add(checkBox4);
+            flowLayoutPanel5.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel5.Location = new Point(137, 3);
+            flowLayoutPanel5.Name = "flowLayoutPanel5";
+            flowLayoutPanel5.Size = new Size(112, 77);
+            flowLayoutPanel5.TabIndex = 3;
+            // 
+            // label4
+            // 
+            label4.Anchor = AnchorStyles.Left;
+            label4.AutoSize = true;
+            label4.Font = new Font("Microsoft YaHei", 9.75F, FontStyle.Bold);
+            label4.Location = new Point(3, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(35, 19);
+            label4.TabIndex = 0;
+            label4.Text = "轨道";
+            // 
+            // checkBox3
+            // 
+            checkBox3.Anchor = AnchorStyles.Left;
+            checkBox3.AutoSize = true;
+            checkBox3.Location = new Point(3, 22);
+            checkBox3.Name = "checkBox3";
+            checkBox3.Size = new Size(106, 23);
+            checkBox3.TabIndex = 1;
+            checkBox3.Text = "轨道毒气攻击";
+            checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox4
+            // 
+            checkBox4.Anchor = AnchorStyles.Left;
+            checkBox4.AutoSize = true;
+            checkBox4.Location = new Point(3, 51);
+            checkBox4.Name = "checkBox4";
+            checkBox4.Size = new Size(93, 23);
+            checkBox4.TabIndex = 2;
+            checkBox4.Text = "轨道炮攻击";
+            checkBox4.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -564,6 +669,12 @@
             fKeysFlowLayoutPanel.PerformLayout();
             fKeyFlowLayoutPanel.ResumeLayout(false);
             fKeyFlowLayoutPanel.PerformLayout();
+            stratagemGroupsFlowLayoutPanel.ResumeLayout(false);
+            stratagemGroupsFlowLayoutPanel.PerformLayout();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
+            flowLayoutPanel5.ResumeLayout(false);
+            flowLayoutPanel5.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -608,5 +719,13 @@
         private FlowLayoutPanel voiceTriggerFlowLayoutPanel;
         private CheckBox enableVoiceTriggerCheckBox;
         private ComboBox voiceTriggerKeyComboBox;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Label label3;
+        private CheckBox checkBox1;
+        private CheckBox checkBox2;
+        private FlowLayoutPanel flowLayoutPanel5;
+        private Label label4;
+        private CheckBox checkBox3;
+        private CheckBox checkBox4;
     }
 }

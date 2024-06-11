@@ -292,9 +292,10 @@ public partial class MainForm : Form
             PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagem.Name + ".mp3"));
     }
 
-
     private void InitStratagemGroups()
     {
+        stratagemGroupsFlowLayoutPanel.Controls.Clear();
+
         foreach (var group in StratagemGroups)
         {
             var root = new FlowLayoutPanel { FlowDirection = FlowDirection.TopDown, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
