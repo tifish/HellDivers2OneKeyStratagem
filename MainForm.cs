@@ -138,7 +138,7 @@ public partial class MainForm : Form
 
                     SetFKeyStratagem(SelectedFKeyIndex, stratagem);
                 }
-                else
+                else if (WindowHelper.GetActiveWindowTitle() == "HELLDIVERS™ 2")
                 {
                     if (Settings.PlayVoice)
                         PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagem.Name + ".mp3"));
