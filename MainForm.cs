@@ -215,6 +215,8 @@ public partial class MainForm : Form
         voiceTriggerKeyComboBox.SelectedItem = Settings.VoiceTriggerKey;
 
         enableSetFKeyByVoiceCheckBox.Checked = Settings.EnableSetFKeyByVoice;
+
+        voiceConfidenceNumericUpDown.Value = (decimal)Settings.VoiceConfidence;
     }
 
     private string GetFKeyStratagemString()
@@ -814,5 +816,11 @@ public partial class MainForm : Form
 
             await LoadByLanguage();
         }
+    }
+
+    private void voiceConfidenceNumericUpDown_ValueChanged(object sender, EventArgs e)
+    {
+        Settings.VoiceConfidence = (float)voiceConfidenceNumericUpDown.Value;
+        _settingsChanged = true;
     }
 }

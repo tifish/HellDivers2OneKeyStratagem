@@ -28,7 +28,11 @@ public class VoiceCommand : IDisposable
         _recognizer.LoadGrammar(g);
 
         // Attach event handlers.
-        _recognizer.SpeechRecognized += (_, e) => { CommandRecognized?.Invoke(this, e.Result.Text); };
+        _recognizer.SpeechRecognized += (_, e) =>
+        {
+            if (e.Result.Confidence > Settings.VoiceConfidence)
+                CommandRecognized?.Invoke(this, e.Result.Text);
+        };
 
         _recognizer.RecognizeCompleted += (sender, args) => { _isRecognizing = false; };
 

@@ -15,4 +15,5 @@ public class AppSettings
     public bool EnableSetFKeyByVoice { get; set; } = true;
     public List<string> StratagemSets { get; set; } = [];
     public string Language { get; set; } = "";
+    public float VoiceConfidence { get; set; } = 0.99f;
 }

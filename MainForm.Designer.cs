@@ -45,6 +45,8 @@
             refreshVoiceNamesButton = new Button();
             enableVoiceTriggerCheckBox = new CheckBox();
             voiceTriggerKeyComboBox = new ComboBox();
+            label11 = new Label();
+            voiceConfidenceNumericUpDown = new NumericUpDown();
             label10 = new Label();
             languageComboBox = new ComboBox();
             generateVoiceFlowLayoutPanel = new FlowLayoutPanel();
@@ -83,6 +85,7 @@
             flowLayoutPanel2.SuspendLayout();
             flowLayoutPanel3.SuspendLayout();
             voiceTriggerFlowLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)voiceConfidenceNumericUpDown).BeginInit();
             generateVoiceFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel4.SuspendLayout();
             flowLayoutPanel6.SuspendLayout();
@@ -242,11 +245,13 @@
             voiceTriggerFlowLayoutPanel.Controls.Add(refreshVoiceNamesButton);
             voiceTriggerFlowLayoutPanel.Controls.Add(enableVoiceTriggerCheckBox);
             voiceTriggerFlowLayoutPanel.Controls.Add(voiceTriggerKeyComboBox);
+            voiceTriggerFlowLayoutPanel.Controls.Add(label11);
+            voiceTriggerFlowLayoutPanel.Controls.Add(voiceConfidenceNumericUpDown);
             voiceTriggerFlowLayoutPanel.Controls.Add(label10);
             voiceTriggerFlowLayoutPanel.Controls.Add(languageComboBox);
             voiceTriggerFlowLayoutPanel.Location = new Point(3, 51);
             voiceTriggerFlowLayoutPanel.Name = "voiceTriggerFlowLayoutPanel";
-            voiceTriggerFlowLayoutPanel.Size = new Size(840, 35);
+            voiceTriggerFlowLayoutPanel.Size = new Size(1004, 35);
             voiceTriggerFlowLayoutPanel.TabIndex = 7;
             // 
             // playVoiceCheckBox
@@ -268,7 +273,7 @@
             voiceNamesComboBox.Anchor = AnchorStyles.Left;
             voiceNamesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             voiceNamesComboBox.FormattingEnabled = true;
-            voiceNamesComboBox.Location = new Point(154, 6);
+            voiceNamesComboBox.Location = new Point(154, 4);
             voiceNamesComboBox.Name = "voiceNamesComboBox";
             voiceNamesComboBox.Size = new Size(140, 27);
             voiceNamesComboBox.TabIndex = 7;
@@ -306,17 +311,41 @@
             voiceTriggerKeyComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             voiceTriggerKeyComboBox.FormattingEnabled = true;
             voiceTriggerKeyComboBox.Items.AddRange(new object[] { "LButton", "RButton", "MButton", "XButton1", "XButton2", "WheelDown", "WheelUp", "WheelLeft", "WheelRight", "CapsLock", "Space", "Tab", "Enter", "Return", "Esc", "Backspace", "ScrollLock", "Delete", "Insert", "Home", "End", "PgUp", "PgDn", "Up", "Down", "Left", "Right", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadDot", "NumLock", "NumpadDiv", "NumpadMult", "NumpadAdd", "NumpadSub", "NumpadEnter", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "LWin", "RWin", "Ctrl", "Alt", "Shift", "LCtrl", "RCtrl", "LShift", "RShift", "LAlt", "RAlt", "Browser_Back", "Browser_Forward", "Browser_Refresh", "Browser_Stop", "Browser_Search", "Browser_Favorites", "Browser_Home", "Volume_Mute", "Volume_Down", "Volume_Up", "Media_Next", "Media_Prev", "Media_Stop", "Media_Play_Pause", "Launch_Mail", "Launch_Media", "Launch_App1", "Launch_App2", "AppsKey", "PrintScreen", "CtrlBreak", "Pause", "Break", "Help", "Sleep", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "-", "=", "[", "]", "\\", ";", "'", ",", ".", "/" });
-            voiceTriggerKeyComboBox.Location = new Point(571, 4);
+            voiceTriggerKeyComboBox.Location = new Point(571, 6);
             voiceTriggerKeyComboBox.Name = "voiceTriggerKeyComboBox";
             voiceTriggerKeyComboBox.Size = new Size(135, 27);
             voiceTriggerKeyComboBox.TabIndex = 8;
             voiceTriggerKeyComboBox.SelectionChangeCommitted += voiceTriggerKeyComboBox_SelectionChangeCommitted;
             // 
+            // label11
+            // 
+            label11.Anchor = AnchorStyles.Left;
+            label11.AutoSize = true;
+            label11.Location = new Point(712, 8);
+            label11.Name = "label11";
+            label11.Size = new Size(100, 19);
+            label11.TabIndex = 12;
+            label11.Text = "语音识别阈值：";
+            // 
+            // voiceConfidenceNumericUpDown
+            // 
+            voiceConfidenceNumericUpDown.Anchor = AnchorStyles.Left;
+            voiceConfidenceNumericUpDown.DecimalPlaces = 2;
+            voiceConfidenceNumericUpDown.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+            voiceConfidenceNumericUpDown.Location = new Point(818, 5);
+            voiceConfidenceNumericUpDown.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            voiceConfidenceNumericUpDown.Minimum = new decimal(new int[] { 5, 0, 0, 65536 });
+            voiceConfidenceNumericUpDown.Name = "voiceConfidenceNumericUpDown";
+            voiceConfidenceNumericUpDown.Size = new Size(52, 25);
+            voiceConfidenceNumericUpDown.TabIndex = 13;
+            voiceConfidenceNumericUpDown.Value = new decimal(new int[] { 99, 0, 0, 131072 });
+            voiceConfidenceNumericUpDown.ValueChanged += voiceConfidenceNumericUpDown_ValueChanged;
+            // 
             // label10
             // 
             label10.Anchor = AnchorStyles.Left;
             label10.AutoSize = true;
-            label10.Location = new Point(712, 8);
+            label10.Location = new Point(876, 8);
             label10.Name = "label10";
             label10.Size = new Size(48, 19);
             label10.TabIndex = 10;
@@ -328,7 +357,7 @@
             languageComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             languageComboBox.FormattingEnabled = true;
             languageComboBox.Items.AddRange(new object[] { "LButton", "RButton", "MButton", "XButton1", "XButton2", "WheelDown", "WheelUp", "WheelLeft", "WheelRight", "CapsLock", "Space", "Tab", "Enter", "Return", "Esc", "Backspace", "ScrollLock", "Delete", "Insert", "Home", "End", "PgUp", "PgDn", "Up", "Down", "Left", "Right", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadDot", "NumLock", "NumpadDiv", "NumpadMult", "NumpadAdd", "NumpadSub", "NumpadEnter", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "LWin", "RWin", "Ctrl", "Alt", "Shift", "LCtrl", "RCtrl", "LShift", "RShift", "LAlt", "RAlt", "Browser_Back", "Browser_Forward", "Browser_Refresh", "Browser_Stop", "Browser_Search", "Browser_Favorites", "Browser_Home", "Volume_Mute", "Volume_Down", "Volume_Up", "Media_Next", "Media_Prev", "Media_Stop", "Media_Play_Pause", "Launch_Mail", "Launch_Media", "Launch_App1", "Launch_App2", "AppsKey", "PrintScreen", "CtrlBreak", "Pause", "Break", "Help", "Sleep", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "-", "=", "[", "]", "\\", ";", "'", ",", ".", "/" });
-            languageComboBox.Location = new Point(766, 6);
+            languageComboBox.Location = new Point(930, 4);
             languageComboBox.Name = "languageComboBox";
             languageComboBox.Size = new Size(71, 27);
             languageComboBox.TabIndex = 11;
@@ -361,7 +390,7 @@
             generateVoiceStyleComboBox.Anchor = AnchorStyles.Left;
             generateVoiceStyleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             generateVoiceStyleComboBox.FormattingEnabled = true;
-            generateVoiceStyleComboBox.Location = new Point(3, 6);
+            generateVoiceStyleComboBox.Location = new Point(3, 4);
             generateVoiceStyleComboBox.Name = "generateVoiceStyleComboBox";
             generateVoiceStyleComboBox.Size = new Size(254, 27);
             generateVoiceStyleComboBox.TabIndex = 5;
@@ -487,7 +516,7 @@
             stratagemSetsComboBox.Anchor = AnchorStyles.Left;
             stratagemSetsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             stratagemSetsComboBox.FormattingEnabled = true;
-            stratagemSetsComboBox.Location = new Point(3, 6);
+            stratagemSetsComboBox.Location = new Point(3, 4);
             stratagemSetsComboBox.Name = "stratagemSetsComboBox";
             stratagemSetsComboBox.Size = new Size(810, 27);
             stratagemSetsComboBox.TabIndex = 5;
@@ -716,6 +745,7 @@
             flowLayoutPanel3.PerformLayout();
             voiceTriggerFlowLayoutPanel.ResumeLayout(false);
             voiceTriggerFlowLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)voiceConfidenceNumericUpDown).EndInit();
             generateVoiceFlowLayoutPanel.ResumeLayout(false);
             generateVoiceFlowLayoutPanel.PerformLayout();
             flowLayoutPanel4.ResumeLayout(false);
@@ -788,5 +818,7 @@
         private CheckBox enableSetFKeyByVoiceCheckBox;
         private Label label10;
         private ComboBox languageComboBox;
+        private Label label11;
+        private NumericUpDown voiceConfidenceNumericUpDown;
     }
 }
