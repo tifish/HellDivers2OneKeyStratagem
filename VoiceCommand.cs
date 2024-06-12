@@ -14,26 +14,28 @@ public class VoiceCommand : IDisposable
         return SpeechRecognitionEngine.InstalledRecognizers().Select(r => r.Culture.Name).ToList();
     }
 
-    public VoiceCommand(string cultureName, string phrase, string[] commands)
+    public VoiceCommand(string cultureName, string wakeupWord, string[] commands)
     {
         _recognizer = new SpeechRecognitionEngine(CultureInfo.GetCultureInfo(cultureName));
 
         var choices = new Choices();
         choices.Add(commands);
 
-        var gb = phrase == ""
+        var gb = wakeupWord == ""
             ? new GrammarBuilder()
-            : new GrammarBuilder(phrase);
+            : new GrammarBuilder(wakeupWord);
         gb.Append(choices);
 
         var g = new Grammar(gb);
         _recognizer.LoadGrammar(g);
 
+        var wakeupWordLength = wakeupWord.Length;
+
         // Attach event handlers.
         _recognizer.SpeechRecognized += (_, e) =>
         {
             if (e.Result.Confidence > Settings.VoiceConfidence)
-                CommandRecognized?.Invoke(this, e.Result.Text);
+                CommandRecognized?.Invoke(this, e.Result.Text[wakeupWordLength..]);
         };
 
         _recognizer.RecognizeCompleted += (sender, args) => { _isRecognizing = false; };
@@ -50,7 +52,7 @@ public class VoiceCommand : IDisposable
             return;
 
         // Start asynchronous, continuous speech recognition.
-        _recognizer.RecognizeAsync(RecognizeMode.Single);
+        _recognizer.RecognizeAsync(RecognizeMode.Multiple);
 
         _isRecognizing = true;
     }

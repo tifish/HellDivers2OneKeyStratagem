@@ -66,11 +66,35 @@ public partial class MainForm : Form
 
     private async Task LoadByLanguage()
     {
-        _voiceCommand?.Dispose();
         StratagemManager.Load();
         InitStratagemGroups();
         InitSettingsToUI();
+        ResetVoiceCommand();
         await LoadGeneratingVoiceStyles();
+    }
+
+    private void ResetVoiceCommand()
+    {
+        _voiceCommand?.Stop();
+        _voiceCommand?.Dispose();
+        _voiceCommand = null;
+
+        if (Settings.EnableVoiceTrigger)
+            StartVoiceTrigger();
+    }
+
+    private bool _isActive;
+
+    protected override void OnActivated(EventArgs e)
+    {
+        base.OnActivated(e);
+        _isActive = true;
+    }
+
+    protected override void OnDeactivate(EventArgs e)
+    {
+        base.OnDeactivate(e);
+        _isActive = false;
     }
 
     private VoiceCommand? _voiceCommand;
@@ -92,19 +116,26 @@ public partial class MainForm : Form
                 return;
             }
 
-            _voiceCommand = new VoiceCommand(Settings.Language, Settings.WakeupWord, [.. Stratagems.Keys]);
+            try
+            {
+                _voiceCommand = new VoiceCommand(Settings.Language, Settings.WakeupWord, [.. Stratagems.Keys]);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "创建语音识别失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             _voiceCommand.CommandRecognized += (_, command) =>
             {
                 if (!Stratagems.TryGetValue(command, out var stratagem))
                     return;
 
-                if (Focused)
+                if (_isActive)
                 {
                     if (!Settings.EnableSetFKeyByVoice)
                         return;
 
-                    PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagem.Name + ".mp3"));
                     SetFKeyStratagem(SelectedFKeyIndex, stratagem);
                 }
                 else
@@ -118,6 +149,14 @@ public partial class MainForm : Form
         }
 
         _voiceCommand.Start();
+    }
+
+    private void StopVoiceTrigger()
+    {
+        if (_voiceCommand == null)
+            return;
+
+        _voiceCommand.Stop();
     }
 
     private void LoadVoiceNames()
@@ -317,15 +356,11 @@ public partial class MainForm : Form
                     return;
 
                 if (Settings.EnableSetFKeyByVoice)
-                {
-                    StartVoiceTrigger();
-                }
-                else
-                {
-                    var stratagem = _fKeyStratagems[SelectedFKeyIndex];
-                    if (stratagem != null)
-                        PlayVoice(Path.Combine(VoiceRootPath, voiceNamesComboBox.SelectedItem as string ?? "", stratagem.Name + ".mp3"));
-                }
+                    return;
+
+                var stratagem = _fKeyStratagems[SelectedFKeyIndex];
+                if (stratagem != null)
+                    PlayVoice(Path.Combine(VoiceRootPath, voiceNamesComboBox.SelectedItem as string ?? "", stratagem.Name + ".mp3"));
             }
         }
 
@@ -509,15 +544,15 @@ public partial class MainForm : Form
             lines.Add("}");
         }
 
-        if (Settings.EnableVoiceTrigger)
-        {
-            lines.Add($$"""
-                        ${{Settings.VoiceTriggerKey}}:: {
-                            SendMessage 0x0111, 1, 0, , "{{Text}}"
-                            SoundBeep 400, 100
-                        }
-                        """);
-        }
+        //if (Settings.EnableVoiceTrigger)
+        //{
+        //    lines.Add($$"""
+        //                ${{Settings.VoiceTriggerKey}}:: {
+        //                    SendMessage 0x0111, 1, 0, , "{{Text}}"
+        //                    SoundBeep 400, 100
+        //                }
+        //                """);
+        //}
 
         await File.WriteAllLinesAsync(ScriptFile, lines);
     }
@@ -769,6 +804,11 @@ public partial class MainForm : Form
     {
         Settings.EnableVoiceTrigger = enableVoiceTriggerCheckBox.Checked;
         _settingsChanged = true;
+
+        if (Settings.EnableVoiceTrigger)
+            StartVoiceTrigger();
+        else
+            StopVoiceTrigger();
     }
 
     private const int WM_COMMAND = 0x0111;
@@ -829,6 +869,7 @@ public partial class MainForm : Form
     {
         Settings.WakeupWord = wakeupWordTextBox.Text.Trim();
         _settingsChanged = true;
+        ResetVoiceCommand();
     }
 
     private void openSpeechRecognitionControlPanelButton_Click(object sender, EventArgs e)
