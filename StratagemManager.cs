@@ -1,4 +1,6 @@
 ﻿global using static HellDivers2OneKeyStratagem.StratagemManager;
+using System.Globalization;
+using System.Speech.Recognition;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -8,38 +10,49 @@ public static class StratagemManager
     public static readonly Dictionary<string, Stratagem> Stratagems = [];
     private const string StratagemsFile = "Stratagems.tab";
 
-    public static async Task Load()
+    public static void Load()
     {
         if (!File.Exists(StratagemsFile))
             return;
+
+        var langName = Settings.Language[..2];
+
+        var nameColumn = langName switch
+        {
+            "zh" => 1,
+            "en" => 2,
+            _ => 2,
+        };
 
         StratagemGroups.Clear();
         Stratagems.Clear();
         List<Stratagem>? currentGroup = null;
 
-        await foreach (var line in File.ReadLinesAsync(StratagemsFile))
+        foreach (var line in File.ReadLines(StratagemsFile).Skip(1))
         {
             var items = line.Split('\t');
             if (items.Length != 3)
                 throw new InvalidOperationException($"Invalid line: {line}");
 
-            if (items[2] != "")
+            if (items[0] != "")
             {
                 if (currentGroup == null)
-                    throw new InvalidOperationException($"No group found for stratagem {items[0]}");
+                    throw new InvalidOperationException($"No group found for stratagem {items[nameColumn]}");
 
-                var stratagem = new Stratagem { Name = items[0], KeySequence = items[2] };
+                var stratagem = new Stratagem { Name = items[nameColumn], KeySequence = items[0] };
+                var names = stratagem.Name.Split('|');
+                stratagem.Name = names[0];
+
                 currentGroup.Add(stratagem);
 
-                Stratagems.Add(stratagem.Name, stratagem);
-                foreach (var name in items[1].Split('|'))
+                foreach (var name in names)
                     if (name != "")
                         Stratagems.Add(name, stratagem);
             }
             else
             {
                 currentGroup = [];
-                StratagemGroups.Add(line, currentGroup);
+                StratagemGroups.Add(items[nameColumn], currentGroup);
             }
         }
     }

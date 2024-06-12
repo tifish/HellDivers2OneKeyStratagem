@@ -1,26 +1,39 @@
+﻿using System.Globalization;
 using System.Speech.Recognition;
 
 namespace HellDivers2OneKeyStratagem;
 
 public class VoiceCommand : IDisposable
 {
-    private readonly SpeechRecognitionEngine _recognizer = new();
-    public List<string> Commands { get; } = [];
+    private readonly SpeechRecognitionEngine _recognizer;
 
     public event EventHandler<string>? CommandRecognized;
 
-    public VoiceCommand()
+    public static List<string> GetInstalledRecognizers()
     {
-        // Attach event handlers.
-        _recognizer.SpeechRecognized += (_, e) =>
-        {
-            CommandRecognized?.Invoke(this, e.Result.Text);
-        };
+        return SpeechRecognitionEngine.InstalledRecognizers().Select(r => r.Culture.Name).ToList();
+    }
 
-        _recognizer.RecognizeCompleted += (sender, args) =>
-        {
-            _isRecognizing = false;
-        };
+    public VoiceCommand(string cultureName, string[] commands)
+    {
+        _recognizer = new SpeechRecognitionEngine(CultureInfo.GetCultureInfo(cultureName));
+
+        var choices = new Choices();
+        choices.Add(commands);
+
+        var gb = new GrammarBuilder();
+        gb.Append(choices);
+
+        var g = new Grammar(gb);
+        _recognizer.LoadGrammar(g);
+
+        // Attach event handlers.
+        _recognizer.SpeechRecognized += (_, e) => { CommandRecognized?.Invoke(this, e.Result.Text); };
+
+        _recognizer.RecognizeCompleted += (sender, args) => { _isRecognizing = false; };
+
+        // Configure the input to the recognizer.
+        _recognizer.SetInputToDefaultAudioDevice();
     }
 
     private bool _isRecognizing;
@@ -29,18 +42,6 @@ public class VoiceCommand : IDisposable
     {
         if (_isRecognizing)
             return;
-
-        var choices = new Choices();
-        choices.Add(Commands.ToArray());
-
-        var gb = new GrammarBuilder();
-        gb.Append(choices);
-
-        var g = new Grammar(gb);
-        _recognizer.LoadGrammar(g);
-
-        // Configure the input to the recognizer.
-        _recognizer.SetInputToDefaultAudioDevice();
 
         // Start asynchronous, continuous speech recognition.
         _recognizer.RecognizeAsync(RecognizeMode.Single);

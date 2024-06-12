@@ -1,6 +1,7 @@
 ﻿using EdgeTTS;
 using NAudio.Wave;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -20,18 +21,15 @@ public partial class MainForm : Form
 
         try
         {
-            await StratagemManager.Load();
-
-            InitFKeys();
-            InitStratagemGroups();
-
             await LoadSettings();
 
+            InitLanguages();
+            InitFKeys();
+
+            await LoadByLanguage();
+
             LoadVoiceNames();
-
             await LoadScriptTemplate();
-
-            await LoadGeneratingVoiceStyles();
         }
         finally
         {
@@ -44,14 +42,57 @@ public partial class MainForm : Form
         _isLoading = false;
     }
 
-    private readonly VoiceCommand _voiceCommand = new();
+    private void InitLanguages()
+    {
+        var speechLanguages = VoiceCommand.GetInstalledRecognizers();
+        if (speechLanguages.Count == 0)
+            return;
+
+        languageComboBox.Items.Clear();
+        foreach (var language in speechLanguages)
+            languageComboBox.Items.Add(language);
+
+        if (!speechLanguages.Contains(Settings.Language))
+        {
+            if (speechLanguages.Contains(CultureInfo.CurrentCulture.Name))
+                Settings.Language = CultureInfo.CurrentCulture.Name;
+            else
+                Settings.Language = speechLanguages.First();
+            _settingsChanged = true;
+        }
+
+        languageComboBox.SelectedItem = Settings.Language;
+    }
+
+    private async Task LoadByLanguage()
+    {
+        _voiceCommand?.Dispose();
+        StratagemManager.Load();
+        InitStratagemGroups();
+        InitSettingsToUI();
+        await LoadGeneratingVoiceStyles();
+    }
+
+    private VoiceCommand? _voiceCommand;
 
     private void StartVoiceTrigger()
     {
-        if (_voiceCommand.Commands.Count == 0)
+        if (_voiceCommand == null)
         {
-            foreach (var name in Stratagems.Keys)
-                _voiceCommand.Commands.Add(name);
+            var languages = VoiceCommand.GetInstalledRecognizers();
+            if (languages.Count == 0)
+            {
+                MessageBox.Show(@"No voice recognition engine installed");
+                return;
+            }
+
+            if (!languages.Contains(Settings.Language))
+            {
+                MessageBox.Show($@"Voice recognition engine for {Settings.Language} not installed");
+                return;
+            }
+
+            _voiceCommand = new VoiceCommand(Settings.Language, [.. Stratagems.Keys]);
 
             _voiceCommand.CommandRecognized += (_, command) =>
             {
@@ -102,8 +143,11 @@ public partial class MainForm : Form
 
     private async Task LoadGeneratingVoiceStyles()
     {
+        if (Settings.Language == "")
+            return;
+
         var manager = await VoicesManager.Create();
-        _voices = manager.Find(language: "zh");
+        _voices = manager.Find(language: Settings.Language[..2]);
 
         foreach (var voice in _voices)
             generateVoiceStyleComboBox.Items.Add(voice.ShortName);
@@ -130,7 +174,10 @@ public partial class MainForm : Form
         var settings = await _settingsFile.Load();
         if (settings != null)
             Settings = settings;
+    }
 
+    private void InitSettingsToUI()
+    {
         switch (Settings.TriggerKey)
         {
             case "Ctrl":
@@ -615,7 +662,7 @@ public partial class MainForm : Form
     {
         try
         {
-            var text = _fKeyStratagems[SelectedFKeyIndex]?.Name ?? "飞鹰空袭";
+            var text = _fKeyStratagems[SelectedFKeyIndex]?.Name ?? Stratagems.Last().Value.Name;
             var tmpMp3 = Path.GetTempFileName() + ".mp3";
             await GenerateVoiceFile(text, tmpMp3);
             PlayVoice(tmpMp3, true);
@@ -756,5 +803,16 @@ public partial class MainForm : Form
     {
         Settings.EnableSetFKeyByVoice = enableSetFKeyByVoiceCheckBox.Checked;
         _settingsChanged = true;
+    }
+
+    private async void languageComboBox_SelectionChangeCommitted(object sender, EventArgs e)
+    {
+        if (languageComboBox.SelectedItem is string language)
+        {
+            Settings.Language = language;
+            _settingsChanged = true;
+
+            await LoadByLanguage();
+        }
     }
 }

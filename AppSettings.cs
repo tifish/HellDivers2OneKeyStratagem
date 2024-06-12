@@ -14,4 +14,5 @@ public class AppSettings
     public string VoiceTriggerKey { get; set; } = "`";
     public bool EnableSetFKeyByVoice { get; set; } = true;
     public List<string> StratagemSets { get; set; } = [];
+    public string Language { get; set; } = "";
 }

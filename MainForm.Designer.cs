@@ -45,6 +45,8 @@
             refreshVoiceNamesButton = new Button();
             enableVoiceTriggerCheckBox = new CheckBox();
             voiceTriggerKeyComboBox = new ComboBox();
+            label10 = new Label();
+            languageComboBox = new ComboBox();
             generateVoiceFlowLayoutPanel = new FlowLayoutPanel();
             generateVoiceStyleComboBox = new ComboBox();
             tryVoiceButton = new Button();
@@ -240,9 +242,11 @@
             voiceTriggerFlowLayoutPanel.Controls.Add(refreshVoiceNamesButton);
             voiceTriggerFlowLayoutPanel.Controls.Add(enableVoiceTriggerCheckBox);
             voiceTriggerFlowLayoutPanel.Controls.Add(voiceTriggerKeyComboBox);
+            voiceTriggerFlowLayoutPanel.Controls.Add(label10);
+            voiceTriggerFlowLayoutPanel.Controls.Add(languageComboBox);
             voiceTriggerFlowLayoutPanel.Location = new Point(3, 51);
             voiceTriggerFlowLayoutPanel.Name = "voiceTriggerFlowLayoutPanel";
-            voiceTriggerFlowLayoutPanel.Size = new Size(709, 35);
+            voiceTriggerFlowLayoutPanel.Size = new Size(840, 35);
             voiceTriggerFlowLayoutPanel.TabIndex = 7;
             // 
             // playVoiceCheckBox
@@ -307,6 +311,28 @@
             voiceTriggerKeyComboBox.Size = new Size(135, 27);
             voiceTriggerKeyComboBox.TabIndex = 8;
             voiceTriggerKeyComboBox.SelectionChangeCommitted += voiceTriggerKeyComboBox_SelectionChangeCommitted;
+            // 
+            // label10
+            // 
+            label10.Anchor = AnchorStyles.Left;
+            label10.AutoSize = true;
+            label10.Location = new Point(712, 8);
+            label10.Name = "label10";
+            label10.Size = new Size(48, 19);
+            label10.TabIndex = 10;
+            label10.Text = "语言：";
+            // 
+            // languageComboBox
+            // 
+            languageComboBox.Anchor = AnchorStyles.Left;
+            languageComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            languageComboBox.FormattingEnabled = true;
+            languageComboBox.Items.AddRange(new object[] { "LButton", "RButton", "MButton", "XButton1", "XButton2", "WheelDown", "WheelUp", "WheelLeft", "WheelRight", "CapsLock", "Space", "Tab", "Enter", "Return", "Esc", "Backspace", "ScrollLock", "Delete", "Insert", "Home", "End", "PgUp", "PgDn", "Up", "Down", "Left", "Right", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadDot", "NumLock", "NumpadDiv", "NumpadMult", "NumpadAdd", "NumpadSub", "NumpadEnter", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "LWin", "RWin", "Ctrl", "Alt", "Shift", "LCtrl", "RCtrl", "LShift", "RShift", "LAlt", "RAlt", "Browser_Back", "Browser_Forward", "Browser_Refresh", "Browser_Stop", "Browser_Search", "Browser_Favorites", "Browser_Home", "Volume_Mute", "Volume_Down", "Volume_Up", "Media_Next", "Media_Prev", "Media_Stop", "Media_Play_Pause", "Launch_Mail", "Launch_Media", "Launch_App1", "Launch_App2", "AppsKey", "PrintScreen", "CtrlBreak", "Pause", "Break", "Help", "Sleep", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "-", "=", "[", "]", "\\", ";", "'", ",", ".", "/" });
+            languageComboBox.Location = new Point(766, 6);
+            languageComboBox.Name = "languageComboBox";
+            languageComboBox.Size = new Size(71, 27);
+            languageComboBox.TabIndex = 11;
+            languageComboBox.SelectionChangeCommitted += languageComboBox_SelectionChangeCommitted;
             // 
             // generateVoiceFlowLayoutPanel
             // 
@@ -760,5 +786,7 @@
         private CheckBox checkBox4;
         private FlowLayoutPanel flowLayoutPanel6;
         private CheckBox enableSetFKeyByVoiceCheckBox;
+        private Label label10;
+        private ComboBox languageComboBox;
     }
 }

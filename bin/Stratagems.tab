@@ -1,71 +1,72 @@
-﻿支援武器		
-机枪		↓ ← ↓ ↑ →
-反器材步枪	反器材	↓ ← → ↑ ↓
-盟友		↓ ← ↓ ↑ ↑ ←
-消耗性反坦克武器	次抛	↓ ↓ ← ↑ →
-无后座力步枪	无后座力	↓ ← → → ←
-火焰喷射器		↓ ← ↑ ↓ ↑
-机炮		↓ ← ↓ ↑ ↑ →
-重机枪		↓ ← ↑ ↓ ↓
-空爆火箭发射器	空爆火箭	↓ ↑ ↑ ← →
-磁轨炮		↓ → ↓ ↑ ← →
-飞矛		↓ ↓ ↑ ↓ ↓
-榴弹发射器	榴弹	↓ ← ↑ ← ↓
-激光大炮	激光炮	↓ ← ↓ ↑ ←
-电弧发射器	电弧枪	↓ → ↓ ↑ ← ←
-类星体加农炮	类星体	↓ ↓ ↑ ← →
-支援背包		
-喷射背包	飞行背包	↓ ↑ ↑ ↓ ↑
-补给背包		↓ ← ↓ ↑ ↑ ↓
-护卫犬漫游者	激光狗|漫游者	↓ ↑ ← ↑ → →
-防弹护盾		↓ ← ↓ ↓ ↑ ←
-防护罩生成包	防护罩背包|防护罩|蛋壳	↓ ↑ ← → ← →
-护卫犬		↓ ↑ ← ↑ → ↓
-支援载具		
-爱国者外骨骼装甲	爱国者	← ↓ → ↑ ← ↓ ↓
-解放者外骨骼装甲	解放者	← ↓ → ↑ ← ↓ ↑
-防守型		
-重机枪部署支架		↓ ↑ ← → ← →
-防护罩生成中继器		↓ ↓ ← → ← →
-特斯拉塔	特斯拉	↓ ↑ → ↑ ← →
-反步兵雷区	地雷	↓ ← ↑ →
-燃烧地雷		↓ ← ← ↓
-哨戒机枪		↓ ↑ → → ↑
-加特林哨戒炮	加特林炮	↓ ↑ → ←
-迫击哨戒炮	迫击炮	↓ ↑ → → ↓
-自动哨戒炮	哨戒炮	↓ ↑ → ↑ ← ↑
-火箭哨戒炮	火箭炮	↓ ↑ → → ←
-电磁冲击波迫击哨戒炮	电磁炮	↓ ↑ → ↓ →
-进攻型·飞鹰		
-飞鹰重新武装	飞鹰武装|重新武装	↑ ↑ ← ↑ →
-飞鹰机枪扫射	飞鹰机枪	↑ → →
-飞鹰空袭		↑ → ↓ →
-飞鹰集束炸弹	飞鹰集束	↑ → ↓ ↓ →
-飞鹰凝固汽油弹空袭	飞鹰汽油弹|飞鹰燃烧弹	↑ → ↓ ↑
-飞鹰烟雾攻击	飞鹰烟雾	↑ → ↑ ↓
-飞鹰110MM火箭巢	飞鹰110	↑ → ↑ ←
-飞鹰500KG炸弹	飞鹰500	↑ → ↓ ↓ ↓
-进攻型·轨道		
-加特林火力网		→ ↓ ← ↑ ↑
-轨道空爆攻击	轨道空爆	→ → →
-轨道120MM高爆火力网	轨道120	→ → ↓ ← → ↓
-轨道380MM高爆火力网	轨道380	→ ↓ ↑ ↑ ← ↓ ↓
-轨道游走火力网		→ ↓ → ↓ → ↓
-轨道激光炮	轨道激光	→ ↓ ↑ → ↓
-轨道炮攻击	轨道炮	→ ↑ ↓ ↓ →
-轨道精准攻击	轨道精准	→ → ↑
-轨道毒气攻击	轨道毒气	→ → ↓ →
-轨道电磁冲击波攻击	轨道电磁波	→ → ← ↓
-轨道烟雾攻击	轨道烟雾	→ → ↓ ↑
-常备		
-增援	救人|救队友	↑ ↓ → ← ↑
-SOS信标		↑ ↓ → ↑
-重新补给	补给	↓ ↓ ↑ →
-任务		
-地狱火炸弹	地狱火	↓ ↑ ← ↓ ↑ → ↓ ↑
-运送超级固态硬盘		↓ ↓ ↓ ↑ ↑
-地质探测器		↑ ↑ ← → ↓ ↓
-上传重要数据		↓ ↓ ↑ ↑ ↑
-照明弹		→ → ← ←
-超级地球大炮		→ ↑ ↑ ↓
-超级地球旗帜		↓ ↑ ↓ ↑
+﻿Keys	zh	en
+	支援武器	Support Weapon
+↓ ← ↓ ↑ →	机枪	Machine Gun
+↓ ← → ↑ ↓	反器材步枪|反器材	Anti-Material Rifle|Anti-Material
+↓ ← ↓ ↑ ↑ ←	盟友	Stalwart
+↓ ↓ ← ↑ →	消耗性反坦克武器|次抛	Expandable Anti-Tank|Anti-Tank
+↓ ← → → ←	无后座力步枪|无后座力	Recoilless Rifle|Recoilless
+↓ ← ↑ ↓ ↑	火焰喷射器	Flamethrower
+↓ ← ↓ ↑ ↑ →	机炮	Autocannon
+↓ ← ↑ ↓ ↓	重机枪	Heavy Machine Gun
+↓ ↑ ↑ ← →	空爆火箭发射器|空爆火箭	Airburst Rocket Launcher|Airburst Rocket
+↓ → ↓ ↑ ← →	磁轨炮	Railgun
+↓ ↓ ↑ ↓ ↓	飞矛	Spear
+↓ ← ↑ ← ↓	榴弹发射器|榴弹	Grenade Launcher|Grenade
+↓ ← ↓ ↑ ←	激光大炮|激光炮	Laser Cannon|Laser
+↓ → ↓ ↑ ← ←	电弧发射器|电弧枪	Arc Thrower|Arc Gun
+↓ ↓ ↑ ← →	类星体加农炮|类星体	Quasar Cannon|Quasar
+	支援背包	Support Pack
+↓ ↑ ↑ ↓ ↑	喷射背包|飞行背包	Jump Pack|Jetpack|Flight Pack
+↓ ← ↓ ↑ ↑ ↓	补给背包	Supply Pack
+↓ ↑ ← ↑ → →	护卫犬漫游者|激光狗|漫游者	Guard Dog Rover|Laser Dog|Rover
+↓ ← ↓ ↓ ↑ ←	防弹护盾	Ballistic Shield Backpack|Ballistic Shield
+↓ ↑ ← → ← →	防护罩生成包|防护罩背包|防护罩|蛋壳	Shield Generator Pack|Shield Generator|Shield
+↓ ↑ ← ↑ → ↓	护卫犬	Guard Dog
+	支援载具	Support Vehicle
+← ↓ → ↑ ← ↓ ↓	爱国者外骨骼装甲|爱国者	Patriot Exosuit|Patriot
+← ↓ → ↑ ← ↓ ↑	解放者外骨骼装甲|解放者	Emancipator Exosuit|Emancipator
+	防守型	Defensive
+↓ ↑ ← → ← →	重机枪部署支架	HMG Emplacement
+↓ ↓ ← → ← →	防护罩生成中继器	Shield Generator Relay
+↓ ↑ → ↑ ← →	特斯拉塔|特斯拉	Tesla Tower|Tesla
+↓ ← ↑ →	反步兵雷区|地雷	Anti-Personnel Minefield|Mines
+↓ ← ← ↓	燃烧地雷	Incendiary Mines
+↓ ↑ → → ↑	哨戒机枪	Machine Gun Sentry
+↓ ↑ → ←	加特林哨戒炮|加特林炮	Gatling Sentry
+↓ ↑ → → ↓	迫击哨戒炮|迫击炮	Mortar Sentry
+↓ ↑ → ↑ ← ↑	自动哨戒炮|哨戒炮	AutoCannon Sentry
+↓ ↑ → → ←	火箭哨戒炮|火箭炮	Rocket Sentry
+↓ ↑ → ↓ →	电磁冲击波迫击哨戒炮|电磁炮	EMS Mortar Sentry
+	进攻型·飞鹰	Offensive Eagle
+↑ ↑ ← ↑ →	飞鹰重新武装|飞鹰武装|重新武装	Eagle Rearm
+↑ → →	飞鹰机枪扫射|飞鹰机枪	Eagle Strafing Run
+↑ → ↓ →	飞鹰空袭	Eagle Airstrike
+↑ → ↓ ↓ →	飞鹰集束炸弹|飞鹰集束	Eagle Cluster Bomb
+↑ → ↓ ↑	飞鹰凝固汽油弹空袭|飞鹰汽油弹|飞鹰燃烧弹	Eagle Napalm Airstrike
+↑ → ↑ ↓	飞鹰烟雾攻击|飞鹰烟雾	Eagle Smoke Strike
+↑ → ↑ ←	飞鹰110MM火箭巢|飞鹰110	Eagle 110mm Rocket Pods|Eagle 110
+↑ → ↓ ↓ ↓	飞鹰500KG炸弹|飞鹰500	Eagle 500KG Bom|Eagle 500
+	进攻型·轨道	Offensive Orbital
+→ ↓ ← ↑ ↑	加特林火力网	Orbital Gatling Barrage
+→ → →	轨道空爆攻击|轨道空爆	Orbital Airburst Attack|Orbital Airburst
+→ → ↓ ← → ↓	轨道120MM高爆火力网|轨道120	Orbital 120MM HE Barrage|Orbital 120
+→ ↓ ↑ ↑ ← ↓ ↓	轨道380MM高爆火力网|轨道380	Orbital 380MM HE Barrage|Orbital 380
+→ ↓ → ↓ → ↓	轨道游走火力网	Orbital Walking Barrage|Orbital Walking
+→ ↓ ↑ → ↓	轨道激光炮|轨道激光	Orbital Laser
+→ ↑ ↓ ↓ →	轨道炮攻击|轨道炮	Orbital Railcannon Strike|Orbital Railcannon
+→ → ↑	轨道精准攻击|轨道精准	Orbital Precision Strike|Orbital Precision
+→ → ↓ →	轨道毒气攻击|轨道毒气	Orbital Gas Strike|Orbital Gas
+→ → ← ↓	轨道电磁冲击波攻击|轨道电磁波|轨道电磁	Orbital EMS Strike|Orbital EMS
+→ → ↓ ↑	轨道烟雾攻击|轨道烟雾	Orbital Smoke Strike|Orbital Smoke
+	常备	Standard Issue
+↑ ↓ → ← ↑	增援|救人|救队友|救援	Reinforce|Rescue
+↑ ↓ → ↑	SOS信标	SOS Beacon
+↓ ↓ ↑ →	重新补给|补给	Resupply|Supply
+	任务	Mission
+↓ ↑ ← ↓ ↑ → ↓ ↑	地狱火炸弹|地狱火	Hellbomb
+↓ ↓ ↓ ↑ ↑	运送超级固态硬盘	SSSD Delivery
+↑ ↑ ← → ↓ ↓	地质探测器	Seismic Probe
+↓ ↓ ↑ ↑ ↑	上传重要数据	Upload Data
+→ → ← ←	照明弹	Flare
+→ ↑ ↑ ↓	超级地球大炮	SEAF Artillery
+↓ ↑ ↓ ↑	超级地球旗帜	Super Earth Flag
