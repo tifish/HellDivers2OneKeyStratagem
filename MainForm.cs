@@ -830,4 +830,9 @@ public partial class MainForm : Form
         Settings.WakeupWord = wakeupWordTextBox.Text.Trim();
         _settingsChanged = true;
     }
+
+    private void openSpeechRecognitionControlPanelButton_Click(object sender, EventArgs e)
+    {
+        Process.Start("control.exe", "/name Microsoft.SpeechRecognition");
+    }
 }

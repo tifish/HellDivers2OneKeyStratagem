@@ -51,6 +51,7 @@
             voiceConfidenceNumericUpDown = new NumericUpDown();
             label12 = new Label();
             wakeupWordTextBox = new TextBox();
+            openSpeechRecognitionControlPanelButton = new Button();
             generateVoiceFlowLayoutPanel = new FlowLayoutPanel();
             generateVoiceStyleComboBox = new ComboBox();
             tryVoiceButton = new Button();
@@ -112,7 +113,7 @@
             rootFlowLayoutPanel.Location = new Point(0, 0);
             rootFlowLayoutPanel.Margin = new Padding(10);
             rootFlowLayoutPanel.Name = "rootFlowLayoutPanel";
-            rootFlowLayoutPanel.Size = new Size(1026, 323);
+            rootFlowLayoutPanel.Size = new Size(1129, 323);
             rootFlowLayoutPanel.TabIndex = 0;
             // 
             // buttonsFlowLayoutPanel
@@ -275,9 +276,10 @@
             voiceTriggerFlowLayoutPanel.Controls.Add(voiceConfidenceNumericUpDown);
             voiceTriggerFlowLayoutPanel.Controls.Add(label12);
             voiceTriggerFlowLayoutPanel.Controls.Add(wakeupWordTextBox);
+            voiceTriggerFlowLayoutPanel.Controls.Add(openSpeechRecognitionControlPanelButton);
             voiceTriggerFlowLayoutPanel.Location = new Point(3, 51);
             voiceTriggerFlowLayoutPanel.Name = "voiceTriggerFlowLayoutPanel";
-            voiceTriggerFlowLayoutPanel.Size = new Size(1020, 35);
+            voiceTriggerFlowLayoutPanel.Size = new Size(1123, 35);
             voiceTriggerFlowLayoutPanel.TabIndex = 7;
             // 
             // playVoiceCheckBox
@@ -384,6 +386,18 @@
             wakeupWordTextBox.Size = new Size(100, 25);
             wakeupWordTextBox.TabIndex = 15;
             wakeupWordTextBox.TextChanged += wakeupWordTextBox_TextChanged;
+            // 
+            // openSpeechRecognitionControlPanelButton
+            // 
+            openSpeechRecognitionControlPanelButton.Anchor = AnchorStyles.Left;
+            openSpeechRecognitionControlPanelButton.AutoSize = true;
+            openSpeechRecognitionControlPanelButton.Location = new Point(1023, 3);
+            openSpeechRecognitionControlPanelButton.Name = "openSpeechRecognitionControlPanelButton";
+            openSpeechRecognitionControlPanelButton.Size = new Size(97, 29);
+            openSpeechRecognitionControlPanelButton.TabIndex = 16;
+            openSpeechRecognitionControlPanelButton.Text = "打开语音设置";
+            openSpeechRecognitionControlPanelButton.UseVisualStyleBackColor = true;
+            openSpeechRecognitionControlPanelButton.Click += openSpeechRecognitionControlPanelButton_Click;
             // 
             // generateVoiceFlowLayoutPanel
             // 
@@ -630,7 +644,7 @@
             enableSetFKeyByVoiceCheckBox.Name = "enableSetFKeyByVoiceCheckBox";
             enableSetFKeyByVoiceCheckBox.Size = new Size(106, 23);
             enableSetFKeyByVoiceCheckBox.TabIndex = 8;
-            enableSetFKeyByVoiceCheckBox.Text = "支持语音设置";
+            enableSetFKeyByVoiceCheckBox.Text = "语音设置战略";
             enableSetFKeyByVoiceCheckBox.UseVisualStyleBackColor = true;
             enableSetFKeyByVoiceCheckBox.Click += enableSetFKeyByVoiceCheckBox_Click;
             // 
@@ -844,5 +858,6 @@
         private NumericUpDown voiceConfidenceNumericUpDown;
         private Label label12;
         private TextBox wakeupWordTextBox;
+        private Button openSpeechRecognitionControlPanelButton;
     }
 }
