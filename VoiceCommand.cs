@@ -16,18 +16,19 @@ public class VoiceCommand : IDisposable
 
     public VoiceCommand(string cultureName, string wakeupWord, string[] commands)
     {
-        _recognizer = new SpeechRecognitionEngine(CultureInfo.GetCultureInfo(cultureName));
+        var culture = new CultureInfo(cultureName);
+        _recognizer = new SpeechRecognitionEngine(culture);
 
         var choices = new Choices();
         choices.Add(commands);
 
-        var gb = wakeupWord == ""
+        var grammarBuilder = wakeupWord == ""
             ? new GrammarBuilder()
             : new GrammarBuilder(wakeupWord);
-        gb.Append(choices);
+        grammarBuilder.Culture = culture;
+        grammarBuilder.Append(choices);
 
-        var g = new Grammar(gb);
-        _recognizer.LoadGrammar(g);
+        _recognizer.LoadGrammar(new Grammar(grammarBuilder));
 
         var wakeupWordLength = wakeupWord.Length;
 

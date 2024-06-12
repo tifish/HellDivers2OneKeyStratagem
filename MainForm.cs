@@ -713,6 +713,9 @@ public partial class MainForm : Form
         if (_isLoading)
             return;
 
+        if (!File.Exists(filePath))
+            return;
+
         var reader = new Mp3FileReader(filePath);
         var waveOut = new WaveOutEvent();
         waveOut.Init(reader);
