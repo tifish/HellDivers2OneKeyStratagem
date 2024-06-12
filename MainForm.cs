@@ -92,7 +92,7 @@ public partial class MainForm : Form
                 return;
             }
 
-            _voiceCommand = new VoiceCommand(Settings.Language, [.. Stratagems.Keys]);
+            _voiceCommand = new VoiceCommand(Settings.Language, Settings.WakeupWord, [.. Stratagems.Keys]);
 
             _voiceCommand.CommandRecognized += (_, command) =>
             {
@@ -217,6 +217,7 @@ public partial class MainForm : Form
         enableSetFKeyByVoiceCheckBox.Checked = Settings.EnableSetFKeyByVoice;
 
         voiceConfidenceNumericUpDown.Value = (decimal)Settings.VoiceConfidence;
+        wakeupWordTextBox.Text = Settings.WakeupWord;
     }
 
     private string GetFKeyStratagemString()
@@ -821,6 +822,12 @@ public partial class MainForm : Form
     private void voiceConfidenceNumericUpDown_ValueChanged(object sender, EventArgs e)
     {
         Settings.VoiceConfidence = (float)voiceConfidenceNumericUpDown.Value;
+        _settingsChanged = true;
+    }
+
+    private void wakeupWordTextBox_TextChanged(object sender, EventArgs e)
+    {
+        Settings.WakeupWord = wakeupWordTextBox.Text.Trim();
         _settingsChanged = true;
     }
 }

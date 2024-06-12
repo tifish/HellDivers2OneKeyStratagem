@@ -14,14 +14,16 @@ public class VoiceCommand : IDisposable
         return SpeechRecognitionEngine.InstalledRecognizers().Select(r => r.Culture.Name).ToList();
     }
 
-    public VoiceCommand(string cultureName, string[] commands)
+    public VoiceCommand(string cultureName, string phrase, string[] commands)
     {
         _recognizer = new SpeechRecognitionEngine(CultureInfo.GetCultureInfo(cultureName));
 
         var choices = new Choices();
         choices.Add(commands);
 
-        var gb = new GrammarBuilder();
+        var gb = phrase == ""
+            ? new GrammarBuilder()
+            : new GrammarBuilder(phrase);
         gb.Append(choices);
 
         var g = new Grammar(gb);

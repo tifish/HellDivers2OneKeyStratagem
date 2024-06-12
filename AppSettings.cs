@@ -16,4 +16,5 @@ public class AppSettings
     public List<string> StratagemSets { get; set; } = [];
     public string Language { get; set; } = "";
     public float VoiceConfidence { get; set; } = 0.99f;
+    public string WakeupWord { get; set; } = "";
 }
