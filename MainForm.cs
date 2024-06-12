@@ -428,20 +428,25 @@ public partial class MainForm : Form
             if (stratagem == null)
                 continue;
 
-            lines.Add($$"""F{{i + 1}}:: {""");
-            lines.Add($"    CallStratagem \"{stratagem.KeySequence}\"");
+            lines.Add($$"""
+                        F{{i + 1}}:: {
+                            CallStratagem "{{stratagem.KeySequence}}"
+                        """);
             if (Settings.PlayVoice)
-                lines.Add($"    SoundPlay \"..\\Voice\\{voiceName}\\{stratagem.Name}.mp3\"");
-
+                lines.Add($"""
+                               SoundPlay "..\Voice\{voiceName}\{stratagem.Name}.mp3"
+                           """);
             lines.Add("}");
         }
 
         if (Settings.EnableVoiceTrigger)
         {
-            lines.Add($$"""${{Settings.VoiceTriggerKey}}:: {""");
-            lines.Add($"    SendMessage 0x0111, 1, 0, , \"{Text}\"");
-            lines.Add("    SoundBeep 400, 100");
-            lines.Add("}");
+            lines.Add($$"""
+                        ${{Settings.VoiceTriggerKey}}:: {
+                            SendMessage 0x0111, 1, 0, , "{{Text}}"
+                            SoundBeep 400, 100
+                        }
+                        """);
         }
 
         await File.WriteAllLinesAsync(ScriptFile, lines);
