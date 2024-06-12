@@ -122,7 +122,7 @@ public partial class MainForm : Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "创建语音识别失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, @"创建语音识别失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -249,9 +249,6 @@ public partial class MainForm : Form
         }
 
         enableVoiceTriggerCheckBox.Checked = Settings.EnableVoiceTrigger;
-        if (!voiceTriggerKeyComboBox.Items.Contains(Settings.VoiceTriggerKey))
-            Settings.VoiceTriggerKey = "`";
-        voiceTriggerKeyComboBox.SelectedItem = Settings.VoiceTriggerKey;
 
         enableSetFKeyByVoiceCheckBox.Checked = Settings.EnableSetFKeyByVoice;
 
@@ -794,12 +791,6 @@ public partial class MainForm : Form
         generateVoiceMessageLabel.Text = @"txt 生成完毕";
     }
 
-    private void voiceTriggerKeyComboBox_SelectionChangeCommitted(object sender, EventArgs e)
-    {
-        Settings.VoiceTriggerKey = (string)voiceTriggerKeyComboBox.SelectedItem!;
-        _settingsChanged = true;
-    }
-
     private void enableVoiceTriggerCheckBox_Click(object sender, EventArgs e)
     {
         Settings.EnableVoiceTrigger = enableVoiceTriggerCheckBox.Checked;
@@ -809,32 +800,6 @@ public partial class MainForm : Form
             StartVoiceTrigger();
         else
             StopVoiceTrigger();
-    }
-
-    private const int WM_COMMAND = 0x0111;
-
-    protected override void WndProc(ref Message m)
-    {
-        if (m.Msg == WM_COMMAND)
-        {
-            var commandId = m.WParam.ToInt32() & 0xFFFF;
-            HandleCommand(commandId, m.LParam);
-            // Optionally, return without calling the base WndProc to prevent default handling
-            return;
-        }
-
-        // Call the base WndProc method for default processing of other messages
-        base.WndProc(ref m);
-    }
-
-    private void HandleCommand(int commandId, IntPtr param)
-    {
-        switch (commandId)
-        {
-            case 1:
-                StartVoiceTrigger();
-                break;
-        }
     }
 
     private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

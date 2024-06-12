@@ -46,7 +46,6 @@
             voiceNamesComboBox = new ComboBox();
             refreshVoiceNamesButton = new Button();
             enableVoiceTriggerCheckBox = new CheckBox();
-            voiceTriggerKeyComboBox = new ComboBox();
             label11 = new Label();
             voiceConfidenceNumericUpDown = new NumericUpDown();
             label12 = new Label();
@@ -113,7 +112,7 @@
             rootFlowLayoutPanel.Location = new Point(0, 0);
             rootFlowLayoutPanel.Margin = new Padding(10);
             rootFlowLayoutPanel.Name = "rootFlowLayoutPanel";
-            rootFlowLayoutPanel.Size = new Size(1060, 323);
+            rootFlowLayoutPanel.Size = new Size(1011, 323);
             rootFlowLayoutPanel.TabIndex = 0;
             // 
             // buttonsFlowLayoutPanel
@@ -271,7 +270,6 @@
             voiceTriggerFlowLayoutPanel.Controls.Add(voiceNamesComboBox);
             voiceTriggerFlowLayoutPanel.Controls.Add(refreshVoiceNamesButton);
             voiceTriggerFlowLayoutPanel.Controls.Add(enableVoiceTriggerCheckBox);
-            voiceTriggerFlowLayoutPanel.Controls.Add(voiceTriggerKeyComboBox);
             voiceTriggerFlowLayoutPanel.Controls.Add(label11);
             voiceTriggerFlowLayoutPanel.Controls.Add(voiceConfidenceNumericUpDown);
             voiceTriggerFlowLayoutPanel.Controls.Add(label12);
@@ -279,7 +277,7 @@
             voiceTriggerFlowLayoutPanel.Controls.Add(openSpeechRecognitionControlPanelButton);
             voiceTriggerFlowLayoutPanel.Location = new Point(3, 51);
             voiceTriggerFlowLayoutPanel.Name = "voiceTriggerFlowLayoutPanel";
-            voiceTriggerFlowLayoutPanel.Size = new Size(1054, 35);
+            voiceTriggerFlowLayoutPanel.Size = new Size(913, 35);
             voiceTriggerFlowLayoutPanel.TabIndex = 7;
             // 
             // playVoiceCheckBox
@@ -333,24 +331,11 @@
             enableVoiceTriggerCheckBox.UseVisualStyleBackColor = true;
             enableVoiceTriggerCheckBox.Click += enableVoiceTriggerCheckBox_Click;
             // 
-            // voiceTriggerKeyComboBox
-            // 
-            voiceTriggerKeyComboBox.Anchor = AnchorStyles.Left;
-            voiceTriggerKeyComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            voiceTriggerKeyComboBox.FormattingEnabled = true;
-            voiceTriggerKeyComboBox.Items.AddRange(new object[] { "LButton", "RButton", "MButton", "XButton1", "XButton2", "WheelDown", "WheelUp", "WheelLeft", "WheelRight", "CapsLock", "Space", "Tab", "Enter", "Return", "Esc", "Backspace", "ScrollLock", "Delete", "Insert", "Home", "End", "PgUp", "PgDn", "Up", "Down", "Left", "Right", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadDot", "NumLock", "NumpadDiv", "NumpadMult", "NumpadAdd", "NumpadSub", "NumpadEnter", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "LWin", "RWin", "Ctrl", "Alt", "Shift", "LCtrl", "RCtrl", "LShift", "RShift", "LAlt", "RAlt", "Browser_Back", "Browser_Forward", "Browser_Refresh", "Browser_Stop", "Browser_Search", "Browser_Favorites", "Browser_Home", "Volume_Mute", "Volume_Down", "Volume_Up", "Media_Next", "Media_Prev", "Media_Stop", "Media_Play_Pause", "Launch_Mail", "Launch_Media", "Launch_App1", "Launch_App2", "AppsKey", "PrintScreen", "CtrlBreak", "Pause", "Break", "Help", "Sleep", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "-", "=", "[", "]", "\\", ";", "'", ",", ".", "/" });
-            voiceTriggerKeyComboBox.Location = new Point(493, 4);
-            voiceTriggerKeyComboBox.Name = "voiceTriggerKeyComboBox";
-            voiceTriggerKeyComboBox.Size = new Size(135, 27);
-            voiceTriggerKeyComboBox.TabIndex = 8;
-            voiceTriggerKeyComboBox.Visible = false;
-            voiceTriggerKeyComboBox.SelectionChangeCommitted += voiceTriggerKeyComboBox_SelectionChangeCommitted;
-            // 
             // label11
             // 
             label11.Anchor = AnchorStyles.Left;
             label11.AutoSize = true;
-            label11.Location = new Point(634, 8);
+            label11.Location = new Point(493, 8);
             label11.Name = "label11";
             label11.Size = new Size(74, 19);
             label11.TabIndex = 12;
@@ -361,7 +346,7 @@
             voiceConfidenceNumericUpDown.Anchor = AnchorStyles.Left;
             voiceConfidenceNumericUpDown.DecimalPlaces = 3;
             voiceConfidenceNumericUpDown.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            voiceConfidenceNumericUpDown.Location = new Point(714, 5);
+            voiceConfidenceNumericUpDown.Location = new Point(573, 5);
             voiceConfidenceNumericUpDown.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             voiceConfidenceNumericUpDown.Minimum = new decimal(new int[] { 5, 0, 0, 65536 });
             voiceConfidenceNumericUpDown.Name = "voiceConfidenceNumericUpDown";
@@ -374,7 +359,7 @@
             // 
             label12.Anchor = AnchorStyles.Left;
             label12.AutoSize = true;
-            label12.Location = new Point(781, 8);
+            label12.Location = new Point(640, 8);
             label12.Name = "label12";
             label12.Size = new Size(61, 19);
             label12.TabIndex = 14;
@@ -382,7 +367,7 @@
             // 
             // wakeupWordTextBox
             // 
-            wakeupWordTextBox.Location = new Point(848, 3);
+            wakeupWordTextBox.Location = new Point(707, 3);
             wakeupWordTextBox.Name = "wakeupWordTextBox";
             wakeupWordTextBox.Size = new Size(100, 25);
             wakeupWordTextBox.TabIndex = 15;
@@ -392,7 +377,7 @@
             // 
             openSpeechRecognitionControlPanelButton.Anchor = AnchorStyles.Left;
             openSpeechRecognitionControlPanelButton.AutoSize = true;
-            openSpeechRecognitionControlPanelButton.Location = new Point(954, 3);
+            openSpeechRecognitionControlPanelButton.Location = new Point(813, 3);
             openSpeechRecognitionControlPanelButton.Name = "openSpeechRecognitionControlPanelButton";
             openSpeechRecognitionControlPanelButton.Size = new Size(97, 29);
             openSpeechRecognitionControlPanelButton.TabIndex = 16;
@@ -842,7 +827,6 @@
         private Button generateTxtButton;
         private FlowLayoutPanel voiceTriggerFlowLayoutPanel;
         private CheckBox enableVoiceTriggerCheckBox;
-        private ComboBox voiceTriggerKeyComboBox;
         private FlowLayoutPanel flowLayoutPanel1;
         private Label label3;
         private CheckBox checkBox1;
