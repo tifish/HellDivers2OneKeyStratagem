@@ -39,15 +39,15 @@
 ↓ ↑ → ↓ →	电磁冲击波迫击哨戒炮|电磁炮	EMS Mortar Sentry
 	进攻型·飞鹰	Offensive Eagle
 ↑ ↑ ← ↑ →	飞鹰重新武装|飞鹰武装|重新武装	Eagle Rearm
-↑ → →	飞鹰机枪扫射|飞鹰机枪	Eagle Strafing Run
+↑ → →	飞鹰机枪扫射|飞鹰机枪	Eagle Strafing Run|Eagle Strafing
 ↑ → ↓ →	飞鹰空袭	Eagle Airstrike
-↑ → ↓ ↓ →	飞鹰集束炸弹|飞鹰集束	Eagle Cluster Bomb
-↑ → ↓ ↑	飞鹰凝固汽油弹空袭|飞鹰汽油弹|飞鹰燃烧弹	Eagle Napalm Airstrike
-↑ → ↑ ↓	飞鹰烟雾攻击|飞鹰烟雾	Eagle Smoke Strike
+↑ → ↓ ↓ →	飞鹰集束炸弹|飞鹰集束	Eagle Cluster Bomb|Eagle Cluster
+↑ → ↓ ↑	飞鹰凝固汽油弹空袭|飞鹰汽油弹|飞鹰燃烧弹	Eagle Napalm Airstrike|Eagle Napalm
+↑ → ↑ ↓	飞鹰烟雾攻击|飞鹰烟雾	Eagle Smoke Strike|Eagle Smoke
 ↑ → ↑ ←	飞鹰110MM火箭巢|飞鹰110	Eagle 110mm Rocket Pods|Eagle 110
 ↑ → ↓ ↓ ↓	飞鹰500KG炸弹|飞鹰500	Eagle 500KG Bom|Eagle 500
 	进攻型·轨道	Offensive Orbital
-→ ↓ ← ↑ ↑	加特林火力网	Orbital Gatling Barrage
+→ ↓ ← ↑ ↑	加特林火力网	Orbital Gatling Barrage|Orbital Gatling
 → → →	轨道空爆攻击|轨道空爆	Orbital Airburst Attack|Orbital Airburst
 → → ↓ ← → ↓	轨道120MM高爆火力网|轨道120	Orbital 120MM HE Barrage|Orbital 120
 → ↓ ↑ ↑ ← ↓ ↓	轨道380MM高爆火力网|轨道380	Orbital 380MM HE Barrage|Orbital 380
@@ -59,7 +59,7 @@
 → → ← ↓	轨道电磁冲击波攻击|轨道电磁波|轨道电磁	Orbital EMS Strike|Orbital EMS
 → → ↓ ↑	轨道烟雾攻击|轨道烟雾	Orbital Smoke Strike|Orbital Smoke
 	常备	Standard Issue
-↑ ↓ → ← ↑	增援|救人|救队友|救援	Reinforce|Rescue
+↑ ↓ → ← ↑	增援|救人|救队友|救援	Reinforce|Rescue|Help
 ↑ ↓ → ↑	SOS信标	SOS Beacon
 ↓ ↓ ↑ →	重新补给|补给	Resupply|Supply
 	任务	Mission
