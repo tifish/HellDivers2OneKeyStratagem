@@ -58,10 +58,21 @@ public partial class MainForm : Form
                 if (!Stratagems.TryGetValue(command, out var stratagem))
                     return;
 
-                if (Settings.PlayVoice)
-                    PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagem.Name + ".mp3"));
+                if (Focused)
+                {
+                    if (!Settings.EnableSetFKeyByVoice)
+                        return;
 
-                stratagem.PressKeys();
+                    PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagem.Name + ".mp3"));
+                    SetFKeyStratagem(SelectedFKeyIndex, stratagem);
+                }
+                else
+                {
+                    if (Settings.PlayVoice)
+                        PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagem.Name + ".mp3"));
+
+                    stratagem.PressKeys();
+                }
             };
         }
 
@@ -155,6 +166,8 @@ public partial class MainForm : Form
         if (!voiceTriggerKeyComboBox.Items.Contains(Settings.VoiceTriggerKey))
             Settings.VoiceTriggerKey = "`";
         voiceTriggerKeyComboBox.SelectedItem = Settings.VoiceTriggerKey;
+
+        enableSetFKeyByVoiceCheckBox.Checked = Settings.EnableSetFKeyByVoice;
     }
 
     private string GetFKeyStratagemString()
@@ -253,9 +266,16 @@ public partial class MainForm : Form
                 if (!Settings.PlayVoice)
                     return;
 
-                var stratagem = _fKeyStratagems[SelectedFKeyIndex];
-                if (stratagem != null)
-                    PlayVoice(Path.Combine(VoiceRootPath, voiceNamesComboBox.SelectedItem as string ?? "", stratagem.Name + ".mp3"));
+                if (Settings.EnableSetFKeyByVoice)
+                {
+                    StartVoiceTrigger();
+                }
+                else
+                {
+                    var stratagem = _fKeyStratagems[SelectedFKeyIndex];
+                    if (stratagem != null)
+                        PlayVoice(Path.Combine(VoiceRootPath, voiceNamesComboBox.SelectedItem as string ?? "", stratagem.Name + ".mp3"));
+                }
             }
         }
 
@@ -730,5 +750,11 @@ public partial class MainForm : Form
     private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
     {
         KillAhkProcess();
+    }
+
+    private void enableSetFKeyByVoiceCheckBox_Click(object sender, EventArgs e)
+    {
+        Settings.EnableSetFKeyByVoice = enableSetFKeyByVoiceCheckBox.Checked;
+        _settingsChanged = true;
     }
 }

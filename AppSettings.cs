@@ -11,6 +11,7 @@ public class AppSettings
     public bool PlayVoice { get; set; } = true;
     public string VoiceName { get; set; } = "晓妮";
     public bool EnableVoiceTrigger { get; set; } = true;
-    public string VoiceTriggerKey { get; set; } = "Oemtilde";
+    public string VoiceTriggerKey { get; set; } = "`";
+    public bool EnableSetFKeyByVoice { get; set; } = true;
     public List<string> StratagemSets { get; set; } = [];
 }
