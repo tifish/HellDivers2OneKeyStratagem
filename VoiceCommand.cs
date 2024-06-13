@@ -5,9 +5,14 @@ namespace HellDivers2OneKeyStratagem;
 
 public class VoiceCommand : IDisposable
 {
+    public struct RecognitionResult
+    {
+        public string Text;
+        public float Score;
+    }
     private readonly SpeechRecognitionEngine _recognizer;
 
-    public event EventHandler<string>? CommandRecognized;
+    public event EventHandler<RecognitionResult>? CommandRecognized;
 
     public static List<string> GetInstalledRecognizers()
     {
@@ -35,8 +40,9 @@ public class VoiceCommand : IDisposable
         // Attach event handlers.
         _recognizer.SpeechRecognized += (_, e) =>
         {
-            if (e.Result.Confidence > Settings.VoiceConfidence)
-                CommandRecognized?.Invoke(this, e.Result.Text[wakeupWordLength..]);
+            CommandRecognized?.Invoke(this,new RecognitionResult { Text = e.Result.Text[wakeupWordLength..],Score = e.Result.Confidence});
+            //if (e.Result.Confidence > Settings.VoiceConfidence)
+                
         };
 
         _recognizer.RecognizeCompleted += (sender, args) => { _isRecognizing = false; };

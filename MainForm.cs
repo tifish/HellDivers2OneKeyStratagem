@@ -128,7 +128,10 @@ public partial class MainForm : Form
 
             _voiceCommand.CommandRecognized += (_, command) =>
             {
-                if (!Stratagems.TryGetValue(command, out var stratagem))
+                if (command.Score < Settings.VoiceConfidence)
+                    return;
+
+                if (!Stratagems.TryGetValue(command.Text, out var stratagem))
                     return;
 
                 if (_isActive)
@@ -843,5 +846,85 @@ public partial class MainForm : Form
     private void openSpeechRecognitionControlPanelButton_Click(object sender, EventArgs e)
     {
         Process.Start("control.exe", "/name Microsoft.SpeechRecognition");
+    }
+
+    private async void BtnVoiceSpeechCalibration_Click(object sender, EventArgs e)
+    {
+        if (_voiceCommand == null)
+        {
+            MessageBox.Show(@"请先开启触发功能", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        float TotalScore = 0;
+        int Times = 0;
+        var TipWindow = new ModalTip();
+        var TestFunction = new EventHandler<VoiceCommand.RecognitionResult>((_, command) =>
+        {
+            if (command.Text == "飞鹰空袭" && Times == 0)
+            {
+                Times++;
+                TotalScore += command.Score;
+            }
+            if (command.Text == "轨道炮攻击" && Times == 1)
+            {
+                Times++;
+                TotalScore += command.Score;
+            }
+            if (command.Text == "消耗性反坦克武器" && Times == 2)
+            {
+                TotalScore += command.Score;
+                Times++;
+            }
+        });
+        try
+        {
+            _voiceCommand.CommandRecognized += TestFunction;
+            TipWindow.SetTipString(string.Format("请朗读 “{0}飞鹰空袭”", wakeupWordTextBox.Text.Trim()));
+            TipWindow.TryClosed = false;
+            var Task1 = Task.Run(() =>
+            {
+                while (Times < 1 && !TipWindow.TryClosed)
+                    Thread.Sleep(100);
+                TipWindow.TryClosed = true;
+            });
+            var Ret = TipWindow.ShowDialog();
+            await Task1;
+            if (Ret == DialogResult.Cancel) return;
+
+            TipWindow.SetTipString(string.Format("请朗读 “{0}轨道炮攻击”", wakeupWordTextBox.Text.Trim()));
+            TipWindow.TryClosed = false;
+            var Task2 = Task.Run(() =>
+            {
+                while (Times < 2 && !TipWindow.TryClosed)
+                    Thread.Sleep(100);
+                TipWindow.TryClosed = true;
+            });
+            Ret = TipWindow.ShowDialog();
+            await Task2;
+            if (Ret == DialogResult.Cancel) return;
+
+            TipWindow.SetTipString(string.Format("请朗读 “{0}消耗性反坦克武器”", wakeupWordTextBox.Text.Trim()));
+            TipWindow.TryClosed = false;
+            var Task3 = Task.Run(() =>
+            {
+                while (Times < 3 && !TipWindow.TryClosed)
+                    Thread.Sleep(100);
+                TipWindow.TryClosed = true;
+            });
+            Ret = TipWindow.ShowDialog();
+            await Task3;
+            if (Ret == DialogResult.Cancel) return;
+
+            voiceConfidenceNumericUpDown.Value = (decimal)((TotalScore / Times) - 0.1);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+        finally
+        {
+            _voiceCommand.CommandRecognized -= TestFunction;
+        }
     }
 }
