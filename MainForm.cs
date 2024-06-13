@@ -1,7 +1,7 @@
-﻿using EdgeTTS;
-using NAudio.Wave;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
+using EdgeTTS;
+using NAudio.Wave;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -197,12 +197,15 @@ public partial class MainForm : Form
     private static readonly string ExeDirectory = Path.GetDirectoryName(Application.ExecutablePath)!;
     private static readonly string AutoHotkeyDirectory = Path.Combine(ExeDirectory, "AutoHotkey");
 
-    private static readonly string TemplateAhk = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKey.template.ahk");
-    private string[] _templateLines = [];
+    private static readonly string TemplateAhk1 = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKey.template1.ahk");
+    private string[] _template1Lines = [];
+    private static readonly string TemplateAhk2 = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKey.template2.ahk");
+    private string[] _template2Lines = [];
 
     private async Task LoadScriptTemplate()
     {
-        _templateLines = await File.ReadAllLinesAsync(TemplateAhk);
+        _template1Lines = await File.ReadAllLinesAsync(TemplateAhk1);
+        _template2Lines = await File.ReadAllLinesAsync(TemplateAhk2);
     }
 
     private static readonly string SettingsFile = Path.Combine(ExeDirectory, "Settings.json");
@@ -487,41 +490,65 @@ public partial class MainForm : Form
 
     private static readonly string Ahk2Exe = Path.Combine(AutoHotkeyDirectory, "Ahk2Exe.exe");
     private static readonly string ScriptFile = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKey.ahk");
+    private static readonly string ScriptExe = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKey.exe");
+
+    private bool _isStartingAutoHotkeyScript;
 
     private async Task StartAutoHotkeyScript()
     {
-        KillAhkProcess();
-
-        await GenerateScript();
-        await GenerateKeys();
-
-        using var compileProcess = Process.Start(new ProcessStartInfo
-        {
-            FileName = Ahk2Exe,
-            WorkingDirectory = AutoHotkeyDirectory,
-            Arguments = $"""/in "{ScriptFile}" /base AutoHotkey64.exe /silent""",
-            UseShellExecute = false,
-        });
-
-        if (compileProcess != null)
-            await compileProcess.WaitForExitAsync();
-        if (compileProcess is not { ExitCode: 0 })
-        {
-            MessageBox.Show(@"Failed to compile script");
+        if (_isClosing)
             return;
-        }
 
-        _ahkProcess = Process.Start(new ProcessStartInfo
+        while (_isStartingAutoHotkeyScript)
+            await Task.Delay(100);
+
+        try
         {
-            FileName = Path.ChangeExtension(ScriptFile, ".exe"),
-            WorkingDirectory = AutoHotkeyDirectory,
-            UseShellExecute = true,
-        });
+            _isStartingAutoHotkeyScript = true;
+
+            KillAhkProcess();
+
+            var lines = new List<string>(_template1Lines);
+            GenerateKeys(lines);
+            lines.AddRange(_template2Lines);
+            await GenerateScript(lines);
+
+            await File.WriteAllLinesAsync(ScriptFile, lines);
+
+            using var compileProcess = Process.Start(new ProcessStartInfo
+            {
+                FileName = Ahk2Exe,
+                WorkingDirectory = AutoHotkeyDirectory,
+                Arguments = $"""/in "{ScriptFile}" /base AutoHotkey64.exe /silent""",
+                UseShellExecute = false,
+            });
+
+            if (compileProcess != null)
+                await compileProcess.WaitForExitAsync();
+            if (compileProcess is not { ExitCode: 0 })
+            {
+                MessageBox.Show(@"Failed to compile script");
+                return;
+            }
+
+            if (File.Exists(ScriptFile))
+                File.Delete(ScriptFile);
+
+            _ahkProcess = Process.Start(new ProcessStartInfo
+            {
+                FileName = Path.ChangeExtension(ScriptFile, ".exe"),
+                WorkingDirectory = AutoHotkeyDirectory,
+                UseShellExecute = true,
+            });
+        }
+        finally
+        {
+            _isStartingAutoHotkeyScript = false;
+        }
     }
 
-    private async Task GenerateScript()
+    private async Task GenerateScript(List<string> lines)
     {
-        var lines = new List<string>(_templateLines) { "" };
         var voiceName = voiceNamesComboBox.SelectedItem as string ?? "";
 
         for (var i = 0; i < _fKeyLabels.Length; i++)
@@ -540,42 +567,27 @@ public partial class MainForm : Form
                            """);
             lines.Add("}");
         }
-
-        //if (Settings.EnableVoiceTrigger)
-        //{
-        //    lines.Add($$"""
-        //                ${{Settings.VoiceTriggerKey}}:: {
-        //                    SendMessage 0x0111, 1, 0, , "{{Text}}"
-        //                    SoundBeep 400, 100
-        //                }
-        //                """);
-        //}
-
-        await File.WriteAllLinesAsync(ScriptFile, lines);
     }
 
-    private static readonly string KeysFile = Path.Combine(AutoHotkeyDirectory, "Keys.ahk");
-
-    private async Task GenerateKeys()
+    private void GenerateKeys(List<string> lines)
     {
-        await using var writer = new StreamWriter(KeysFile);
-        await writer.WriteLineAsync("#Requires AutoHotkey v2.0");
-        await writer.WriteLineAsync("");
-        await writer.WriteLineAsync($"TriggerKey := \"{(ctrlRadioButton.Checked ? "Ctrl" : "Alt")}\"");
+        lines.Add("#Requires AutoHotkey v2.0");
+        lines.Add("");
+        lines.Add($"TriggerKey := \"{(ctrlRadioButton.Checked ? "Ctrl" : "Alt")}\"");
         if (wasdRadioButton.Checked)
-            await writer.WriteLineAsync("""
-                                        UpKey := "w"
-                                        DownKey := "s"
-                                        LeftKey := "a"
-                                        RightKey := "d"
-                                        """);
+            lines.Add("""
+                      UpKey := "w"
+                      DownKey := "s"
+                      LeftKey := "a"
+                      RightKey := "d"
+                      """);
         else
-            await writer.WriteLineAsync("""
-                                        UpKey := "up"
-                                        DownKey := "down"
-                                        LeftKey := "left"
-                                        RightKey := "right"
-                                        """);
+            lines.Add("""
+                      UpKey := "up"
+                      DownKey := "down"
+                      LeftKey := "left"
+                      RightKey := "right"
+                      """);
     }
 
     private void KillAhkProcess()
@@ -591,9 +603,8 @@ public partial class MainForm : Form
             foreach (var process in Process.GetProcessesByName("HellDivers2OneKey"))
                 process.Kill();
 
-            foreach (var process in Process.GetProcessesByName("HellDivers2OneKeyStratagem")
-                         .Where(proc => proc.Id != Environment.ProcessId))
-                process.Kill();
+            if (File.Exists(ScriptExe))
+                File.Delete(ScriptExe);
         }
         catch
         {
@@ -805,8 +816,11 @@ public partial class MainForm : Form
             StopVoiceTrigger();
     }
 
+    private bool _isClosing;
+
     private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
     {
+        _isClosing = true;
         KillAhkProcess();
     }
 
