@@ -27,12 +27,13 @@ public class VoiceCommand : IDisposable
         var choices = new Choices();
         choices.Add(commands);
 
-        var grammarBuilder = wakeupWord == ""
-            ? new GrammarBuilder()
-            : new GrammarBuilder(wakeupWord);
+        var grammarBuilder = new GrammarBuilder();
+        if (wakeupWord.Length > 0)
+            grammarBuilder.Append(wakeupWord);
         grammarBuilder.Culture = culture;
         grammarBuilder.Append(choices);
 
+        _recognizer.RequestRecognizerUpdate();
         _recognizer.LoadGrammar(new Grammar(grammarBuilder));
 
         var wakeupWordLength = wakeupWord.Length;
@@ -40,9 +41,7 @@ public class VoiceCommand : IDisposable
         // Attach event handlers.
         _recognizer.SpeechRecognized += (_, e) =>
         {
-            CommandRecognized?.Invoke(this,new RecognitionResult { Text = e.Result.Text[wakeupWordLength..],Score = e.Result.Confidence});
-            //if (e.Result.Confidence > Settings.VoiceConfidence)
-                
+            CommandRecognized?.Invoke(this,new RecognitionResult { Text = e.Result.Text[wakeupWordLength..],Score = e.Result.Confidence});       
         };
 
         _recognizer.RecognizeCompleted += (sender, args) => { _isRecognizing = false; };

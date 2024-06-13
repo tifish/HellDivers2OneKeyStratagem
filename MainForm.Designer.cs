@@ -323,8 +323,6 @@
             // 
             enableVoiceTriggerCheckBox.Anchor = AnchorStyles.Left;
             enableVoiceTriggerCheckBox.AutoSize = true;
-            enableVoiceTriggerCheckBox.Checked = true;
-            enableVoiceTriggerCheckBox.CheckState = CheckState.Checked;
             enableVoiceTriggerCheckBox.Location = new Point(421, 6);
             enableVoiceTriggerCheckBox.Name = "enableVoiceTriggerCheckBox";
             enableVoiceTriggerCheckBox.Size = new Size(134, 27);

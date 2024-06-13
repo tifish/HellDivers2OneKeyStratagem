@@ -254,12 +254,12 @@ public partial class MainForm : Form
                 stratagemSetsComboBox.Items.Add(stratagemSet);
         }
 
-        enableVoiceTriggerCheckBox.Checked = Settings.EnableVoiceTrigger;
-
         enableSetFKeyByVoiceCheckBox.Checked = Settings.EnableSetFKeyByVoice;
 
         voiceConfidenceNumericUpDown.Value = (decimal)Settings.VoiceConfidence;
         wakeupWordTextBox.Text = Settings.WakeupWord;
+
+        enableVoiceTriggerCheckBox.Checked = Settings.EnableVoiceTrigger;
     }
 
     private string GetFKeyStratagemString()
