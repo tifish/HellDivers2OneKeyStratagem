@@ -33,7 +33,7 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Build
-      run: dotnet build --configuration Release --no-restore HellDivers2OneKeyStratagem.sln
+      run: dotnet build --configuration Release HellDivers2OneKeyStratagem.sln
 
     - name: Zip
       shell: powershell
