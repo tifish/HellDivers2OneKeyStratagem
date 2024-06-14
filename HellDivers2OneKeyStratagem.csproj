@@ -7,12 +7,13 @@
         <UseWindowsForms>true</UseWindowsForms>
         <ImplicitUsings>enable</ImplicitUsings>
         <OutDir>bin</OutDir>
+        <ForceDesignerDPIUnaware>true</ForceDesignerDPIUnaware>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="EdgeTTS" Version="1.0.3" />
-      <PackageReference Include="NAudio" Version="2.2.1" />
-      <PackageReference Include="System.Speech" Version="9.0.0-preview.4.24266.19" />
+        <PackageReference Include="EdgeTTS" Version="1.0.3"/>
+        <PackageReference Include="NAudio" Version="2.2.1"/>
+        <PackageReference Include="System.Speech" Version="9.0.0-preview.4.24266.19"/>
     </ItemGroup>
 
 </Project>

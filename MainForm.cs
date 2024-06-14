@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
-using System.Globalization;
-using EdgeTTS;
+﻿using EdgeTTS;
 using NAudio.Wave;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
