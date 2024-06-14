@@ -165,6 +165,7 @@ public partial class MainForm : Form
             };
         }
 
+        _voiceCommand.UseMic(0);
         _voiceCommand.Start();
     }
 

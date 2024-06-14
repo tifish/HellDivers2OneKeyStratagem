@@ -255,13 +255,14 @@ namespace HellDivers2OneKeyStratagem
                     _reset = true;
                 }
             }
-            _writeEvent.Set();
+            _writeEvent?.Set();
 
         }
 
         public override void Close()
         {
-            _writeEvent.Close();
+            if (_writeEvent!=null)
+                _writeEvent.Close();
             _writeEvent = null;
             base.Close();
         }

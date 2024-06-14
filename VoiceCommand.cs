@@ -83,43 +83,11 @@ public class VoiceCommand : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public void SelectDevice(string selectedValue)
+    private static WaveFormat GetWaveFormat(SupportedWaveFormat eFormat, out int samplesRate, out int nChannel,
+        out int bitsPerSample, out AudioBitsPerSample eBitsPerSample, out AudioChannel eChannel)
     {
-        for (var i = 0; i < WaveInEvent.DeviceCount; i++)
+        switch (eFormat)
         {
-            var device = WaveInEvent.GetCapabilities(i);
-            if (device.ProductName != selectedValue)
-                continue;
-
-            if (_waveInEvent != null)
-            {
-                _waveInEvent.Dispose();
-                _waveInEvent = null;
-            }
-
-            _waveInEvent = new WaveInEvent();
-            _waveInEvent.DeviceNumber = i; //device.ID;
-            _waveInEvent.DataAvailable += (_, args) =>
-            {
-                _audioStreamer?.Write(args.Buffer);
-                //AudioStream.WriterStream.Write(args.Buffer);
-            };
-
-            _audioStreamer = new SpeechStreamer(2 * 1024 * 1024);
-            SupportedWaveFormat supportFormat = 0;
-            foreach (SupportedWaveFormat format in Enum.GetValues(typeof(SupportedWaveFormat)))
-                if (device.SupportsWaveFormat(format))
-                {
-                    supportFormat = format;
-
-                    break;
-                }
-
-            var samplesRate = 0;
-            var nChannel = 0;
-            var bitsPerSample = 0;
-            switch (supportFormat)
-            {
                 case SupportedWaveFormat.WAVE_FORMAT_1M08: //11.025 kHz, Mono, 8-bit
                     nChannel = 1;
                     bitsPerSample = 8;
@@ -220,20 +188,92 @@ public class VoiceCommand : IDisposable
                     bitsPerSample = 16;
                     samplesRate = 96000;
                     break;
+                default:
+                    nChannel = 1;
+                    bitsPerSample = 8;
+                    samplesRate = 11025;
+                    break;
             }
 
-            _waveInEvent.WaveFormat = new WaveFormat(samplesRate, bitsPerSample, nChannel);
-            _waveInEvent.StartRecording();
+        eBitsPerSample = bitsPerSample == 8 ? AudioBitsPerSample.Eight : AudioBitsPerSample.Sixteen;
+        eChannel = nChannel == 2 ? AudioChannel.Stereo : AudioChannel.Mono;
+        return new WaveFormat(samplesRate, bitsPerSample, nChannel);
+    }
 
-            var shouldStart = _isRecognizing;
-            if (_isRecognizing)
+    public async void UseMic(int DeviceIndex)
+    {
+        //cleanup
+        if (_waveInEvent != null)
+        {
+            _waveInEvent.StopRecording();
+            _waveInEvent.Dispose();
+        }
+        if (_audioStreamer != null)
+        {
+            _audioStreamer.Close();
+            _audioStreamer.Dispose();
+        }
+        
+        //settings
+        _waveInEvent = new WaveInEvent();
+        _waveInEvent.DeviceNumber = DeviceIndex; //device.ID;
+        var device = WaveInEvent.GetCapabilities(DeviceIndex);
+        SupportedWaveFormat supportFormat = 0;
+        foreach (SupportedWaveFormat format in Enum.GetValues(typeof(SupportedWaveFormat)))
+            if (device.SupportsWaveFormat(format) && format <= SupportedWaveFormat.WAVE_FORMAT_48S16 && ((int)Math.Log2((int)format))%2 == 0)//找个单通道的
+            {
+                supportFormat = format;//取最后一个支持的。
+            }
+        
+        var samplesRate = 0;
+        var nChannel = 0;
+        var bitsPerSample = 0;
+        AudioBitsPerSample eBitsPerSample;
+        AudioChannel eChannel;
+        _waveInEvent.WaveFormat = GetWaveFormat(supportFormat, out samplesRate, out nChannel, out bitsPerSample,
+            out eBitsPerSample, out eChannel);
+        
+        var audioStreamer = _audioStreamer = new SpeechStreamer(2 * 1024 * 1024);//2MB
+        _waveInEvent.DataAvailable += (_, args) =>
+        {
+            if (audioStreamer.CanWrite)
+                audioStreamer.Write(args.Buffer);//闭包获取。不访问_audioStreamer，防止写入错误streamer
+        };
+        
+        var audioFormat = new SpeechAudioFormatInfo(nChannel * samplesRate, eBitsPerSample, eChannel);
+        
+        //start record microphone
+        _waveInEvent.StartRecording();
+        
+        //restart _recognizer
+        if (!_isRecognizing)
+        {
+            _recognizer.SetInputToAudioStream(_audioStreamer, audioFormat);
+            Start();
+        }
+        else
+        {
+            Task.Run(() =>
+            {
                 Stop();
-
-            _recognizer.SetInputToAudioStream(_audioStreamer, new SpeechAudioFormatInfo(nChannel * samplesRate, bitsPerSample == 8 ? AudioBitsPerSample.Eight : AudioBitsPerSample.Sixteen, nChannel == 2 ? AudioChannel.Stereo : AudioChannel.Mono));
-
-            if (shouldStart)
+                while(_isRecognizing)
+                    Thread.Sleep(100);
+                
+                _recognizer.SetInputToAudioStream(_audioStreamer, audioFormat);
+       
                 Start();
+            });
+        }
+    }
 
+    public void SelectDevice(string selectedValue)
+    {
+        for (var i = 0; i < WaveInEvent.DeviceCount; i++)
+        {
+            var device = WaveInEvent.GetCapabilities(i);
+            if (device.ProductName != selectedValue)
+                continue;
+            UseMic(i);
             break;
         }
     }
