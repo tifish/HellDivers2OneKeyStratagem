@@ -1,11 +1,8 @@
 /.idea
 /.vs
 /obj
-/*.csproj.user
+/*.user
 /bin/HellDivers2OneKeyStratagem.*
 /bin/*.dll
-/bin/AutoHotkey/HellDivers2OneKeyStratagem.*
-/bin/AutoHotkey/Keys.ahk
 /bin/Settings.json
-/bin/AutoHotkey/HellDivers2OneKey.*
 /bin/runtimes

@@ -1,7 +1,8 @@
-﻿using EdgeTTS;
-using NAudio.Wave;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
+using AutoHotkey.Interop;
+using EdgeTTS;
+using NAudio.Wave;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -144,7 +145,7 @@ public partial class MainForm : Form
                 else if (WindowHelper.GetActiveWindowTitle() == "HELLDIVERS™ 2")
                 {
                     if (Settings.PlayVoice)
-                        PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagem.Name + ".mp3"));
+                        PlayStratagemVoice(stratagem.Name);
 
                     stratagem.PressKeys();
                 }
@@ -152,6 +153,11 @@ public partial class MainForm : Form
         }
 
         _voiceCommand.Start();
+    }
+
+    private void PlayStratagemVoice(string stratagemName)
+    {
+        PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagemName + ".mp3"));
     }
 
     private void StopVoiceTrigger()
@@ -198,11 +204,10 @@ public partial class MainForm : Form
     }
 
     private static readonly string ExeDirectory = Path.GetDirectoryName(Application.ExecutablePath)!;
-    private static readonly string AutoHotkeyDirectory = Path.Combine(ExeDirectory, "AutoHotkey");
 
-    private static readonly string TemplateAhk1 = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKey.template1.ahk");
+    private static readonly string TemplateAhk1 = Path.Combine(ExeDirectory, "HellDivers2OneKey.template1.ahk");
     private string[] _template1Lines = [];
-    private static readonly string TemplateAhk2 = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKey.template2.ahk");
+    private static readonly string TemplateAhk2 = Path.Combine(ExeDirectory, "HellDivers2OneKey.template2.ahk");
     private string[] _template2Lines = [];
 
     private async Task LoadScriptTemplate()
@@ -363,7 +368,7 @@ public partial class MainForm : Form
 
                 var stratagem = _fKeyStratagems[SelectedFKeyIndex];
                 if (stratagem != null)
-                    PlayVoice(Path.Combine(VoiceRootPath, voiceNamesComboBox.SelectedItem as string ?? "", stratagem.Name + ".mp3"));
+                    PlayStratagemVoice(stratagem.Name);
             }
         }
 
@@ -385,7 +390,7 @@ public partial class MainForm : Form
             _settingsChanged = true;
 
         if (Settings.PlayVoice && playVoice)
-            PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagem.Name + ".mp3"));
+            PlayStratagemVoice(stratagem.Name);
     }
 
     private void InitStratagemGroups()
@@ -489,68 +494,24 @@ public partial class MainForm : Form
             _settingsChanged = true;
     }
 
-    private Process? _ahkProcess;
+    private AutoHotkeyEngine? _autoHotkeyEngine;
 
-    private static readonly string Ahk2Exe = Path.Combine(AutoHotkeyDirectory, "Ahk2Exe.exe");
-    private static readonly string ScriptFile = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKey.ahk");
-    private static readonly string ScriptExe = Path.Combine(AutoHotkeyDirectory, "HellDivers2OneKey.exe");
-
-    private bool _isStartingAutoHotkeyScript;
-
-    private async Task StartAutoHotkeyScript()
+    private void StartAutoHotkeyScript()
     {
         if (_isClosing)
             return;
 
-        while (_isStartingAutoHotkeyScript)
-            await Task.Delay(100);
+        var lines = new List<string>(_template1Lines);
+        GenerateKeys(lines);
+        lines.AddRange(_template2Lines);
+        GenerateScript(lines);
 
-        try
-        {
-            _isStartingAutoHotkeyScript = true;
-
-            KillAhkProcess();
-
-            var lines = new List<string>(_template1Lines);
-            GenerateKeys(lines);
-            lines.AddRange(_template2Lines);
-            await GenerateScript(lines);
-
-            await File.WriteAllLinesAsync(ScriptFile, lines);
-
-            using var compileProcess = Process.Start(new ProcessStartInfo
-            {
-                FileName = Ahk2Exe,
-                WorkingDirectory = AutoHotkeyDirectory,
-                Arguments = $"""/in "{ScriptFile}" /base AutoHotkey64.exe /silent""",
-                UseShellExecute = false,
-            });
-
-            if (compileProcess != null)
-                await compileProcess.WaitForExitAsync();
-            if (compileProcess is not { ExitCode: 0 })
-            {
-                MessageBox.Show(@"Failed to compile script");
-                return;
-            }
-
-            if (File.Exists(ScriptFile))
-                File.Delete(ScriptFile);
-
-            _ahkProcess = Process.Start(new ProcessStartInfo
-            {
-                FileName = Path.ChangeExtension(ScriptFile, ".exe"),
-                WorkingDirectory = AutoHotkeyDirectory,
-                UseShellExecute = true,
-            });
-        }
-        finally
-        {
-            _isStartingAutoHotkeyScript = false;
-        }
+        _autoHotkeyEngine?.Terminate();
+        _autoHotkeyEngine = new AutoHotkeyEngine();
+        _autoHotkeyEngine.LoadScript(string.Join('\n', lines));
     }
 
-    private async Task GenerateScript(List<string> lines)
+    private void GenerateScript(List<string> lines)
     {
         var voiceName = voiceNamesComboBox.SelectedItem as string ?? "";
 
@@ -561,22 +522,23 @@ public partial class MainForm : Form
                 continue;
 
             lines.Add($$"""
-                        F{{i + 1}}:: {
-                            CallStratagem "{{stratagem.KeySequence}}"
+                        F{{i + 1}}::
+                            CallStratagem("{{stratagem.KeySequence}}")
                         """);
             if (Settings.PlayVoice)
                 lines.Add($"""
-                               SoundPlay "..\Voice\{voiceName}\{stratagem.Name}.mp3"
+                               SoundPlay, Voice\{voiceName}\{stratagem.Name}.mp3
                            """);
-            lines.Add("}");
+            lines.Add("return");
         }
     }
 
     private void GenerateKeys(List<string> lines)
     {
-        lines.Add("#Requires AutoHotkey v2.0");
         lines.Add("");
-        lines.Add($"TriggerKey := \"{(ctrlRadioButton.Checked ? "Ctrl" : "Alt")}\"");
+        lines.Add($"""
+                   TriggerKey := "{(ctrlRadioButton.Checked ? "Ctrl" : "Alt")}"
+                   """);
         if (wasdRadioButton.Checked)
             lines.Add("""
                       UpKey := "w"
@@ -591,28 +553,6 @@ public partial class MainForm : Form
                       LeftKey := "left"
                       RightKey := "right"
                       """);
-    }
-
-    private void KillAhkProcess()
-    {
-        try
-        {
-            if (_ahkProcess != null)
-            {
-                _ahkProcess.Kill();
-                _ahkProcess = null;
-            }
-
-            foreach (var process in Process.GetProcessesByName("HellDivers2OneKey"))
-                process.Kill();
-
-            if (File.Exists(ScriptExe))
-                File.Delete(ScriptExe);
-        }
-        catch
-        {
-            // ignore permission error
-        }
     }
 
     private void saveStratagemSetButton_Click(object sender, EventArgs e)
@@ -768,7 +708,7 @@ public partial class MainForm : Form
         if (_isLoading)
             return;
 
-        var shouldStart = _settingsChanged || _ahkProcess == null;
+        var shouldStart = _settingsChanged || _autoHotkeyEngine == null;
 
         if (_settingsChanged)
         {
@@ -777,7 +717,7 @@ public partial class MainForm : Form
         }
 
         if (shouldStart)
-            await StartAutoHotkeyScript();
+            StartAutoHotkeyScript();
     }
 
     private void suggestionLabel_Click(object sender, EventArgs e)
@@ -788,9 +728,9 @@ public partial class MainForm : Form
     private void voiceNamesComboBox_SelectionChangeCommitted(object sender, EventArgs e)
     {
         Settings.VoiceName = voiceNamesComboBox.SelectedItem as string ?? "";
+        _settingsChanged = true;
 
-        var text = _fKeyStratagems[SelectedFKeyIndex]?.Name ?? "飞鹰空袭";
-        PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, text + ".mp3"));
+        PlayStratagemVoice(_fKeyStratagems[SelectedFKeyIndex]?.Name ?? Stratagems.Values.Last().Name);
     }
 
     private void refreshVoiceNamesButton_Click(object sender, EventArgs e)
@@ -824,7 +764,7 @@ public partial class MainForm : Form
     private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
     {
         _isClosing = true;
-        KillAhkProcess();
+        _autoHotkeyEngine?.Terminate();
     }
 
     private void enableSetFKeyByVoiceCheckBox_Click(object sender, EventArgs e)
@@ -870,67 +810,67 @@ public partial class MainForm : Form
             return;
         }
 
-        float TotalScore = 0;
-        int Times = 0;
-        var TipWindow = new ModalTip();
-        var TestFunction = new EventHandler<VoiceCommand.RecognitionResult>((_, command) =>
+        float totalScore = 0;
+        var times = 0;
+        var tipWindow = new ModalTip();
+        var testFunction = new EventHandler<VoiceCommand.RecognitionResult>((_, command) =>
         {
-            if (command.Text == "飞鹰空袭" && Times == 0)
+            switch (command.Text)
             {
-                Times++;
-                TotalScore += command.Score;
-            }
-            if (command.Text == "轨道炮攻击" && Times == 1)
-            {
-                Times++;
-                TotalScore += command.Score;
-            }
-            if (command.Text == "消耗性反坦克武器" && Times == 2)
-            {
-                TotalScore += command.Score;
-                Times++;
+                case "飞鹰空袭" when times == 0:
+                    times++;
+                    totalScore += command.Score;
+                    break;
+                case "轨道炮攻击" when times == 1:
+                    times++;
+                    totalScore += command.Score;
+                    break;
+                case "消耗性反坦克武器" when times == 2:
+                    totalScore += command.Score;
+                    times++;
+                    break;
             }
         });
         try
         {
-            _voiceCommand.CommandRecognized += TestFunction;
-            TipWindow.SetTipString(string.Format("请朗读 “{0}飞鹰空袭”", wakeupWordTextBox.Text.Trim()));
-            TipWindow.TryClosed = false;
-            var Task1 = Task.Run(() =>
+            _voiceCommand.CommandRecognized += testFunction;
+            tipWindow.SetTipString($"请朗读 “{wakeupWordTextBox.Text.Trim()}飞鹰空袭”");
+            tipWindow.TryClosed = false;
+            var task1 = Task.Run(() =>
             {
-                while (Times < 1 && !TipWindow.TryClosed)
+                while (times < 1 && !tipWindow.TryClosed)
                     Thread.Sleep(100);
-                TipWindow.TryClosed = true;
+                tipWindow.TryClosed = true;
             });
-            var Ret = TipWindow.ShowDialog();
-            await Task1;
-            if (Ret == DialogResult.Cancel) return;
+            var ret = tipWindow.ShowDialog();
+            await task1;
+            if (ret == DialogResult.Cancel) return;
 
-            TipWindow.SetTipString(string.Format("请朗读 “{0}轨道炮攻击”", wakeupWordTextBox.Text.Trim()));
-            TipWindow.TryClosed = false;
-            var Task2 = Task.Run(() =>
+            tipWindow.SetTipString($"请朗读 “{wakeupWordTextBox.Text.Trim()}轨道炮攻击”");
+            tipWindow.TryClosed = false;
+            var task2 = Task.Run(() =>
             {
-                while (Times < 2 && !TipWindow.TryClosed)
+                while (times < 2 && !tipWindow.TryClosed)
                     Thread.Sleep(100);
-                TipWindow.TryClosed = true;
+                tipWindow.TryClosed = true;
             });
-            Ret = TipWindow.ShowDialog();
-            await Task2;
-            if (Ret == DialogResult.Cancel) return;
+            ret = tipWindow.ShowDialog();
+            await task2;
+            if (ret == DialogResult.Cancel) return;
 
-            TipWindow.SetTipString(string.Format("请朗读 “{0}消耗性反坦克武器”", wakeupWordTextBox.Text.Trim()));
-            TipWindow.TryClosed = false;
-            var Task3 = Task.Run(() =>
+            tipWindow.SetTipString($"请朗读 “{wakeupWordTextBox.Text.Trim()}消耗性反坦克武器”");
+            tipWindow.TryClosed = false;
+            var task3 = Task.Run(() =>
             {
-                while (Times < 3 && !TipWindow.TryClosed)
+                while (times < 3 && !tipWindow.TryClosed)
                     Thread.Sleep(100);
-                TipWindow.TryClosed = true;
+                tipWindow.TryClosed = true;
             });
-            Ret = TipWindow.ShowDialog();
-            await Task3;
-            if (Ret == DialogResult.Cancel) return;
+            ret = tipWindow.ShowDialog();
+            await task3;
+            if (ret == DialogResult.Cancel) return;
 
-            voiceConfidenceNumericUpDown.Value = (decimal)((TotalScore / Times) - 0.1);
+            voiceConfidenceNumericUpDown.Value = (decimal)(totalScore / times - 0.1);
         }
         catch (Exception ex)
         {
@@ -938,7 +878,7 @@ public partial class MainForm : Form
         }
         finally
         {
-            _voiceCommand.CommandRecognized -= TestFunction;
+            _voiceCommand.CommandRecognized -= testFunction;
         }
     }
 }
