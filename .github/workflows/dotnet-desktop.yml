@@ -6,15 +6,15 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: write  # This grants write permissions to the contents scope
+
 jobs:
 
   build:
 
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-
-    env:
-      Solution_Name: HellDivers2OneKeyStratagem.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
 
     steps:
     - name: Checkout
@@ -33,7 +33,7 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Build
-      run: dotnet build --configuration Release ${{ env.Solution_Name }}
+      run: dotnet build --configuration Release --no-restore HellDivers2OneKeyStratagem.sln
 
     - name: Zip
       shell: powershell
@@ -41,7 +41,7 @@ jobs:
         Compress-Archive -Path ./bin/* -DestinationPath HellDivers2OneKeyStratagem.zip
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Zip Package
         path: HellDivers2OneKeyStratagem.zip
@@ -51,11 +51,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
 
     - name: Download artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: Zip Package
 
@@ -65,7 +63,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
         draft: false
         prerelease: false
