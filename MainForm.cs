@@ -31,6 +31,8 @@ public partial class MainForm : Form
 
             LoadVoiceNames();
             await LoadScriptTemplate();
+
+            LoadMicDevices();
         }
         finally
         {
@@ -41,6 +43,15 @@ public partial class MainForm : Form
         CenterToScreen();
 
         _isLoading = false;
+    }
+
+    private void LoadMicDevices()
+    {
+        for (int i = 0; i < WaveInEvent.DeviceCount; i++)
+        {
+            var device = WaveInEvent.GetCapabilities(i);
+            MicComboBox.Items.Add(device.ProductName);
+        } 
     }
 
     private void InitLanguages()
@@ -154,7 +165,7 @@ public partial class MainForm : Form
             };
         }
 
-        _voiceCommand.Start();
+        //_voiceCommand.Start();
     }
 
     private void PlayStratagemVoice(string stratagemName)
@@ -899,6 +910,14 @@ public partial class MainForm : Form
         {
             _autoHotkeyEngine.Terminate();
             _autoHotkeyEngine = null;
+        }
+    }
+
+    private void MicComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (_voiceCommand != null)
+        {
+            _voiceCommand.SelectDevice(MicComboBox.Text);
         }
     }
 }
