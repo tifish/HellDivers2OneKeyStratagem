@@ -32,7 +32,7 @@ public partial class MainForm : Form
             LoadVoiceNames();
             await LoadScriptTemplate();
 
-            LoadMicDevices();
+            LoadMicDevices("");
         }
         finally
         {
@@ -45,13 +45,17 @@ public partial class MainForm : Form
         _isLoading = false;
     }
 
-    private void LoadMicDevices()
+    private void LoadMicDevices(string LastSelected)
     {
+        micComboBox.Items.Clear();
+        int SelectedIndex = -1;
         for (var i = 0; i < WaveInEvent.DeviceCount; i++)
         {
             var device = WaveInEvent.GetCapabilities(i);
             micComboBox.Items.Add(device.ProductName);
+            SelectedIndex = device.ProductName == LastSelected ? i : SelectedIndex;
         }
+        micComboBox.SelectedIndex = SelectedIndex;
     }
 
     private void InitLanguages()
@@ -919,5 +923,10 @@ public partial class MainForm : Form
     private void micComboBox_SelectionChangeCommitted(object sender, EventArgs e)
     {
         _voiceCommand?.SelectDevice(micComboBox.Text);
+    }
+
+    private void micComboBox_DropDown(object sender, EventArgs e)
+    {
+        LoadMicDevices(micComboBox.Text);
     }
 }
