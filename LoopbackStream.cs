@@ -83,7 +83,7 @@ namespace HellDivers2OneKeyStratagem
         {
             private readonly BlockingCollection<byte[]> _buffer;
             private readonly IEnumerator<byte[]> _readerEnumerator;
-            private byte[] _currentBuffer;
+            private byte[]? _currentBuffer;
             private int _currentBufferIndex = 0;
 
             public ReaderStreamInternal(BlockingCollection<byte[]> buffer)
@@ -166,7 +166,7 @@ namespace HellDivers2OneKeyStratagem
 
     class SpeechStreamer : Stream
     {
-        private AutoResetEvent _writeEvent;
+        private AutoResetEvent? _writeEvent;
         private List<byte> _buffer;
         private int _buffersize;
         private int _readposition;

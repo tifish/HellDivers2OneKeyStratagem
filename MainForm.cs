@@ -45,17 +45,19 @@ public partial class MainForm : Form
         _isLoading = false;
     }
 
-    private void LoadMicDevices(string LastSelected)
+    private void LoadMicDevices(string lastSelected)
     {
         micComboBox.Items.Clear();
-        int SelectedIndex = -1;
+
+        var selectedIndex = -1;
         for (var i = 0; i < WaveInEvent.DeviceCount; i++)
         {
             var device = WaveInEvent.GetCapabilities(i);
             micComboBox.Items.Add(device.ProductName);
-            SelectedIndex = device.ProductName == LastSelected ? i : SelectedIndex;
+            selectedIndex = device.ProductName == lastSelected ? i : selectedIndex;
         }
-        micComboBox.SelectedIndex = SelectedIndex;
+
+        micComboBox.SelectedIndex = selectedIndex;
     }
 
     private void InitLanguages()
@@ -85,18 +87,18 @@ public partial class MainForm : Form
         StratagemManager.Load();
         InitStratagemGroups();
         InitSettingsToUI();
-        ResetVoiceCommand();
+        await ResetVoiceCommand();
         await LoadGeneratingVoiceStyles();
     }
 
-    private void ResetVoiceCommand()
+    private async Task ResetVoiceCommand()
     {
         _voiceCommand?.Stop();
         _voiceCommand?.Dispose();
         _voiceCommand = null;
 
         if (Settings.EnableVoiceTrigger)
-            StartVoiceTrigger();
+            await StartVoiceTrigger();
     }
 
     private bool _isActive;
@@ -115,7 +117,7 @@ public partial class MainForm : Form
 
     private VoiceCommand? _voiceCommand;
 
-    private void StartVoiceTrigger()
+    private async Task StartVoiceTrigger()
     {
         if (_voiceCommand == null)
         {
@@ -167,9 +169,11 @@ public partial class MainForm : Form
                     stratagem.PressKeys();
                 }
             };
+
+            if (micComboBox.Text != "")
+                await _voiceCommand.UseMic(micComboBox.Text);
         }
 
-        _voiceCommand.UseMic(0);
         _voiceCommand.Start();
     }
 
@@ -768,13 +772,13 @@ public partial class MainForm : Form
         generateVoiceMessageLabel.Text = @"txt 生成完毕";
     }
 
-    private void enableVoiceTriggerCheckBox_Click(object sender, EventArgs e)
+    private async void enableVoiceTriggerCheckBox_Click(object sender, EventArgs e)
     {
         Settings.EnableVoiceTrigger = enableVoiceTriggerCheckBox.Checked;
         _settingsChanged = true;
 
         if (Settings.EnableVoiceTrigger)
-            StartVoiceTrigger();
+            await StartVoiceTrigger();
         else
             StopVoiceTrigger();
     }
@@ -810,11 +814,11 @@ public partial class MainForm : Form
         _settingsChanged = true;
     }
 
-    private void wakeupWordTextBox_TextChanged(object sender, EventArgs e)
+    private async void wakeupWordTextBox_TextChanged(object sender, EventArgs e)
     {
         Settings.WakeupWord = wakeupWordTextBox.Text.Trim();
         _settingsChanged = true;
-        ResetVoiceCommand();
+        await ResetVoiceCommand();
     }
 
     private void openSpeechRecognitionControlPanelButton_Click(object sender, EventArgs e)
@@ -904,14 +908,14 @@ public partial class MainForm : Form
         }
     }
 
-    private void enableHotkeyTriggerCheckBox_Click(object sender, EventArgs e)
+    private async void enableHotkeyTriggerCheckBox_Click(object sender, EventArgs e)
     {
         Settings.EnableHotkeyTrigger = enableHotkeyTriggerCheckBox.Checked;
         _settingsChanged = true;
 
         if (Settings.EnableHotkeyTrigger)
         {
-            StartVoiceTrigger();
+            await StartVoiceTrigger();
         }
         else if (_autoHotkeyEngine != null)
         {
@@ -922,7 +926,7 @@ public partial class MainForm : Form
 
     private void micComboBox_SelectionChangeCommitted(object sender, EventArgs e)
     {
-        _voiceCommand?.SelectDevice(micComboBox.Text);
+        _voiceCommand?.UseMic(micComboBox.Text);
     }
 
     private void micComboBox_DropDown(object sender, EventArgs e)

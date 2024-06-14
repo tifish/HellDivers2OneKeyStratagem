@@ -88,119 +88,119 @@ public class VoiceCommand : IDisposable
     {
         switch (eFormat)
         {
-                case SupportedWaveFormat.WAVE_FORMAT_1M08: //11.025 kHz, Mono, 8-bit
-                    nChannel = 1;
-                    bitsPerSample = 8;
-                    samplesRate = 11025;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_1S08: //     11.025 kHz, Stereo, 8-bit
-                    nChannel = 2;
-                    bitsPerSample = 8;
-                    samplesRate = 11025;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_1M16: //     11.025 kHz, Mono, 16-bit
-                    nChannel = 1;
-                    bitsPerSample = 16;
-                    samplesRate = 11025;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_1S16: //     11.025 kHz, Stereo, 16-bit
-                    nChannel = 2;
-                    bitsPerSample = 16;
-                    samplesRate = 11025;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_2M08: //     22.05 kHz, Mono, 8-bit
-                    nChannel = 1;
-                    bitsPerSample = 8;
-                    samplesRate = 22050;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_2S08: //     22.05 kHz, Stereo, 8-bit
-                    nChannel = 2;
-                    bitsPerSample = 8;
-                    samplesRate = 22050;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_2M16: //     22.05 kHz, Mono, 16-bit
-                    nChannel = 1;
-                    bitsPerSample = 16;
-                    samplesRate = 22050;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_2S16: //     22.05 kHz, Stereo, 16-bit
-                    nChannel = 2;
-                    bitsPerSample = 16;
-                    samplesRate = 22050;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_4M08: //     44.1 kHz, Mono, 8-bit
-                    nChannel = 1;
-                    bitsPerSample = 8;
-                    samplesRate = 44100;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_4S08: //     44.1 kHz, Stereo, 8-bit
-                    nChannel = 2;
-                    bitsPerSample = 8;
-                    samplesRate = 44100;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_4M16: //     44.1 kHz, Mono, 16-bit
-                    nChannel = 1;
-                    bitsPerSample = 16;
-                    samplesRate = 44100;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_4S16: //     44.1 kHz, Stereo, 16-bit
-                    nChannel = 2;
-                    bitsPerSample = 16;
-                    samplesRate = 44100;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_48M08: //     48 kHz, Mono, 8-bit
-                    nChannel = 1;
-                    bitsPerSample = 8;
-                    samplesRate = 48000;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_48S08: //     48 kHz, Stereo, 8-bit
-                    nChannel = 2;
-                    bitsPerSample = 8;
-                    samplesRate = 48000;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_48M16: //     48 kHz, Mono, 16-bit
-                    nChannel = 1;
-                    bitsPerSample = 16;
-                    samplesRate = 48000;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_48S16: //     48 kHz, Stereo, 16-bit
-                    nChannel = 2;
-                    bitsPerSample = 16;
-                    samplesRate = 48000;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_96M08: //     96 kHz, Mono, 8-bit
-                    nChannel = 1;
-                    bitsPerSample = 8;
-                    samplesRate = 96000;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_96S08: //     96 kHz, Stereo, 8-bit
-                    nChannel = 2;
-                    bitsPerSample = 8;
-                    samplesRate = 96000;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_96M16: //     96 kHz, Mono, 16-bit
-                    nChannel = 1;
-                    bitsPerSample = 16;
-                    samplesRate = 96000;
-                    break;
-                case SupportedWaveFormat.WAVE_FORMAT_96S16: //     96 kHz, Stereo, 16-bit
-                    nChannel = 2;
-                    bitsPerSample = 16;
-                    samplesRate = 96000;
-                    break;
-                default:
-                    nChannel = 1;
-                    bitsPerSample = 8;
-                    samplesRate = 11025;
-                    break;
-            }
+            case SupportedWaveFormat.WAVE_FORMAT_1M08: //11.025 kHz, Mono, 8-bit
+                nChannel = 1;
+                bitsPerSample = 8;
+                samplesRate = 11025;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_1S08: //     11.025 kHz, Stereo, 8-bit
+                nChannel = 2;
+                bitsPerSample = 8;
+                samplesRate = 11025;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_1M16: //     11.025 kHz, Mono, 16-bit
+                nChannel = 1;
+                bitsPerSample = 16;
+                samplesRate = 11025;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_1S16: //     11.025 kHz, Stereo, 16-bit
+                nChannel = 2;
+                bitsPerSample = 16;
+                samplesRate = 11025;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_2M08: //     22.05 kHz, Mono, 8-bit
+                nChannel = 1;
+                bitsPerSample = 8;
+                samplesRate = 22050;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_2S08: //     22.05 kHz, Stereo, 8-bit
+                nChannel = 2;
+                bitsPerSample = 8;
+                samplesRate = 22050;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_2M16: //     22.05 kHz, Mono, 16-bit
+                nChannel = 1;
+                bitsPerSample = 16;
+                samplesRate = 22050;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_2S16: //     22.05 kHz, Stereo, 16-bit
+                nChannel = 2;
+                bitsPerSample = 16;
+                samplesRate = 22050;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_4M08: //     44.1 kHz, Mono, 8-bit
+                nChannel = 1;
+                bitsPerSample = 8;
+                samplesRate = 44100;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_4S08: //     44.1 kHz, Stereo, 8-bit
+                nChannel = 2;
+                bitsPerSample = 8;
+                samplesRate = 44100;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_4M16: //     44.1 kHz, Mono, 16-bit
+                nChannel = 1;
+                bitsPerSample = 16;
+                samplesRate = 44100;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_4S16: //     44.1 kHz, Stereo, 16-bit
+                nChannel = 2;
+                bitsPerSample = 16;
+                samplesRate = 44100;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_48M08: //     48 kHz, Mono, 8-bit
+                nChannel = 1;
+                bitsPerSample = 8;
+                samplesRate = 48000;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_48S08: //     48 kHz, Stereo, 8-bit
+                nChannel = 2;
+                bitsPerSample = 8;
+                samplesRate = 48000;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_48M16: //     48 kHz, Mono, 16-bit
+                nChannel = 1;
+                bitsPerSample = 16;
+                samplesRate = 48000;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_48S16: //     48 kHz, Stereo, 16-bit
+                nChannel = 2;
+                bitsPerSample = 16;
+                samplesRate = 48000;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_96M08: //     96 kHz, Mono, 8-bit
+                nChannel = 1;
+                bitsPerSample = 8;
+                samplesRate = 96000;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_96S08: //     96 kHz, Stereo, 8-bit
+                nChannel = 2;
+                bitsPerSample = 8;
+                samplesRate = 96000;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_96M16: //     96 kHz, Mono, 16-bit
+                nChannel = 1;
+                bitsPerSample = 16;
+                samplesRate = 96000;
+                break;
+            case SupportedWaveFormat.WAVE_FORMAT_96S16: //     96 kHz, Stereo, 16-bit
+                nChannel = 2;
+                bitsPerSample = 16;
+                samplesRate = 96000;
+                break;
+            default:
+                nChannel = 1;
+                bitsPerSample = 8;
+                samplesRate = 11025;
+                break;
+        }
 
         eBitsPerSample = bitsPerSample == 8 ? AudioBitsPerSample.Eight : AudioBitsPerSample.Sixteen;
         eChannel = nChannel == 2 ? AudioChannel.Stereo : AudioChannel.Mono;
         return new WaveFormat(samplesRate, bitsPerSample, nChannel);
     }
 
-    public async void UseMic(int DeviceIndex)
+    public async Task UseMic(int deviceIndex)
     {
         //cleanup
         if (_waveInEvent != null)
@@ -208,72 +208,59 @@ public class VoiceCommand : IDisposable
             _waveInEvent.StopRecording();
             _waveInEvent.Dispose();
         }
+
         if (_audioStreamer != null)
         {
             _audioStreamer.Close();
-            _audioStreamer.Dispose();
+            await _audioStreamer.DisposeAsync();
         }
-        
+
         //settings
         _waveInEvent = new WaveInEvent();
-        _waveInEvent.DeviceNumber = DeviceIndex; //device.ID;
-        var device = WaveInEvent.GetCapabilities(DeviceIndex);
+        _waveInEvent.DeviceNumber = deviceIndex; //device.ID;
+        var device = WaveInEvent.GetCapabilities(deviceIndex);
         SupportedWaveFormat supportFormat = 0;
         foreach (SupportedWaveFormat format in Enum.GetValues(typeof(SupportedWaveFormat)))
-            if (device.SupportsWaveFormat(format) && format <= SupportedWaveFormat.WAVE_FORMAT_48S16 && ((int)Math.Log2((int)format))%2 == 0)//找个单通道的
-            {
-                supportFormat = format;//取最后一个支持的。
-            }
-        
-        var samplesRate = 0;
-        var nChannel = 0;
-        var bitsPerSample = 0;
-        AudioBitsPerSample eBitsPerSample;
-        AudioChannel eChannel;
-        _waveInEvent.WaveFormat = GetWaveFormat(supportFormat, out samplesRate, out nChannel, out bitsPerSample,
-            out eBitsPerSample, out eChannel);
-        
-        var audioStreamer = _audioStreamer = new SpeechStreamer(2 * 1024 * 1024);//2MB
+            if (device.SupportsWaveFormat(format) && format <= SupportedWaveFormat.WAVE_FORMAT_48S16 && (int)Math.Log2((int)format) % 2 == 0) //找个单通道的
+                supportFormat = format; //取最后一个支持的。
+
+        _waveInEvent.WaveFormat = GetWaveFormat(
+            supportFormat, out var samplesRate, out var nChannel, out _,
+            out var eBitsPerSample, out var eChannel);
+
+        var audioStreamer = _audioStreamer = new SpeechStreamer(2 * 1024 * 1024); //2MB
         _waveInEvent.DataAvailable += (_, args) =>
         {
             if (audioStreamer.CanWrite)
-                audioStreamer.Write(args.Buffer);//闭包获取。不访问_audioStreamer，防止写入错误streamer
+                audioStreamer.Write(args.Buffer); //闭包获取。不访问_audioStreamer，防止写入错误streamer
         };
-        
+
         var audioFormat = new SpeechAudioFormatInfo(nChannel * samplesRate, eBitsPerSample, eChannel);
-        
+
         //start record microphone
         _waveInEvent.StartRecording();
-        
+
         //restart _recognizer
-        if (!_isRecognizing)
+        if (_isRecognizing)
         {
+            Stop();
+            while (_isRecognizing)
+                await Task.Delay(100);
+
             _recognizer.SetInputToAudioStream(_audioStreamer, audioFormat);
             Start();
         }
-        else
-        {
-            Task.Run(() =>
-            {
-                Stop();
-                while(_isRecognizing)
-                    Thread.Sleep(100);
-                
-                _recognizer.SetInputToAudioStream(_audioStreamer, audioFormat);
-       
-                Start();
-            });
-        }
     }
 
-    public void SelectDevice(string selectedValue)
+    public async Task UseMic(string deviceName)
     {
         for (var i = 0; i < WaveInEvent.DeviceCount; i++)
         {
             var device = WaveInEvent.GetCapabilities(i);
-            if (device.ProductName != selectedValue)
+            if (device.ProductName != deviceName)
                 continue;
-            UseMic(i);
+
+            await UseMic(i);
             break;
         }
     }
