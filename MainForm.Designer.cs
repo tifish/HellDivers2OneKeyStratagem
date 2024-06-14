@@ -39,19 +39,21 @@
             wasdRadioButton = new RadioButton();
             arrowRadioButton = new RadioButton();
             suggestionLabel = new Label();
-            label10 = new Label();
-            languageComboBox = new ComboBox();
             voiceTriggerFlowLayoutPanel = new FlowLayoutPanel();
             playVoiceCheckBox = new CheckBox();
             voiceNamesComboBox = new ComboBox();
             refreshVoiceNamesButton = new Button();
+            label10 = new Label();
+            languageComboBox = new ComboBox();
+            flowLayoutPanel8 = new FlowLayoutPanel();
             enableVoiceTriggerCheckBox = new CheckBox();
+            openSpeechRecognitionControlPanelButton = new Button();
+            label12 = new Label();
+            wakeupWordTextBox = new TextBox();
             label11 = new Label();
             voiceConfidenceNumericUpDown = new NumericUpDown();
             BtnVoiceSpeechCalibration = new Button();
-            label12 = new Label();
-            wakeupWordTextBox = new TextBox();
-            openSpeechRecognitionControlPanelButton = new Button();
+            voiceRecognizeResultLabel = new Label();
             generateVoiceFlowLayoutPanel = new FlowLayoutPanel();
             generateVoiceStyleComboBox = new ComboBox();
             tryVoiceButton = new Button();
@@ -68,12 +70,14 @@
             stratagemSetsComboBox = new ComboBox();
             saveStratagemSetButton = new Button();
             deleteStratagemSetButton = new Button();
+            flowLayoutPanel7 = new FlowLayoutPanel();
+            enableHotkeyTriggerCheckBox = new CheckBox();
+            enableSetFKeyByVoiceCheckBox = new CheckBox();
             flowLayoutPanel6 = new FlowLayoutPanel();
             fKeysFlowLayoutPanel = new FlowLayoutPanel();
             fKeyFlowLayoutPanel = new FlowLayoutPanel();
             label2 = new Label();
             label1 = new Label();
-            enableSetFKeyByVoiceCheckBox = new CheckBox();
             stratagemGroupsFlowLayoutPanel = new FlowLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             label3 = new Label();
@@ -88,9 +92,11 @@
             flowLayoutPanel2.SuspendLayout();
             flowLayoutPanel3.SuspendLayout();
             voiceTriggerFlowLayoutPanel.SuspendLayout();
+            flowLayoutPanel8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)voiceConfidenceNumericUpDown).BeginInit();
             generateVoiceFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel4.SuspendLayout();
+            flowLayoutPanel7.SuspendLayout();
             flowLayoutPanel6.SuspendLayout();
             fKeysFlowLayoutPanel.SuspendLayout();
             fKeyFlowLayoutPanel.SuspendLayout();
@@ -105,15 +111,17 @@
             rootFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             rootFlowLayoutPanel.Controls.Add(buttonsFlowLayoutPanel);
             rootFlowLayoutPanel.Controls.Add(voiceTriggerFlowLayoutPanel);
+            rootFlowLayoutPanel.Controls.Add(flowLayoutPanel8);
             rootFlowLayoutPanel.Controls.Add(generateVoiceFlowLayoutPanel);
             rootFlowLayoutPanel.Controls.Add(flowLayoutPanel4);
+            rootFlowLayoutPanel.Controls.Add(flowLayoutPanel7);
             rootFlowLayoutPanel.Controls.Add(flowLayoutPanel6);
             rootFlowLayoutPanel.Controls.Add(stratagemGroupsFlowLayoutPanel);
             rootFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
             rootFlowLayoutPanel.Location = new Point(0, 0);
             rootFlowLayoutPanel.Margin = new Padding(10);
             rootFlowLayoutPanel.Name = "rootFlowLayoutPanel";
-            rootFlowLayoutPanel.Size = new Size(1057, 335);
+            rootFlowLayoutPanel.Size = new Size(1057, 415);
             rootFlowLayoutPanel.TabIndex = 0;
             // 
             // buttonsFlowLayoutPanel
@@ -123,12 +131,10 @@
             buttonsFlowLayoutPanel.Controls.Add(flowLayoutPanel2);
             buttonsFlowLayoutPanel.Controls.Add(flowLayoutPanel3);
             buttonsFlowLayoutPanel.Controls.Add(suggestionLabel);
-            buttonsFlowLayoutPanel.Controls.Add(label10);
-            buttonsFlowLayoutPanel.Controls.Add(languageComboBox);
             buttonsFlowLayoutPanel.Location = new Point(3, 3);
             buttonsFlowLayoutPanel.Margin = new Padding(3, 3, 3, 10);
             buttonsFlowLayoutPanel.Name = "buttonsFlowLayoutPanel";
-            buttonsFlowLayoutPanel.Size = new Size(968, 35);
+            buttonsFlowLayoutPanel.Size = new Size(837, 35);
             buttonsFlowLayoutPanel.TabIndex = 3;
             // 
             // flowLayoutPanel2
@@ -240,28 +246,6 @@
             suggestionLabel.Text = "强烈建议把呼叫战略的按键改为上下左右，可以在跑动中呼叫战略。";
             suggestionLabel.Click += suggestionLabel_Click;
             // 
-            // label10
-            // 
-            label10.Anchor = AnchorStyles.Left;
-            label10.AutoSize = true;
-            label10.Location = new Point(840, 8);
-            label10.Name = "label10";
-            label10.Size = new Size(48, 19);
-            label10.TabIndex = 10;
-            label10.Text = "语言：";
-            // 
-            // languageComboBox
-            // 
-            languageComboBox.Anchor = AnchorStyles.Left;
-            languageComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            languageComboBox.FormattingEnabled = true;
-            languageComboBox.Items.AddRange(new object[] { "LButton", "RButton", "MButton", "XButton1", "XButton2", "WheelDown", "WheelUp", "WheelLeft", "WheelRight", "CapsLock", "Space", "Tab", "Enter", "Return", "Esc", "Backspace", "ScrollLock", "Delete", "Insert", "Home", "End", "PgUp", "PgDn", "Up", "Down", "Left", "Right", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadDot", "NumLock", "NumpadDiv", "NumpadMult", "NumpadAdd", "NumpadSub", "NumpadEnter", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "LWin", "RWin", "Ctrl", "Alt", "Shift", "LCtrl", "RCtrl", "LShift", "RShift", "LAlt", "RAlt", "Browser_Back", "Browser_Forward", "Browser_Refresh", "Browser_Stop", "Browser_Search", "Browser_Favorites", "Browser_Home", "Volume_Mute", "Volume_Down", "Volume_Up", "Media_Next", "Media_Prev", "Media_Stop", "Media_Play_Pause", "Launch_Mail", "Launch_Media", "Launch_App1", "Launch_App2", "AppsKey", "PrintScreen", "CtrlBreak", "Pause", "Break", "Help", "Sleep", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "-", "=", "[", "]", "\\", ";", "'", ",", ".", "/" });
-            languageComboBox.Location = new Point(894, 6);
-            languageComboBox.Name = "languageComboBox";
-            languageComboBox.Size = new Size(71, 27);
-            languageComboBox.TabIndex = 11;
-            languageComboBox.SelectionChangeCommitted += languageComboBox_SelectionChangeCommitted;
-            // 
             // voiceTriggerFlowLayoutPanel
             // 
             voiceTriggerFlowLayoutPanel.Anchor = AnchorStyles.Left;
@@ -270,16 +254,11 @@
             voiceTriggerFlowLayoutPanel.Controls.Add(playVoiceCheckBox);
             voiceTriggerFlowLayoutPanel.Controls.Add(voiceNamesComboBox);
             voiceTriggerFlowLayoutPanel.Controls.Add(refreshVoiceNamesButton);
-            voiceTriggerFlowLayoutPanel.Controls.Add(enableVoiceTriggerCheckBox);
-            voiceTriggerFlowLayoutPanel.Controls.Add(label11);
-            voiceTriggerFlowLayoutPanel.Controls.Add(voiceConfidenceNumericUpDown);
-            voiceTriggerFlowLayoutPanel.Controls.Add(BtnVoiceSpeechCalibration);
-            voiceTriggerFlowLayoutPanel.Controls.Add(label12);
-            voiceTriggerFlowLayoutPanel.Controls.Add(wakeupWordTextBox);
-            voiceTriggerFlowLayoutPanel.Controls.Add(openSpeechRecognitionControlPanelButton);
+            voiceTriggerFlowLayoutPanel.Controls.Add(label10);
+            voiceTriggerFlowLayoutPanel.Controls.Add(languageComboBox);
             voiceTriggerFlowLayoutPanel.Location = new Point(3, 51);
             voiceTriggerFlowLayoutPanel.Name = "voiceTriggerFlowLayoutPanel";
-            voiceTriggerFlowLayoutPanel.Size = new Size(1030, 39);
+            voiceTriggerFlowLayoutPanel.Size = new Size(509, 39);
             voiceTriggerFlowLayoutPanel.TabIndex = 7;
             // 
             // playVoiceCheckBox
@@ -301,7 +280,7 @@
             voiceNamesComboBox.Anchor = AnchorStyles.Left;
             voiceNamesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             voiceNamesComboBox.FormattingEnabled = true;
-            voiceNamesComboBox.Location = new Point(154, 8);
+            voiceNamesComboBox.Location = new Point(154, 7);
             voiceNamesComboBox.Name = "voiceNamesComboBox";
             voiceNamesComboBox.Size = new Size(140, 27);
             voiceNamesComboBox.TabIndex = 7;
@@ -319,23 +298,93 @@
             refreshVoiceNamesButton.UseVisualStyleBackColor = true;
             refreshVoiceNamesButton.Click += refreshVoiceNamesButton_Click;
             // 
+            // label10
+            // 
+            label10.Anchor = AnchorStyles.Left;
+            label10.AutoSize = true;
+            label10.Location = new Point(381, 10);
+            label10.Name = "label10";
+            label10.Size = new Size(48, 19);
+            label10.TabIndex = 10;
+            label10.Text = "语言：";
+            // 
+            // languageComboBox
+            // 
+            languageComboBox.Anchor = AnchorStyles.Left;
+            languageComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            languageComboBox.FormattingEnabled = true;
+            languageComboBox.Items.AddRange(new object[] { "LButton", "RButton", "MButton", "XButton1", "XButton2", "WheelDown", "WheelUp", "WheelLeft", "WheelRight", "CapsLock", "Space", "Tab", "Enter", "Return", "Esc", "Backspace", "ScrollLock", "Delete", "Insert", "Home", "End", "PgUp", "PgDn", "Up", "Down", "Left", "Right", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadDot", "NumLock", "NumpadDiv", "NumpadMult", "NumpadAdd", "NumpadSub", "NumpadEnter", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "LWin", "RWin", "Ctrl", "Alt", "Shift", "LCtrl", "RCtrl", "LShift", "RShift", "LAlt", "RAlt", "Browser_Back", "Browser_Forward", "Browser_Refresh", "Browser_Stop", "Browser_Search", "Browser_Favorites", "Browser_Home", "Volume_Mute", "Volume_Down", "Volume_Up", "Media_Next", "Media_Prev", "Media_Stop", "Media_Play_Pause", "Launch_Mail", "Launch_Media", "Launch_App1", "Launch_App2", "AppsKey", "PrintScreen", "CtrlBreak", "Pause", "Break", "Help", "Sleep", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "-", "=", "[", "]", "\\", ";", "'", ",", ".", "/" });
+            languageComboBox.Location = new Point(435, 7);
+            languageComboBox.Name = "languageComboBox";
+            languageComboBox.Size = new Size(71, 27);
+            languageComboBox.TabIndex = 11;
+            languageComboBox.SelectionChangeCommitted += languageComboBox_SelectionChangeCommitted;
+            // 
+            // flowLayoutPanel8
+            // 
+            flowLayoutPanel8.AutoSize = true;
+            flowLayoutPanel8.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            flowLayoutPanel8.Controls.Add(enableVoiceTriggerCheckBox);
+            flowLayoutPanel8.Controls.Add(openSpeechRecognitionControlPanelButton);
+            flowLayoutPanel8.Controls.Add(label12);
+            flowLayoutPanel8.Controls.Add(wakeupWordTextBox);
+            flowLayoutPanel8.Controls.Add(label11);
+            flowLayoutPanel8.Controls.Add(voiceConfidenceNumericUpDown);
+            flowLayoutPanel8.Controls.Add(BtnVoiceSpeechCalibration);
+            flowLayoutPanel8.Controls.Add(voiceRecognizeResultLabel);
+            flowLayoutPanel8.Location = new Point(3, 96);
+            flowLayoutPanel8.Name = "flowLayoutPanel8";
+            flowLayoutPanel8.Size = new Size(668, 39);
+            flowLayoutPanel8.TabIndex = 10;
+            // 
             // enableVoiceTriggerCheckBox
             // 
             enableVoiceTriggerCheckBox.Anchor = AnchorStyles.Left;
             enableVoiceTriggerCheckBox.AutoSize = true;
-            enableVoiceTriggerCheckBox.Location = new Point(381, 8);
+            enableVoiceTriggerCheckBox.Location = new Point(3, 8);
             enableVoiceTriggerCheckBox.Name = "enableVoiceTriggerCheckBox";
             enableVoiceTriggerCheckBox.Size = new Size(106, 23);
             enableVoiceTriggerCheckBox.TabIndex = 7;
-            enableVoiceTriggerCheckBox.Text = "开启语音触发";
+            enableVoiceTriggerCheckBox.Text = "开启语音呼叫";
             enableVoiceTriggerCheckBox.UseVisualStyleBackColor = true;
             enableVoiceTriggerCheckBox.Click += enableVoiceTriggerCheckBox_Click;
+            // 
+            // openSpeechRecognitionControlPanelButton
+            // 
+            openSpeechRecognitionControlPanelButton.Anchor = AnchorStyles.Left;
+            openSpeechRecognitionControlPanelButton.AutoSize = true;
+            openSpeechRecognitionControlPanelButton.Location = new Point(115, 3);
+            openSpeechRecognitionControlPanelButton.Name = "openSpeechRecognitionControlPanelButton";
+            openSpeechRecognitionControlPanelButton.Size = new Size(132, 33);
+            openSpeechRecognitionControlPanelButton.TabIndex = 16;
+            openSpeechRecognitionControlPanelButton.Text = "打开系统语音设置...";
+            openSpeechRecognitionControlPanelButton.UseVisualStyleBackColor = true;
+            openSpeechRecognitionControlPanelButton.Click += openSpeechRecognitionControlPanelButton_Click;
+            // 
+            // label12
+            // 
+            label12.Anchor = AnchorStyles.Left;
+            label12.AutoSize = true;
+            label12.Location = new Point(253, 10);
+            label12.Name = "label12";
+            label12.Size = new Size(61, 19);
+            label12.TabIndex = 14;
+            label12.Text = "唤醒词：";
+            // 
+            // wakeupWordTextBox
+            // 
+            wakeupWordTextBox.Anchor = AnchorStyles.Left;
+            wakeupWordTextBox.Location = new Point(320, 7);
+            wakeupWordTextBox.Name = "wakeupWordTextBox";
+            wakeupWordTextBox.Size = new Size(100, 25);
+            wakeupWordTextBox.TabIndex = 15;
+            wakeupWordTextBox.TextChanged += wakeupWordTextBox_TextChanged;
             // 
             // label11
             // 
             label11.Anchor = AnchorStyles.Left;
             label11.AutoSize = true;
-            label11.Location = new Point(493, 10);
+            label11.Location = new Point(426, 10);
             label11.Name = "label11";
             label11.Size = new Size(74, 19);
             label11.TabIndex = 12;
@@ -346,7 +395,7 @@
             voiceConfidenceNumericUpDown.Anchor = AnchorStyles.Left;
             voiceConfidenceNumericUpDown.DecimalPlaces = 3;
             voiceConfidenceNumericUpDown.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            voiceConfidenceNumericUpDown.Location = new Point(573, 7);
+            voiceConfidenceNumericUpDown.Location = new Point(506, 7);
             voiceConfidenceNumericUpDown.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             voiceConfidenceNumericUpDown.Minimum = new decimal(new int[] { 5, 0, 0, 65536 });
             voiceConfidenceNumericUpDown.Name = "voiceConfidenceNumericUpDown";
@@ -357,42 +406,22 @@
             // 
             // BtnVoiceSpeechCalibration
             // 
-            BtnVoiceSpeechCalibration.Location = new Point(640, 3);
+            BtnVoiceSpeechCalibration.Anchor = AnchorStyles.Left;
+            BtnVoiceSpeechCalibration.Location = new Point(573, 3);
             BtnVoiceSpeechCalibration.Name = "BtnVoiceSpeechCalibration";
             BtnVoiceSpeechCalibration.Size = new Size(86, 33);
             BtnVoiceSpeechCalibration.TabIndex = 14;
-            BtnVoiceSpeechCalibration.Text = "识别校准";
+            BtnVoiceSpeechCalibration.Text = "识别校准...";
             BtnVoiceSpeechCalibration.Click += BtnVoiceSpeechCalibration_Click;
             // 
-            // label12
+            // voiceRecognizeResultLabel
             // 
-            label12.Anchor = AnchorStyles.Left;
-            label12.AutoSize = true;
-            label12.Location = new Point(732, 10);
-            label12.Name = "label12";
-            label12.Size = new Size(61, 19);
-            label12.TabIndex = 14;
-            label12.Text = "唤醒词：";
-            // 
-            // wakeupWordTextBox
-            // 
-            wakeupWordTextBox.Location = new Point(799, 3);
-            wakeupWordTextBox.Name = "wakeupWordTextBox";
-            wakeupWordTextBox.Size = new Size(100, 25);
-            wakeupWordTextBox.TabIndex = 15;
-            wakeupWordTextBox.TextChanged += wakeupWordTextBox_TextChanged;
-            // 
-            // openSpeechRecognitionControlPanelButton
-            // 
-            openSpeechRecognitionControlPanelButton.Anchor = AnchorStyles.Left;
-            openSpeechRecognitionControlPanelButton.AutoSize = true;
-            openSpeechRecognitionControlPanelButton.Location = new Point(905, 3);
-            openSpeechRecognitionControlPanelButton.Name = "openSpeechRecognitionControlPanelButton";
-            openSpeechRecognitionControlPanelButton.Size = new Size(122, 33);
-            openSpeechRecognitionControlPanelButton.TabIndex = 16;
-            openSpeechRecognitionControlPanelButton.Text = "打开语音设置";
-            openSpeechRecognitionControlPanelButton.UseVisualStyleBackColor = true;
-            openSpeechRecognitionControlPanelButton.Click += openSpeechRecognitionControlPanelButton_Click;
+            voiceRecognizeResultLabel.Anchor = AnchorStyles.Left;
+            voiceRecognizeResultLabel.AutoSize = true;
+            voiceRecognizeResultLabel.Location = new Point(665, 10);
+            voiceRecognizeResultLabel.Name = "voiceRecognizeResultLabel";
+            voiceRecognizeResultLabel.Size = new Size(0, 19);
+            voiceRecognizeResultLabel.TabIndex = 17;
             // 
             // generateVoiceFlowLayoutPanel
             // 
@@ -410,7 +439,7 @@
             generateVoiceFlowLayoutPanel.Controls.Add(generateVoiceButton);
             generateVoiceFlowLayoutPanel.Controls.Add(generateTxtButton);
             generateVoiceFlowLayoutPanel.Controls.Add(generateVoiceMessageLabel);
-            generateVoiceFlowLayoutPanel.Location = new Point(3, 96);
+            generateVoiceFlowLayoutPanel.Location = new Point(3, 141);
             generateVoiceFlowLayoutPanel.Name = "generateVoiceFlowLayoutPanel";
             generateVoiceFlowLayoutPanel.Size = new Size(874, 39);
             generateVoiceFlowLayoutPanel.TabIndex = 6;
@@ -421,7 +450,7 @@
             generateVoiceStyleComboBox.Anchor = AnchorStyles.Left;
             generateVoiceStyleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             generateVoiceStyleComboBox.FormattingEnabled = true;
-            generateVoiceStyleComboBox.Location = new Point(3, 8);
+            generateVoiceStyleComboBox.Location = new Point(3, 7);
             generateVoiceStyleComboBox.Name = "generateVoiceStyleComboBox";
             generateVoiceStyleComboBox.Size = new Size(254, 27);
             generateVoiceStyleComboBox.TabIndex = 5;
@@ -537,7 +566,7 @@
             flowLayoutPanel4.Controls.Add(stratagemSetsComboBox);
             flowLayoutPanel4.Controls.Add(saveStratagemSetButton);
             flowLayoutPanel4.Controls.Add(deleteStratagemSetButton);
-            flowLayoutPanel4.Location = new Point(3, 141);
+            flowLayoutPanel4.Location = new Point(3, 186);
             flowLayoutPanel4.Name = "flowLayoutPanel4";
             flowLayoutPanel4.Size = new Size(1051, 39);
             flowLayoutPanel4.TabIndex = 5;
@@ -547,7 +576,7 @@
             stratagemSetsComboBox.Anchor = AnchorStyles.Left;
             stratagemSetsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             stratagemSetsComboBox.FormattingEnabled = true;
-            stratagemSetsComboBox.Location = new Point(3, 8);
+            stratagemSetsComboBox.Location = new Point(3, 7);
             stratagemSetsComboBox.Name = "stratagemSetsComboBox";
             stratagemSetsComboBox.Size = new Size(810, 27);
             stratagemSetsComboBox.TabIndex = 5;
@@ -575,15 +604,53 @@
             deleteStratagemSetButton.UseVisualStyleBackColor = true;
             deleteStratagemSetButton.Click += deleteStratagemSetButton_Click;
             // 
+            // flowLayoutPanel7
+            // 
+            flowLayoutPanel7.AutoSize = true;
+            flowLayoutPanel7.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            flowLayoutPanel7.Controls.Add(enableHotkeyTriggerCheckBox);
+            flowLayoutPanel7.Controls.Add(enableSetFKeyByVoiceCheckBox);
+            flowLayoutPanel7.Location = new Point(3, 231);
+            flowLayoutPanel7.Name = "flowLayoutPanel7";
+            flowLayoutPanel7.Size = new Size(276, 29);
+            flowLayoutPanel7.TabIndex = 9;
+            // 
+            // enableHotkeyTriggerCheckBox
+            // 
+            enableHotkeyTriggerCheckBox.Anchor = AnchorStyles.Left;
+            enableHotkeyTriggerCheckBox.AutoSize = true;
+            enableHotkeyTriggerCheckBox.Checked = true;
+            enableHotkeyTriggerCheckBox.CheckState = CheckState.Checked;
+            enableHotkeyTriggerCheckBox.Location = new Point(3, 3);
+            enableHotkeyTriggerCheckBox.Name = "enableHotkeyTriggerCheckBox";
+            enableHotkeyTriggerCheckBox.Size = new Size(119, 23);
+            enableHotkeyTriggerCheckBox.TabIndex = 8;
+            enableHotkeyTriggerCheckBox.Text = "开启快捷键呼叫";
+            enableHotkeyTriggerCheckBox.UseVisualStyleBackColor = true;
+            enableHotkeyTriggerCheckBox.Click += enableHotkeyTriggerCheckBox_Click;
+            // 
+            // enableSetFKeyByVoiceCheckBox
+            // 
+            enableSetFKeyByVoiceCheckBox.Anchor = AnchorStyles.Left;
+            enableSetFKeyByVoiceCheckBox.AutoSize = true;
+            enableSetFKeyByVoiceCheckBox.Checked = true;
+            enableSetFKeyByVoiceCheckBox.CheckState = CheckState.Checked;
+            enableSetFKeyByVoiceCheckBox.Location = new Point(128, 3);
+            enableSetFKeyByVoiceCheckBox.Name = "enableSetFKeyByVoiceCheckBox";
+            enableSetFKeyByVoiceCheckBox.Size = new Size(145, 23);
+            enableSetFKeyByVoiceCheckBox.TabIndex = 8;
+            enableSetFKeyByVoiceCheckBox.Text = "语音设置快捷键战略";
+            enableSetFKeyByVoiceCheckBox.UseVisualStyleBackColor = true;
+            enableSetFKeyByVoiceCheckBox.Click += enableSetFKeyByVoiceCheckBox_Click;
+            // 
             // flowLayoutPanel6
             // 
             flowLayoutPanel6.AutoSize = true;
             flowLayoutPanel6.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             flowLayoutPanel6.Controls.Add(fKeysFlowLayoutPanel);
-            flowLayoutPanel6.Controls.Add(enableSetFKeyByVoiceCheckBox);
-            flowLayoutPanel6.Location = new Point(3, 186);
+            flowLayoutPanel6.Location = new Point(3, 266);
             flowLayoutPanel6.Name = "flowLayoutPanel6";
-            flowLayoutPanel6.Size = new Size(191, 57);
+            flowLayoutPanel6.Size = new Size(79, 57);
             flowLayoutPanel6.TabIndex = 3;
             // 
             // fKeysFlowLayoutPanel
@@ -629,27 +696,13 @@
             label1.TabIndex = 1;
             label1.Text = "飞鹰空袭";
             // 
-            // enableSetFKeyByVoiceCheckBox
-            // 
-            enableSetFKeyByVoiceCheckBox.Anchor = AnchorStyles.Left;
-            enableSetFKeyByVoiceCheckBox.AutoSize = true;
-            enableSetFKeyByVoiceCheckBox.Checked = true;
-            enableSetFKeyByVoiceCheckBox.CheckState = CheckState.Checked;
-            enableSetFKeyByVoiceCheckBox.Location = new Point(82, 17);
-            enableSetFKeyByVoiceCheckBox.Name = "enableSetFKeyByVoiceCheckBox";
-            enableSetFKeyByVoiceCheckBox.Size = new Size(106, 23);
-            enableSetFKeyByVoiceCheckBox.TabIndex = 8;
-            enableSetFKeyByVoiceCheckBox.Text = "语音设置战略";
-            enableSetFKeyByVoiceCheckBox.UseVisualStyleBackColor = true;
-            enableSetFKeyByVoiceCheckBox.Click += enableSetFKeyByVoiceCheckBox_Click;
-            // 
             // stratagemGroupsFlowLayoutPanel
             // 
             stratagemGroupsFlowLayoutPanel.AutoSize = true;
             stratagemGroupsFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             stratagemGroupsFlowLayoutPanel.Controls.Add(flowLayoutPanel1);
             stratagemGroupsFlowLayoutPanel.Controls.Add(flowLayoutPanel5);
-            stratagemGroupsFlowLayoutPanel.Location = new Point(3, 249);
+            stratagemGroupsFlowLayoutPanel.Location = new Point(3, 329);
             stratagemGroupsFlowLayoutPanel.Name = "stratagemGroupsFlowLayoutPanel";
             stratagemGroupsFlowLayoutPanel.Size = new Size(252, 83);
             stratagemGroupsFlowLayoutPanel.TabIndex = 2;
@@ -776,11 +829,15 @@
             flowLayoutPanel3.PerformLayout();
             voiceTriggerFlowLayoutPanel.ResumeLayout(false);
             voiceTriggerFlowLayoutPanel.PerformLayout();
+            flowLayoutPanel8.ResumeLayout(false);
+            flowLayoutPanel8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)voiceConfidenceNumericUpDown).EndInit();
             generateVoiceFlowLayoutPanel.ResumeLayout(false);
             generateVoiceFlowLayoutPanel.PerformLayout();
             flowLayoutPanel4.ResumeLayout(false);
             flowLayoutPanel4.PerformLayout();
+            flowLayoutPanel7.ResumeLayout(false);
+            flowLayoutPanel7.PerformLayout();
             flowLayoutPanel6.ResumeLayout(false);
             flowLayoutPanel6.PerformLayout();
             fKeysFlowLayoutPanel.ResumeLayout(false);
@@ -854,5 +911,9 @@
         private TextBox wakeupWordTextBox;
         private Button openSpeechRecognitionControlPanelButton;
         private Button BtnVoiceSpeechCalibration;
+        private FlowLayoutPanel flowLayoutPanel7;
+        private CheckBox enableHotkeyTriggerCheckBox;
+        private FlowLayoutPanel flowLayoutPanel8;
+        private Label voiceRecognizeResultLabel;
     }
 }

@@ -37,9 +37,10 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft YaHei UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 134);
-            label1.Location = new Point(12, 39);
+            label1.Location = new Point(11, 9);
+            label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(144, 52);
+            label1.Size = new Size(114, 42);
             label1.TabIndex = 0;
             label1.Text = "label1";
             label1.Click += label1_Click;
@@ -51,17 +52,19 @@
             // 
             // ModalTip
             // 
-            AutoScaleDimensions = new SizeF(9F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(522, 150);
+            AutoSize = true;
+            ClientSize = new Size(406, 128);
             Controls.Add(label1);
+            Margin = new Padding(2, 3, 2, 3);
             MaximizeBox = false;
             MdiChildrenMinimizedAnchorBottom = false;
             MinimizeBox = false;
             Name = "ModalTip";
             ShowInTaskbar = false;
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "提示";
             TopMost = true;
             FormClosing += ModalTip_FormClosing;

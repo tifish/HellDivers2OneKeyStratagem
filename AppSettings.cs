@@ -16,4 +16,5 @@ public class AppSettings
     public string Language { get; set; } = "";
     public float VoiceConfidence { get; set; } = 0.6f;
     public string WakeupWord { get; set; } = "";
+    public bool EnableHotkeyTrigger { get; set; } = true;
 }

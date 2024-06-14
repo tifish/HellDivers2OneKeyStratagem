@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
-using System.Globalization;
-using AutoHotkey.Interop;
+﻿using AutoHotkey.Interop;
 using EdgeTTS;
 using NAudio.Wave;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -129,6 +129,8 @@ public partial class MainForm : Form
 
             _voiceCommand.CommandRecognized += (_, command) =>
             {
+                voiceRecognizeResultLabel.Text = $@"识别概率：{command.Score:F3} 文字：{command.Text}";
+
                 if (command.Score < Settings.VoiceConfidence)
                     return;
 
@@ -265,6 +267,8 @@ public partial class MainForm : Form
         wakeupWordTextBox.Text = Settings.WakeupWord;
 
         enableVoiceTriggerCheckBox.Checked = Settings.EnableVoiceTrigger;
+
+        enableHotkeyTriggerCheckBox.Checked = Settings.EnableHotkeyTrigger;
     }
 
     private string GetFKeyStratagemString()
@@ -708,7 +712,7 @@ public partial class MainForm : Form
         if (_isLoading)
             return;
 
-        var shouldStart = _settingsChanged || _autoHotkeyEngine == null;
+        var shouldStart = Settings.EnableVoiceTrigger && (_settingsChanged || _autoHotkeyEngine == null);
 
         if (_settingsChanged)
         {
@@ -879,6 +883,22 @@ public partial class MainForm : Form
         finally
         {
             _voiceCommand.CommandRecognized -= testFunction;
+        }
+    }
+
+    private void enableHotkeyTriggerCheckBox_Click(object sender, EventArgs e)
+    {
+        Settings.EnableHotkeyTrigger = enableHotkeyTriggerCheckBox.Checked;
+        _settingsChanged = true;
+
+        if (Settings.EnableHotkeyTrigger)
+        {
+            StartVoiceTrigger();
+        }
+        else if (_autoHotkeyEngine != null)
+        {
+            _autoHotkeyEngine.Terminate();
+            _autoHotkeyEngine = null;
         }
     }
 }
