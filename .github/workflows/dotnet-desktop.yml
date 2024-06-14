@@ -36,7 +36,9 @@ jobs:
       run: dotnet build --configuration Release ${{ env.Solution_Name }}
 
     - name: Zip
-      run: zip -r HellDivers2OneKeyStratagem.zip ./bin
+      shell: powershell
+      run: |
+        Compress-Archive -Path ./bin/* -DestinationPath HellDivers2OneKeyStratagem.zip
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
