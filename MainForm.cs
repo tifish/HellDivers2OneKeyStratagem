@@ -1,8 +1,8 @@
-﻿using AutoHotkey.Interop;
+﻿using System.Diagnostics;
+using System.Globalization;
+using AutoHotkey.Interop;
 using EdgeTTS;
 using NAudio.Wave;
-using System.Diagnostics;
-using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -47,11 +47,11 @@ public partial class MainForm : Form
 
     private void LoadMicDevices()
     {
-        for (int i = 0; i < WaveInEvent.DeviceCount; i++)
+        for (var i = 0; i < WaveInEvent.DeviceCount; i++)
         {
             var device = WaveInEvent.GetCapabilities(i);
-            MicComboBox.Items.Add(device.ProductName);
-        } 
+            micComboBox.Items.Add(device.ProductName);
+        }
     }
 
     private void InitLanguages()
@@ -165,7 +165,7 @@ public partial class MainForm : Form
             };
         }
 
-        //_voiceCommand.Start();
+        _voiceCommand.Start();
     }
 
     private void PlayStratagemVoice(string stratagemName)
@@ -817,7 +817,7 @@ public partial class MainForm : Form
         Process.Start("control.exe", "/name Microsoft.SpeechRecognition");
     }
 
-    private async void BtnVoiceSpeechCalibration_Click(object sender, EventArgs e)
+    private async void calibrateVoiceButton_Click(object sender, EventArgs e)
     {
         if (_voiceCommand == null)
         {
@@ -825,30 +825,14 @@ public partial class MainForm : Form
             return;
         }
 
-        float totalScore = 0;
+        var scores = new float[3];
         var times = 0;
         var tipWindow = new ModalTip();
-        var testFunction = new EventHandler<VoiceCommand.RecognitionResult>((_, command) =>
-        {
-            switch (command.Text)
-            {
-                case "飞鹰空袭" when times == 0:
-                    times++;
-                    totalScore += command.Score;
-                    break;
-                case "轨道炮攻击" when times == 1:
-                    times++;
-                    totalScore += command.Score;
-                    break;
-                case "消耗性反坦克武器" when times == 2:
-                    totalScore += command.Score;
-                    times++;
-                    break;
-            }
-        });
+
         try
         {
-            _voiceCommand.CommandRecognized += testFunction;
+            _voiceCommand.CommandRecognized += TestEvent;
+
             tipWindow.SetTipString($"请朗读 “{wakeupWordTextBox.Text.Trim()}飞鹰空袭”");
             tipWindow.TryClosed = false;
             var task1 = Task.Run(() =>
@@ -859,7 +843,8 @@ public partial class MainForm : Form
             });
             var ret = tipWindow.ShowDialog();
             await task1;
-            if (ret == DialogResult.Cancel) return;
+            if (ret == DialogResult.Cancel)
+                return;
 
             tipWindow.SetTipString($"请朗读 “{wakeupWordTextBox.Text.Trim()}轨道炮攻击”");
             tipWindow.TryClosed = false;
@@ -871,7 +856,8 @@ public partial class MainForm : Form
             });
             ret = tipWindow.ShowDialog();
             await task2;
-            if (ret == DialogResult.Cancel) return;
+            if (ret == DialogResult.Cancel)
+                return;
 
             tipWindow.SetTipString($"请朗读 “{wakeupWordTextBox.Text.Trim()}消耗性反坦克武器”");
             tipWindow.TryClosed = false;
@@ -883,9 +869,10 @@ public partial class MainForm : Form
             });
             ret = tipWindow.ShowDialog();
             await task3;
-            if (ret == DialogResult.Cancel) return;
+            if (ret == DialogResult.Cancel)
+                return;
 
-            voiceConfidenceNumericUpDown.Value = (decimal)(totalScore / times - 0.1);
+            voiceConfidenceNumericUpDown.Value = (decimal)(scores.Average() - (scores.Max() - scores.Min()));
         }
         catch (Exception ex)
         {
@@ -893,7 +880,22 @@ public partial class MainForm : Form
         }
         finally
         {
-            _voiceCommand.CommandRecognized -= testFunction;
+            _voiceCommand.CommandRecognized -= TestEvent;
+        }
+
+        return;
+
+        void TestEvent(object? _, VoiceCommand.RecognitionResult command)
+        {
+            switch (command.Text)
+            {
+                case "飞鹰空袭" when times == 0:
+                case "轨道炮攻击" when times == 1:
+                case "消耗性反坦克武器" when times == 2:
+                    scores[times] = command.Score;
+                    times++;
+                    break;
+            }
         }
     }
 
@@ -913,11 +915,8 @@ public partial class MainForm : Form
         }
     }
 
-    private void MicComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    private void micComboBox_SelectionChangeCommitted(object sender, EventArgs e)
     {
-        if (_voiceCommand != null)
-        {
-            _voiceCommand.SelectDevice(MicComboBox.Text);
-        }
+        _voiceCommand?.SelectDevice(micComboBox.Text);
     }
 }
