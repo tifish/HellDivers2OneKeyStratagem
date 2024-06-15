@@ -11,6 +11,8 @@ public partial class EditAliasesDialog : Form
         _stratagemName = stratagemName;
         systemAliasesTextBox.Text = StratagemManager.GetSystemAlias(stratagemName);
         userAliasesTextBox.Text = StratagemManager.GetUserAlias(stratagemName);
+
+        ActiveControl = userAliasesTextBox;
     }
 
     private void okButton_Click(object sender, EventArgs e)

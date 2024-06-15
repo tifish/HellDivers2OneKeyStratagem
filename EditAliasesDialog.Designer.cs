@@ -79,7 +79,7 @@
             label1.Name = "label1";
             label1.Size = new Size(156, 19);
             label1.TabIndex = 0;
-            label1.Text = "预设的名称（用|分隔）：";
+            label1.Text = "预定义名称（用|分隔）：";
             // 
             // systemAliasesTextBox
             // 
@@ -121,7 +121,7 @@
             userAliasesTextBox.Margin = new Padding(3, 4, 3, 4);
             userAliasesTextBox.Name = "userAliasesTextBox";
             userAliasesTextBox.Size = new Size(408, 24);
-            userAliasesTextBox.TabIndex = 3;
+            userAliasesTextBox.TabIndex = 2;
             // 
             // flowLayoutPanel4
             // 
@@ -143,7 +143,7 @@
             okButton.Location = new Point(3, 3);
             okButton.Name = "okButton";
             okButton.Size = new Size(75, 29);
-            okButton.TabIndex = 0;
+            okButton.TabIndex = 3;
             okButton.Text = "确定";
             okButton.UseVisualStyleBackColor = true;
             okButton.Click += okButton_Click;
@@ -155,12 +155,12 @@
             cancelButton.Location = new Point(84, 3);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new Size(75, 29);
-            cancelButton.TabIndex = 1;
+            cancelButton.TabIndex = 4;
             cancelButton.Text = "取消";
             cancelButton.UseVisualStyleBackColor = true;
             cancelButton.Click += cancelButton_Click;
             // 
-            // EditAliasesForm
+            // EditAliasesDialog
             // 
             AcceptButton = okButton;
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -168,11 +168,11 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             CancelButton = cancelButton;
-            ClientSize = new Size(914, 503);
+            ClientSize = new Size(624, 219);
             Controls.Add(flowLayoutPanel1);
             Font = new Font("Microsoft YaHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 134);
             Margin = new Padding(3, 4, 3, 4);
-            Name = "EditAliasesForm";
+            Name = "EditAliasesDialog";
             StartPosition = FormStartPosition.CenterParent;
             Text = "自定义语音名称";
             flowLayoutPanel1.ResumeLayout(false);

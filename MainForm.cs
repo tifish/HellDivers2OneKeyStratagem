@@ -1,8 +1,8 @@
-﻿using AutoHotkey.Interop;
+﻿using System.Diagnostics;
+using System.Globalization;
+using AutoHotkey.Interop;
 using EdgeTTS;
 using NAudio.Wave;
-using System.Diagnostics;
-using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -11,6 +11,25 @@ public partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
+
+        SetTooltipFont();
+    }
+
+    private void SetTooltipFont()
+    {
+        toolTip.OwnerDraw = true;
+        toolTip.Popup += (sender, args) =>
+        {
+            var text = toolTip.GetToolTip(args.AssociatedControl);
+            args.ToolTipSize = TextRenderer.MeasureText(text, Font);
+        };
+        toolTip.Draw += (_, args) =>
+        {
+            args.DrawBackground();
+            args.DrawBorder();
+            args.Graphics.DrawString(args.ToolTipText, Font, Brushes.Black, new PointF(2, 2));
+
+        };
     }
 
     private bool _isLoading = true;
@@ -426,9 +445,21 @@ public partial class MainForm : Form
 
             foreach (var stratagem in group.Value)
             {
-                var stratagemCheckBox = new CheckBox { Text = stratagem.Name, AutoSize = true, Anchor = AnchorStyles.Left };
+                var stratagemCheckBox = new CheckBox
+                {
+                    Text = stratagem.Name,
+                    AutoSize = true,
+                    Anchor = AnchorStyles.Left,
+                };
                 stratagem.CheckBox = stratagemCheckBox;
                 root.Controls.Add(stratagemCheckBox);
+
+                toolTip.SetToolTip(stratagemCheckBox,
+                    $"""
+                    {StratagemManager.GetSystemAlias(stratagem.Name)}
+                        自定义名称：{StratagemManager.GetUserAlias(stratagem.Name)}
+                        按右键编辑自定义名称。
+                    """);
 
                 stratagemCheckBox.MouseUp += async (_, args) =>
                 {
