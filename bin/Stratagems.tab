@@ -5,7 +5,7 @@
 ↓ ← ↓ ↑ ↑ ←	盟友	Stalwart
 ↓ ↓ ← ↑ →	消耗性反坦克武器|次抛	Expandable Anti-Tank|Anti-Tank
 ↓ ← → → ←	无后座力步枪|无后座力	Recoilless Rifle|Recoilless
-↓ ← ↑ ↓ ↑	火焰喷射器	Flamethrower
+↓ ← ↑ ↓ ↑	火焰喷射器|喷火器	Flamethrower
 ↓ ← ↓ ↑ ↑ →	机炮	Autocannon
 ↓ ← ↑ ↓ ↓	重机枪	Heavy Machine Gun
 ↓ ↑ ↑ ← →	空爆火箭发射器|空爆火箭	Airburst Rocket Launcher|Airburst Rocket
@@ -14,7 +14,7 @@
 ↓ ← ↑ ← ↓	榴弹发射器|榴弹	Grenade Launcher|Grenade
 ↓ ← ↓ ↑ ←	激光大炮|激光炮	Laser Cannon|Laser
 ↓ → ↓ ↑ ← ←	电弧发射器|电弧枪	Arc Thrower|Arc Gun
-↓ ↓ ↑ ← →	类星体加农炮|类星体	Quasar Cannon|Quasar
+↓ ↓ ↑ ← →	类星体加农炮|类星体|星体炮	Quasar Cannon|Quasar
 	支援背包	Support Pack
 ↓ ↑ ↑ ↓ ↑	喷射背包|飞行背包	Jump Pack|Jetpack|Flight Pack
 ↓ ← ↓ ↑ ↑ ↓	补给背包	Supply Pack
@@ -26,8 +26,8 @@
 ← ↓ → ↑ ← ↓ ↓	爱国者外骨骼装甲|爱国者	Patriot Exosuit|Patriot
 ← ↓ → ↑ ← ↓ ↑	解放者外骨骼装甲|解放者	Emancipator Exosuit|Emancipator
 	防守型	Defensive
-↓ ↑ ← → ← →	重机枪部署支架	HMG Emplacement
-↓ ↓ ← → ← →	防护罩生成中继器	Shield Generator Relay
+↓ ↑ ← → ← →	重机枪部署支架|机枪支架	HMG Emplacement
+↓ ↓ ← → ← →	防护罩生成中继器|防护罩生成器	Shield Generator Relay
 ↓ ↑ → ↑ ← →	特斯拉塔|特斯拉	Tesla Tower|Tesla
 ↓ ← ↑ →	反步兵雷区|地雷	Anti-Personnel Minefield|Mines
 ↓ ← ← ↓	燃烧地雷	Incendiary Mines
@@ -47,11 +47,11 @@
 ↑ → ↑ ←	飞鹰110MM火箭巢|飞鹰110	Eagle 110mm Rocket Pods|Eagle 110
 ↑ → ↓ ↓ ↓	飞鹰500KG炸弹|飞鹰500	Eagle 500KG Bom|Eagle 500
 	进攻型·轨道	Offensive Orbital
-→ ↓ ← ↑ ↑	加特林火力网	Orbital Gatling Barrage|Orbital Gatling
+→ ↓ ← ↑ ↑	加特林火力网|轨道加特林	Orbital Gatling Barrage|Orbital Gatling
 → → →	轨道空爆攻击|轨道空爆	Orbital Airburst Attack|Orbital Airburst
 → → ↓ ← → ↓	轨道120MM高爆火力网|轨道120	Orbital 120MM HE Barrage|Orbital 120
 → ↓ ↑ ↑ ← ↓ ↓	轨道380MM高爆火力网|轨道380	Orbital 380MM HE Barrage|Orbital 380
-→ ↓ → ↓ → ↓	轨道游走火力网	Orbital Walking Barrage|Orbital Walking
+→ ↓ → ↓ → ↓	轨道游走火力网|轨道游走	Orbital Walking Barrage|Orbital Walking
 → ↓ ↑ → ↓	轨道激光炮|轨道激光	Orbital Laser
 → ↑ ↓ ↓ →	轨道炮攻击|轨道炮	Orbital Railcannon Strike|Orbital Railcannon
 → → ↑	轨道精准攻击|轨道精准	Orbital Precision Strike|Orbital Precision
@@ -64,9 +64,9 @@
 ↓ ↓ ↑ →	重新补给|补给	Resupply|Supply
 	任务	Mission
 ↓ ↑ ← ↓ ↑ → ↓ ↑	地狱火炸弹|地狱火	Hellbomb
-↓ ↓ ↓ ↑ ↑	运送超级固态硬盘	SSSD Delivery
+↓ ↓ ↓ ↑ ↑	运送超级固态硬盘|固态硬盘	SSSD Delivery
 ↑ ↑ ← → ↓ ↓	地质探测器	Seismic Probe
-↓ ↓ ↑ ↑ ↑	上传重要数据	Upload Data
+↓ ↓ ↑ ↑ ↑	上传重要数据|上传数据	Upload Data
 → → ← ←	照明弹	Flare
-→ ↑ ↑ ↓	超级地球大炮	SEAF Artillery
-↓ ↑ ↓ ↑	超级地球旗帜	Super Earth Flag
+→ ↑ ↑ ↓	超级地球大炮|超级大炮	SEAF Artillery
+↓ ↑ ↓ ↑	超级地球旗帜|超级旗帜	Super Earth Flag
