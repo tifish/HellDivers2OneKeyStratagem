@@ -29,6 +29,10 @@ public class JsonFile<T> where T : class
 
     public async Task Save(T obj)
     {
+        var dir = Path.GetDirectoryName(FilePath);
+        if (dir != null && !Directory.Exists(dir))
+            Directory.CreateDirectory(dir);
+
         await using var fileStream = File.Create(FilePath);
         await JsonSerializer.SerializeAsync(fileStream, obj, JsonSerializerOptions);
     }

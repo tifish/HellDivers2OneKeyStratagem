@@ -136,7 +136,7 @@ public partial class MainForm : Form
 
             try
             {
-                _voiceCommand = new VoiceCommand(Settings.Language, Settings.WakeupWord, [.. Stratagems.Keys]);
+                _voiceCommand = new VoiceCommand(Settings.Language, Settings.WakeupWord, [.. StratagemManager.StratagemAlias]);
             }
             catch (Exception ex)
             {
@@ -151,7 +151,7 @@ public partial class MainForm : Form
                 if (command.Score < Settings.VoiceConfidence)
                     return;
 
-                if (!Stratagems.TryGetValue(command.Text, out var stratagem))
+                if (!StratagemManager.TryGet(command.Text, out var stratagem))
                     return;
 
                 if (_isActive)
@@ -225,11 +225,9 @@ public partial class MainForm : Form
         generateVoiceStyleComboBox.SelectedIndex = generateVoiceStyleComboBox.Items.Count - 1;
     }
 
-    private static readonly string ExeDirectory = Path.GetDirectoryName(Application.ExecutablePath)!;
-
-    private static readonly string TemplateAhk1 = Path.Combine(ExeDirectory, "HellDivers2OneKey.template1.ahk");
+    private static readonly string TemplateAhk1 = Path.Combine(AppSettings.ExeDirectory, "HellDivers2OneKey.template1.ahk");
     private string[] _template1Lines = [];
-    private static readonly string TemplateAhk2 = Path.Combine(ExeDirectory, "HellDivers2OneKey.template2.ahk");
+    private static readonly string TemplateAhk2 = Path.Combine(AppSettings.ExeDirectory, "HellDivers2OneKey.template2.ahk");
     private string[] _template2Lines = [];
 
     private async Task LoadScriptTemplate()
@@ -238,8 +236,7 @@ public partial class MainForm : Form
         _template2Lines = await File.ReadAllLinesAsync(TemplateAhk2);
     }
 
-    private static readonly string SettingsFile = Path.Combine(ExeDirectory, "Settings.json");
-    private readonly JsonFile<AppSettings> _settingsFile = new(SettingsFile);
+    private readonly JsonFile<AppSettings> _settingsFile = new(AppSettings.SettingsFile);
 
     private async Task LoadSettings()
     {
@@ -306,7 +303,7 @@ public partial class MainForm : Form
             if (string.IsNullOrWhiteSpace(name))
                 continue;
 
-            if (!Stratagems.TryGetValue(name, out var stratagem))
+            if (!StratagemManager.TryGet(name, out var stratagem))
                 continue;
 
             SetFKeyStratagem(i, stratagem, false);
@@ -421,7 +418,7 @@ public partial class MainForm : Form
     {
         stratagemGroupsFlowLayoutPanel.Controls.Clear();
 
-        foreach (var group in StratagemGroups)
+        foreach (var group in StratagemManager.Groups)
         {
             var root = new FlowLayoutPanel { FlowDirection = FlowDirection.TopDown, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
             var groupLabel = new Label { Text = group.Key, AutoSize = true, Anchor = AnchorStyles.Left, Font = new Font(Font, FontStyle.Bold) };
@@ -433,26 +430,35 @@ public partial class MainForm : Form
                 stratagem.CheckBox = stratagemCheckBox;
                 root.Controls.Add(stratagemCheckBox);
 
-                stratagemCheckBox.Click += (_, _) =>
+                stratagemCheckBox.MouseUp += (_, args) =>
                 {
-                    if (stratagemCheckBox.Checked)
+                    switch (args.Button)
                     {
-                        SetFKeyStratagem(SelectedFKeyIndex, stratagem);
+                        case MouseButtons.Left when stratagemCheckBox.Checked:
+                            {
+                                SetFKeyStratagem(SelectedFKeyIndex, stratagem);
 
-                        if (SelectedFKeyIndex > 0)
-                            if (_fKeyLabels[SelectedFKeyIndex - 1].Text == NoStratagem)
-                                SelectedFKeyIndex--;
-                    }
-                    else
-                    {
-                        var fKeyIndex = Array.IndexOf(_fKeyStratagems, stratagem);
-                        if (fKeyIndex > -1)
-                        {
-                            _fKeyStratagems[fKeyIndex] = null;
-                            _settingsChanged = true;
-                            _fKeyLabels[fKeyIndex].Text = NoStratagem;
-                            SelectedFKeyIndex = fKeyIndex;
-                        }
+                                if (SelectedFKeyIndex > 0)
+                                    if (_fKeyLabels[SelectedFKeyIndex - 1].Text == NoStratagem)
+                                        SelectedFKeyIndex--;
+                                break;
+                            }
+                        case MouseButtons.Left:
+                            {
+                                var fKeyIndex = Array.IndexOf(_fKeyStratagems, stratagem);
+                                if (fKeyIndex > -1)
+                                {
+                                    _fKeyStratagems[fKeyIndex] = null;
+                                    _settingsChanged = true;
+                                    _fKeyLabels[fKeyIndex].Text = NoStratagem;
+                                    SelectedFKeyIndex = fKeyIndex;
+                                }
+
+                                break;
+                            }
+                        case MouseButtons.Right:
+                            new EditAliasesForm(stratagemCheckBox.Text).ShowDialog();
+                            break;
                     }
                 };
             }
@@ -617,7 +623,7 @@ public partial class MainForm : Form
         _settingsChanged = true;
     }
 
-    private static readonly string VoiceRootPath = Path.Combine(ExeDirectory, "Voice");
+    private static readonly string VoiceRootPath = Path.Combine(AppSettings.ExeDirectory, "Voice");
 
     private bool _isGeneratingVoice;
 
@@ -638,8 +644,8 @@ public partial class MainForm : Form
         try
         {
             var count = 0;
-            var total = Stratagems.Count;
-            foreach (var stratagem in Stratagems.Values)
+            var total = StratagemManager.Count;
+            foreach (var stratagem in StratagemManager.Stratagems)
             {
                 if (!_isGeneratingVoice)
                     break;
@@ -675,7 +681,7 @@ public partial class MainForm : Form
     {
         try
         {
-            var text = _fKeyStratagems[SelectedFKeyIndex]?.Name ?? Stratagems.Last().Value.Name;
+            var text = _fKeyStratagems[SelectedFKeyIndex]?.Name ?? StratagemManager.Stratagems.Last().Name;
             var tmpMp3 = Path.GetTempFileName() + ".mp3";
             await GenerateVoiceFile(text, tmpMp3);
             PlayVoice(tmpMp3, true);
@@ -754,7 +760,7 @@ public partial class MainForm : Form
         Settings.VoiceName = voiceNamesComboBox.SelectedItem as string ?? "";
         _settingsChanged = true;
 
-        PlayStratagemVoice(_fKeyStratagems[SelectedFKeyIndex]?.Name ?? Stratagems.Values.Last().Name);
+        PlayStratagemVoice(_fKeyStratagems[SelectedFKeyIndex]?.Name ?? StratagemManager.Stratagems.Last().Name);
     }
 
     private void refreshVoiceNamesButton_Click(object sender, EventArgs e)
@@ -767,7 +773,7 @@ public partial class MainForm : Form
     {
         var folder = "VoiceTxt";
         Directory.CreateDirectory(folder);
-        foreach (var stratagem in Stratagems.Values)
+        foreach (var stratagem in StratagemManager.Stratagems)
             File.WriteAllText(Path.Combine(folder, stratagem.Name), stratagem.Name);
         generateVoiceMessageLabel.Text = @"txt 生成完毕";
     }

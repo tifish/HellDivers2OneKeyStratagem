@@ -90,6 +90,7 @@
             label4 = new Label();
             checkBox3 = new CheckBox();
             checkBox4 = new CheckBox();
+            label14 = new Label();
             rootFlowLayoutPanel.SuspendLayout();
             buttonsFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
@@ -122,11 +123,12 @@
             rootFlowLayoutPanel.Controls.Add(flowLayoutPanel7);
             rootFlowLayoutPanel.Controls.Add(flowLayoutPanel6);
             rootFlowLayoutPanel.Controls.Add(stratagemGroupsFlowLayoutPanel);
+            rootFlowLayoutPanel.Controls.Add(label14);
             rootFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
             rootFlowLayoutPanel.Location = new Point(0, 0);
             rootFlowLayoutPanel.Margin = new Padding(10);
             rootFlowLayoutPanel.Name = "rootFlowLayoutPanel";
-            rootFlowLayoutPanel.Size = new Size(1057, 460);
+            rootFlowLayoutPanel.Size = new Size(1057, 479);
             rootFlowLayoutPanel.TabIndex = 0;
             // 
             // buttonsFlowLayoutPanel
@@ -837,13 +839,24 @@
             checkBox4.Text = "轨道炮攻击";
             checkBox4.UseVisualStyleBackColor = true;
             // 
+            // label14
+            // 
+            label14.Anchor = AnchorStyles.Left;
+            label14.AutoSize = true;
+            label14.Font = new Font("Microsoft YaHei", 9.75F, FontStyle.Bold);
+            label14.Location = new Point(3, 460);
+            label14.Name = "label14";
+            label14.Size = new Size(204, 19);
+            label14.TabIndex = 3;
+            label14.Text = "右键点击战略可以自定义语音名称";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(1127, 463);
+            ClientSize = new Size(1127, 490);
             Controls.Add(rootFlowLayoutPanel);
             Font = new Font("Microsoft YaHei", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 134);
             KeyPreview = true;
@@ -958,5 +971,6 @@
         private Label label13;
         private FlowLayoutPanel flowLayoutPanel9;
         private Label voiceRecognizeResultLabel;
+        private Label label14;
     }
 }

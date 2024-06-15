@@ -64,7 +64,7 @@
             MinimizeBox = false;
             Name = "ModalTip";
             ShowInTaskbar = false;
-            StartPosition = FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "提示";
             TopMost = true;
             FormClosing += ModalTip_FormClosing;
