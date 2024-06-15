@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
-using System.Globalization;
-using AutoHotkey.Interop;
+﻿using AutoHotkey.Interop;
 using EdgeTTS;
 using NAudio.Wave;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -457,7 +457,7 @@ public partial class MainForm : Form
                                 break;
                             }
                         case MouseButtons.Right:
-                            var result = new EditAliasesForm(stratagemCheckBox.Text).ShowDialog();
+                            var result = new EditAliasesDialog(stratagemCheckBox.Text).ShowDialog();
                             if (result == DialogResult.OK)
                                 await ResetVoiceCommand();
                             break;
@@ -844,7 +844,7 @@ public partial class MainForm : Form
 
         var scores = new float[3];
         var times = 0;
-        var tipWindow = new ModalTip();
+        var tipWindow = new CalibrateVoiceDialog();
 
         try
         {

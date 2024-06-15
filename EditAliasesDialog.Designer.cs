@@ -1,6 +1,6 @@
 ﻿namespace HellDivers2OneKeyStratagem
 {
-    partial class EditAliasesForm
+    partial class EditAliasesDialog
     {
         /// <summary>
         /// Required designer variable.

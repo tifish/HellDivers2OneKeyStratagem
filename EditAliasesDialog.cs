@@ -1,10 +1,10 @@
 ﻿namespace HellDivers2OneKeyStratagem;
 
-public partial class EditAliasesForm : Form
+public partial class EditAliasesDialog : Form
 {
     private string _stratagemName;
 
-    public EditAliasesForm(string stratagemName)
+    public EditAliasesDialog(string stratagemName)
     {
         InitializeComponent();
 

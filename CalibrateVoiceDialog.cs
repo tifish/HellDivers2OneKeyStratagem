@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace HellDivers2OneKeyStratagem
 {
-    public partial class ModalTip : Form
+    public partial class CalibrateVoiceDialog : Form
     {
-        public ModalTip()
+        public CalibrateVoiceDialog()
         {
             InitializeComponent();
         }
@@ -22,7 +22,7 @@ namespace HellDivers2OneKeyStratagem
 
         }
         public bool TryClosed = false;
-        public ModalTip SetTipString(string tipString)
+        public CalibrateVoiceDialog SetTipString(string tipString)
         {
             label1.Text = tipString;
             return this;

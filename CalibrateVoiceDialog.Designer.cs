@@ -1,6 +1,6 @@
 ﻿namespace HellDivers2OneKeyStratagem
 {
-    partial class ModalTip
+    partial class CalibrateVoiceDialog
     {
         /// <summary>
         /// Required designer variable.
