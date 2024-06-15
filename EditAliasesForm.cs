@@ -16,11 +16,13 @@ public partial class EditAliasesForm : Form
     private void okButton_Click(object sender, EventArgs e)
     {
         StratagemManager.SetUserAlias(_stratagemName, userAliasesTextBox.Text.Trim());
+        DialogResult = DialogResult.OK;
         Close();
     }
 
     private void cancelButton_Click(object sender, EventArgs e)
     {
+        DialogResult = DialogResult.Cancel;
         Close();
     }
 }

@@ -77,7 +77,6 @@ public static class StratagemManager
     private static void LoadUserAliases()
     {
         _userAliasesDictionary.Clear();
-        _userAliasStratagemDictionary.Clear();
 
         if (!File.Exists(UserAliasesFile))
             return;
@@ -88,12 +87,22 @@ public static class StratagemManager
             if (items.Length != 2)
                 throw new InvalidOperationException($"Invalid line: {line}");
 
-            if (!TryGet(items[0], out var stratagem))
+            _userAliasesDictionary[items[0]] = items[1];
+        }
+
+        UpdateUserAliases();
+    }
+
+    private static void UpdateUserAliases()
+    {
+        _userAliasStratagemDictionary.Clear();
+
+        foreach (var (name, aliasesString) in _userAliasesDictionary)
+        {
+            if (!TryGet(name, out var stratagem))
                 continue;
 
-            _userAliasesDictionary[items[0]] = items[1];
-
-            var aliases = items[1].Split('|').Where(item => item != "");
+            var aliases = aliasesString.Split('|').Where(item => item != "");
             foreach (var alias in aliases)
                 _userAliasStratagemDictionary[alias] = stratagem;
         }
@@ -135,6 +144,7 @@ public static class StratagemManager
         else
             _userAliasesDictionary[stratagemName] = alias;
 
+        UpdateUserAliases();
         SaveUserAliases();
     }
 }

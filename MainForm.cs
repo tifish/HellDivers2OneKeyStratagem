@@ -430,7 +430,7 @@ public partial class MainForm : Form
                 stratagem.CheckBox = stratagemCheckBox;
                 root.Controls.Add(stratagemCheckBox);
 
-                stratagemCheckBox.MouseUp += (_, args) =>
+                stratagemCheckBox.MouseUp += async (_, args) =>
                 {
                     switch (args.Button)
                     {
@@ -457,7 +457,9 @@ public partial class MainForm : Form
                                 break;
                             }
                         case MouseButtons.Right:
-                            new EditAliasesForm(stratagemCheckBox.Text).ShowDialog();
+                            var result = new EditAliasesForm(stratagemCheckBox.Text).ShowDialog();
+                            if (result == DialogResult.OK)
+                                await ResetVoiceCommand();
                             break;
                     }
                 };
