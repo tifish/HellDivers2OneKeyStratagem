@@ -60,9 +60,9 @@ jobs:
     - name: Set release version
       id: set_version
       run: |
-        VERSION=$(date +'%Y%m%d%H%M%S')
-        echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-        echo "RELEASE_TAG=release-$VERSION" >> $GITHUB_ENV
+        $version = (Get-Date).ToString('yyyyMMddHHmmss')
+        echo "RELEASE_VERSION=$version" >> $env:GITHUB_ENV
+        echo "RELEASE_TAG=release-$version" >> $env:GITHUB_ENV
 
     - name: Create tag
       run: |
