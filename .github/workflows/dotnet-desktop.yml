@@ -57,13 +57,27 @@ jobs:
       with:
         name: Zip Package
 
+    - name: Set release version
+      id: set_version
+      run: |
+        VERSION=$(date +'%Y%m%d%H%M%S')
+        echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+        echo "RELEASE_TAG=release-$VERSION" >> $GITHUB_ENV
+
+    - name: Create tag
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git tag ${{ env.RELEASE_TAG }}
+        git push origin ${{ env.RELEASE_TAG }}
+
     - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
+        tag_name: ${{ env.RELEASE_TAG }}
         release_name: Release ${{ github.ref }}
         draft: false
         prerelease: false
