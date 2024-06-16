@@ -9,6 +9,9 @@ on:
 permissions:
   contents: write  # This grants write permissions to the contents scope
 
+env:
+  RELEASE_TAG: "latest_release"
+
 jobs:
 
   build:
@@ -40,12 +43,22 @@ jobs:
       run: |
         Compress-Archive -Path ./bin/* -DestinationPath HellDivers2OneKeyStratagem.zip
 
-    - name: Set release version
-      id: set_version
+    - name: Delete existing release and tag if they exist
+      id: delete_release_and_tag
       run: |
-        $version = (Get-Date).ToString('yyyyMMddHHmmss')
-        echo "RELEASE_VERSION=$version" >> $env:GITHUB_ENV
-        echo "RELEASE_TAG=release-$version" >> $env:GITHUB_ENV
+        $headers = @{
+          "Authorization" = "token $env:GITHUB_TOKEN"
+        }
+        $url = "https://api.github.com/repos/${{ github.repository }}/releases/tags/$env:RELEASE_TAG"
+        $response = Invoke-RestMethod -Uri $url -Method Get -Headers $headers -ErrorAction SilentlyContinue
+        if ($response) {
+          # Delete the release
+          Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/$($response.id)" -Method Delete -Headers $headers
+          
+          # Delete the tag locally and remotely
+          git tag -d $env:RELEASE_TAG
+          git push origin --delete $env:RELEASE_TAG
+        }
 
     - name: Create tag
       run: |
