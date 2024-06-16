@@ -25,6 +25,9 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Verify .NET Core SDK installation
+      run: dotnet --list-sdks
+
     # Install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
