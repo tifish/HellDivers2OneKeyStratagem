@@ -44,30 +44,14 @@ jobs:
       run: |
         Compress-Archive -Path ./bin/* -DestinationPath HellDivers2OneKeyStratagem.zip
 
-    - name: Delete existing release and tag if they exist
-      id: delete_release_and_tag
+    - name: Delete release
       run: |
-        $headers = @{
-          "Authorization" = "token $env:GITHUB_TOKEN"
-          "Accept" = "application/vnd.github.v3+json"
-        }
-        $url = "https://api.github.com/repos/${{ github.repository }}/releases/tags/$env:RELEASE_TAG"
-        $response = Invoke-RestMethod -Uri $url -Method Get -Headers $headers -ErrorAction SilentlyContinue
-        if ($response) {
-          # Delete the release
-          Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/$($response.id)" -Method Delete -Headers $headers
-          
-          # Delete the tag locally and remotely
-          git tag -d $env:RELEASE_TAG
-          git push origin --delete $env:RELEASE_TAG
-        }
+        gh release delete ${{ env.RELEASE_TAG }} --cleanup-tag
 
-    - name: Create tag
+    - name: Create a new tag
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git tag ${{ env.RELEASE_TAG }}
-        git push origin ${{ env.RELEASE_TAG }}
+        $COMMIT_SHA=$(git rev-parse HEAD)
+        gh release create ${{ env.RELEASE_TAG }} $COMMIT_SHA --generate-notes
 
     - name: Create GitHub Release
       id: create_release
