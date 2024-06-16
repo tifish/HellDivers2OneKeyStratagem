@@ -10,6 +10,7 @@ permissions:
   contents: write  # This grants write permissions to the contents scope
 
 env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   RELEASE_TAG: "latest_release"
 
 jobs:
