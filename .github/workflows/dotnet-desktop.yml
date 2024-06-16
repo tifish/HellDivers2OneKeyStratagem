@@ -17,8 +17,7 @@ jobs:
 
   build_and_release:
 
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    runs-on: windows-latest
 
     steps:
     - name: Checkout
@@ -41,35 +40,14 @@ jobs:
 
     - name: Zip
       shell: powershell
-      run: |
-        Compress-Archive -Path ./bin/* -DestinationPath HellDivers2OneKeyStratagem.zip
+      run: Compress-Archive -Path ./bin/* -DestinationPath HellDivers2OneKeyStratagem.zip
 
     - name: Delete release
-      run: |
-        gh release delete ${{ env.RELEASE_TAG }} --cleanup-tag
+      run: gh release delete ${{ env.RELEASE_TAG }} --cleanup-tag -y
+      continue-on-error: true
 
-    - name: Create a new tag
-      run: |
-        $COMMIT_SHA=$(git rev-parse HEAD)
-        gh release create ${{ env.RELEASE_TAG }} $COMMIT_SHA --generate-notes
+    - name: Create a new tag and release
+      run: gh release create ${{ env.RELEASE_TAG }} --generate-notes
 
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ env.RELEASE_TAG }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-
-    - name: Upload release asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./HellDivers2OneKeyStratagem.zip
-        asset_name: HellDivers2OneKeyStratagem.zip
-        asset_content_type: application/zip
+    - name: Upload zip
+      run: gh release upload ${{ env.RELEASE_TAG }} HellDivers2OneKeyStratagem.zip --clobber 
