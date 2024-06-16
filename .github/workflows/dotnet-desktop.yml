@@ -25,27 +25,13 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Verify .NET Core SDK installation
-      run: dotnet --list-sdks
-
-    # Install the .NET Core workload
-    - name: Install .NET Core
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-
-    # Add MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2
-
     - name: Build
       run: dotnet build --configuration Release HellDivers2OneKeyStratagem.sln
 
     - name: Zip
-      shell: powershell
       run: Compress-Archive -Path ./bin/* -DestinationPath HellDivers2OneKeyStratagem.zip
 
-    - name: Delete release
+    - name: Delete release and tag
       run: gh release delete ${{ env.RELEASE_TAG }} --cleanup-tag -y
       continue-on-error: true
 
