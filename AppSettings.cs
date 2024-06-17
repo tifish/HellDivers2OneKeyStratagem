@@ -13,8 +13,8 @@ public class AppSettings
     public string OperateKeys { get; set; } = "WASD";
     public bool PlayVoice { get; set; } = true;
     public string VoiceName { get; set; } = "晓妮";
-    public bool EnableVoiceTrigger { get; set; } = true;
-    public bool EnableSetFKeyByVoice { get; set; } = true;
+    public bool EnableSpeechTrigger { get; set; } = true;
+    public bool EnableSetFKeyBySpeech { get; set; } = true;
     public List<string> StratagemSets { get; set; } = [];
     public string Locale { get; set; } = "";
 

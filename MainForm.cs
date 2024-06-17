@@ -93,7 +93,9 @@ public partial class MainForm : Form
                 Settings.Locale = CultureInfo.CurrentCulture.Name;
             else
                 Settings.Locale = speechLocales.First();
-            _settingsChanged = true;
+
+            _keySettingsChanged = true;
+            _speechSettingsChanged = true;
         }
 
         localeComboBox.SelectedItem = Settings.Locale;
@@ -115,8 +117,8 @@ public partial class MainForm : Form
         _voiceCommand?.Dispose();
         _voiceCommand = null;
 
-        if (Settings.EnableVoiceTrigger)
-            await StartVoiceTrigger();
+        if (Settings.EnableSpeechTrigger)
+            await StartSpeechTrigger();
     }
 
     private bool _isActive;
@@ -135,7 +137,7 @@ public partial class MainForm : Form
 
     private VoiceCommand? _voiceCommand;
 
-    private async Task StartVoiceTrigger()
+    private async Task StartSpeechTrigger()
     {
         if (_voiceCommand == null)
         {
@@ -174,7 +176,7 @@ public partial class MainForm : Form
 
                 if (_isActive)
                 {
-                    if (!Settings.EnableSetFKeyByVoice)
+                    if (!Settings.EnableSetFKeyBySpeech)
                         return;
 
                     SetFKeyStratagem(SelectedFKeyIndex, stratagem);
@@ -294,12 +296,12 @@ public partial class MainForm : Form
                 stratagemSetsComboBox.Items.Add(stratagemSet);
         }
 
-        enableSetFKeyByVoiceCheckBox.Checked = Settings.EnableSetFKeyByVoice;
+        enableSetFKeyBySpeechCheckBox.Checked = Settings.EnableSetFKeyBySpeech;
 
-        voiceConfidenceNumericUpDown.Value = (decimal)Settings.VoiceConfidence;
+        speechConfidenceNumericUpDown.Value = (decimal)Settings.VoiceConfidence;
         wakeupWordTextBox.Text = Settings.WakeupWord;
 
-        enableVoiceTriggerCheckBox.Checked = Settings.EnableVoiceTrigger;
+        enableSpeechTriggerCheckBox.Checked = Settings.EnableSpeechTrigger;
 
         enableHotkeyTriggerCheckBox.Checked = Settings.EnableHotkeyTrigger;
     }
@@ -400,7 +402,7 @@ public partial class MainForm : Form
                 if (!Settings.PlayVoice)
                     return;
 
-                if (Settings.EnableSetFKeyByVoice)
+                if (Settings.EnableSetFKeyBySpeech)
                     return;
 
                 var stratagem = _fKeyStratagems[SelectedFKeyIndex];
@@ -413,21 +415,28 @@ public partial class MainForm : Form
         _fKeyRoots.Last().BorderStyle = BorderStyle.FixedSingle;
     }
 
-    private void SetFKeyStratagem(int index, Stratagem stratagem, bool playVoice = true)
+    private void SetFKeyStratagem(int index, Stratagem? stratagem, bool playVoice = true)
     {
         var currentStratagem = _fKeyStratagems[index];
         if (currentStratagem != null)
             currentStratagem.CheckBox.Checked = false;
 
         _fKeyStratagems[index] = stratagem;
-        stratagem.CheckBox.Checked = true;
-        _fKeyLabels[index].Text = stratagem.Name;
+        if (stratagem != null)
+        {
+            stratagem.CheckBox.Checked = true;
+            _fKeyLabels[index].Text = stratagem.Name;
+
+            if (Settings.PlayVoice && playVoice)
+                PlayStratagemVoice(stratagem.Name);
+        }
+        else
+        {
+            _fKeyLabels[index].Text = NoStratagem;
+        }
 
         if (!_isLoading)
-            _settingsChanged = true;
-
-        if (Settings.PlayVoice && playVoice)
-            PlayStratagemVoice(stratagem.Name);
+            _keySettingsChanged = true;
     }
 
     private void InitStratagemGroups()
@@ -475,12 +484,7 @@ public partial class MainForm : Form
                             {
                                 var fKeyIndex = Array.IndexOf(_fKeyStratagems, stratagem);
                                 if (fKeyIndex > -1)
-                                {
-                                    _fKeyStratagems[fKeyIndex] = null;
-                                    _settingsChanged = true;
-                                    _fKeyLabels[fKeyIndex].Text = NoStratagem;
-                                    SelectedFKeyIndex = fKeyIndex;
-                                }
+                                    SetFKeyStratagem(fKeyIndex, null);
 
                                 break;
                             }
@@ -544,14 +548,14 @@ public partial class MainForm : Form
     {
         Settings.TriggerKey = ctrlRadioButton.Checked ? "Ctrl" : "Alt";
         if (!_isLoading)
-            _settingsChanged = true;
+            _keySettingsChanged = true;
     }
 
     private void wasdRadioButton_Click(object sender, EventArgs e)
     {
         Settings.OperateKeys = wasdRadioButton.Checked ? "WASD" : "Arrow";
         if (!_isLoading)
-            _settingsChanged = true;
+            _keySettingsChanged = true;
     }
 
     private AutoHotkeyEngine? _autoHotkeyEngine;
@@ -644,13 +648,13 @@ public partial class MainForm : Form
             return;
 
         SetFKeyStratagemString(selectedItem);
-        _settingsChanged = true;
+        _keySettingsChanged = true;
     }
 
     private void playVoiceCheckBox_Click(object sender, EventArgs e)
     {
         Settings.PlayVoice = playVoiceCheckBox.Checked;
-        _settingsChanged = true;
+        _keySettingsChanged = true;
     }
 
     private static readonly string VoiceRootPath = Path.Combine(AppSettings.ExeDirectory, "Voice");
@@ -764,18 +768,23 @@ public partial class MainForm : Form
     }
 
     private bool _settingsChanged;
+    private bool _keySettingsChanged;
+    private bool _speechSettingsChanged;
 
     private async void MainForm_Deactivate(object sender, EventArgs e)
     {
         if (_isLoading)
             return;
 
-        var shouldStart = Settings.EnableHotkeyTrigger && (_settingsChanged || _autoHotkeyEngine == null);
+        var shouldStart = Settings.EnableHotkeyTrigger && (_keySettingsChanged || _autoHotkeyEngine == null);
 
-        if (_settingsChanged)
+        if (_settingsChanged || _keySettingsChanged || _speechSettingsChanged)
         {
             await SaveSettings();
+
             _settingsChanged = false;
+            _keySettingsChanged = false;
+            _speechSettingsChanged = false;
         }
 
         if (shouldStart)
@@ -790,7 +799,10 @@ public partial class MainForm : Form
     private void voiceNamesComboBox_SelectionChangeCommitted(object sender, EventArgs e)
     {
         Settings.VoiceName = voiceNamesComboBox.SelectedItem as string ?? "";
-        _settingsChanged = true;
+        if (Settings.PlayVoice)
+            _keySettingsChanged = true;
+        else
+            _settingsChanged = true;
 
         PlayStratagemVoice(_fKeyStratagems[SelectedFKeyIndex]?.Name ?? StratagemManager.Stratagems.Last().Name);
     }
@@ -810,13 +822,13 @@ public partial class MainForm : Form
         generateVoiceMessageLabel.Text = @"txt 生成完毕";
     }
 
-    private async void enableVoiceTriggerCheckBox_Click(object sender, EventArgs e)
+    private async void enableSpeechTriggerCheckBox_Click(object sender, EventArgs e)
     {
-        Settings.EnableVoiceTrigger = enableVoiceTriggerCheckBox.Checked;
+        Settings.EnableSpeechTrigger = enableSpeechTriggerCheckBox.Checked;
         _settingsChanged = true;
 
-        if (Settings.EnableVoiceTrigger)
-            await StartVoiceTrigger();
+        if (Settings.EnableSpeechTrigger)
+            await StartSpeechTrigger();
         else
             StopVoiceTrigger();
     }
@@ -829,9 +841,9 @@ public partial class MainForm : Form
         _autoHotkeyEngine?.Terminate();
     }
 
-    private void enableSetFKeyByVoiceCheckBox_Click(object sender, EventArgs e)
+    private void enableSetFKeyBySpeechCheckBox_Click(object sender, EventArgs e)
     {
-        Settings.EnableSetFKeyByVoice = enableSetFKeyByVoiceCheckBox.Checked;
+        Settings.EnableSetFKeyBySpeech = enableSetFKeyBySpeechCheckBox.Checked;
         _settingsChanged = true;
     }
 
@@ -840,15 +852,17 @@ public partial class MainForm : Form
         if (localeComboBox.SelectedItem is string locale)
         {
             Settings.Locale = locale;
-            _settingsChanged = true;
+            if (Settings.PlayVoice)
+                _keySettingsChanged = true;
+            _speechSettingsChanged = true;
 
             await LoadByLanguage();
         }
     }
 
-    private void voiceConfidenceNumericUpDown_ValueChanged(object sender, EventArgs e)
+    private void speechConfidenceNumericUpDown_ValueChanged(object sender, EventArgs e)
     {
-        Settings.VoiceConfidence = (float)voiceConfidenceNumericUpDown.Value;
+        Settings.VoiceConfidence = (float)speechConfidenceNumericUpDown.Value;
         _settingsChanged = true;
     }
 
@@ -919,7 +933,7 @@ public partial class MainForm : Form
             if (ret == DialogResult.Cancel)
                 return;
 
-            voiceConfidenceNumericUpDown.Value = (decimal)(scores.Average() - (scores.Max() - scores.Min()));
+            speechConfidenceNumericUpDown.Value = (decimal)(scores.Average() - (scores.Max() - scores.Min()));
         }
         catch (Exception ex)
         {
@@ -946,14 +960,14 @@ public partial class MainForm : Form
         }
     }
 
-    private async void enableHotkeyTriggerCheckBox_Click(object sender, EventArgs e)
+    private void enableHotkeyTriggerCheckBox_Click(object sender, EventArgs e)
     {
         Settings.EnableHotkeyTrigger = enableHotkeyTriggerCheckBox.Checked;
         _settingsChanged = true;
 
         if (Settings.EnableHotkeyTrigger)
         {
-            await StartVoiceTrigger();
+            StartAutoHotkeyScript();
         }
         else if (_autoHotkeyEngine != null)
         {
