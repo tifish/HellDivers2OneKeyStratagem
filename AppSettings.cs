@@ -1,4 +1,5 @@
 ﻿global using static HellDivers2OneKeyStratagem.SettingsContainer;
+using System.Text.Json.Serialization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -15,7 +16,11 @@ public class AppSettings
     public bool EnableVoiceTrigger { get; set; } = true;
     public bool EnableSetFKeyByVoice { get; set; } = true;
     public List<string> StratagemSets { get; set; } = [];
-    public string Language { get; set; } = "";
+    public string Locale { get; set; } = "";
+
+    [JsonIgnore]
+    public string Language => Locale.Length > 2 ? Locale[..2] : Locale;
+
     public float VoiceConfidence { get; set; } = 0.6f;
     public string WakeupWord { get; set; } = "";
     public bool EnableHotkeyTrigger { get; set; } = true;

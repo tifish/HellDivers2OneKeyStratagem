@@ -7,10 +7,11 @@ public static class StratagemManager
     public static readonly Dictionary<string, List<Stratagem>> Groups = [];
 
     private static readonly Dictionary<string, Stratagem> _stratagemDictionary = [];
-    public static IEnumerable<Stratagem> Stratagems => _stratagemDictionary.Values;
+    private static readonly List<Stratagem> _stratagems = [];
+    public static IEnumerable<Stratagem> Stratagems => _stratagems;
     private static readonly Dictionary<string, string> _systemAliasesDictionary = [];
     public static IEnumerable<string> StratagemAlias => _stratagemDictionary.Keys.Concat(_userAliasStratagemDictionary.Keys);
-    public static int Count => _stratagemDictionary.Count;
+    public static int Count => _stratagems.Count;
 
     private static readonly string StratagemsFile = Path.Combine(AppSettings.ExeDirectory, "Stratagems.tab");
 
@@ -28,9 +29,7 @@ public static class StratagemManager
         if (!File.Exists(StratagemsFile))
             return;
 
-        var langName = Settings.Language[..2];
-
-        var nameColumn = langName switch
+        var nameColumn = Settings.Language switch
         {
             "zh" => 1,
             "en" => 2,
@@ -56,6 +55,8 @@ public static class StratagemManager
                 var stratagem = new Stratagem { Name = items[nameColumn], KeySequence = items[0] };
                 var names = stratagem.Name.Split('|');
                 stratagem.Name = names[0];
+
+                _stratagems.Add(stratagem);
                 _systemAliasesDictionary[stratagem.Name] = items[nameColumn];
 
                 currentGroup.Add(stratagem);

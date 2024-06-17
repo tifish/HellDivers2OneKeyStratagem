@@ -47,7 +47,6 @@ public partial class MainForm : Form
 
             await LoadByLanguage();
 
-            LoadVoiceNames();
             await LoadScriptTemplate();
 
             LoadMicDevices("");
@@ -80,24 +79,24 @@ public partial class MainForm : Form
 
     private void InitLanguages()
     {
-        var speechLanguages = VoiceCommand.GetInstalledRecognizers();
-        if (speechLanguages.Count == 0)
+        var speechLocales = VoiceCommand.GetInstalledRecognizers();
+        if (speechLocales.Count == 0)
             return;
 
-        languageComboBox.Items.Clear();
-        foreach (var language in speechLanguages)
-            languageComboBox.Items.Add(language);
+        localeComboBox.Items.Clear();
+        foreach (var locale in speechLocales)
+            localeComboBox.Items.Add(locale);
 
-        if (!speechLanguages.Contains(Settings.Language))
+        if (!speechLocales.Contains(Settings.Locale))
         {
-            if (speechLanguages.Contains(CultureInfo.CurrentCulture.Name))
-                Settings.Language = CultureInfo.CurrentCulture.Name;
+            if (speechLocales.Contains(CultureInfo.CurrentCulture.Name))
+                Settings.Locale = CultureInfo.CurrentCulture.Name;
             else
-                Settings.Language = speechLanguages.First();
+                Settings.Locale = speechLocales.First();
             _settingsChanged = true;
         }
 
-        languageComboBox.SelectedItem = Settings.Language;
+        localeComboBox.SelectedItem = Settings.Locale;
     }
 
     private async Task LoadByLanguage()
@@ -107,6 +106,7 @@ public partial class MainForm : Form
         InitSettingsToUI();
         await ResetVoiceCommand();
         await LoadGeneratingVoiceStyles();
+        LoadVoiceNames();
     }
 
     private async Task ResetVoiceCommand()
@@ -146,15 +146,15 @@ public partial class MainForm : Form
                 return;
             }
 
-            if (!languages.Contains(Settings.Language))
+            if (!languages.Contains(Settings.Locale))
             {
-                MessageBox.Show($@"Voice recognition engine for {Settings.Language} not installed");
+                MessageBox.Show($@"Voice recognition engine for {Settings.Locale} not installed");
                 return;
             }
 
             try
             {
-                _voiceCommand = new VoiceCommand(Settings.Language, Settings.WakeupWord, [.. StratagemManager.StratagemAlias]);
+                _voiceCommand = new VoiceCommand(Settings.Locale, Settings.WakeupWord, [.. StratagemManager.StratagemAlias]);
             }
             catch (Exception ex)
             {
@@ -197,20 +197,19 @@ public partial class MainForm : Form
 
     private void PlayStratagemVoice(string stratagemName)
     {
-        PlayVoice(Path.Combine(VoiceRootPath, Settings.VoiceName, stratagemName + ".mp3"));
+        PlayVoice(Path.Combine(VoiceRootPath, Settings.Language, Settings.VoiceName, stratagemName + ".mp3"));
     }
 
     private void StopVoiceTrigger()
     {
-        if (_voiceCommand == null)
-            return;
-
-        _voiceCommand.Stop();
+        _voiceCommand?.Stop();
     }
 
     private void LoadVoiceNames()
     {
-        var styles = Directory.GetDirectories(VoiceRootPath)
+        var languageVoicePath = Path.Combine(VoiceRootPath, Settings.Language);
+
+        var styles = Directory.GetDirectories(languageVoicePath)
             .Select(Path.GetFileName)
             .Where(style => style != null)
             .ToList();
@@ -222,21 +221,20 @@ public partial class MainForm : Form
         voiceNamesComboBox.SelectedItem =
             styles.Contains(Settings.VoiceName)
                 ? Settings.VoiceName
-                : styles.Contains("晓妮")
-                    ? "晓妮"
-                    : styles.FirstOrDefault();
+                : styles.FirstOrDefault();
     }
 
     private List<Voice> _voices = null!;
 
     private async Task LoadGeneratingVoiceStyles()
     {
-        if (Settings.Language == "")
+        if (Settings.Locale == "")
             return;
 
         var manager = await VoicesManager.Create();
-        _voices = manager.Find(language: Settings.Language[..2]);
+        _voices = manager.Find(language: Settings.Language);
 
+        generateVoiceStyleComboBox.Items.Clear();
         foreach (var voice in _voices)
             generateVoiceStyleComboBox.Items.Add(voice.ShortName);
 
@@ -677,6 +675,8 @@ public partial class MainForm : Form
         {
             var count = 0;
             var total = StratagemManager.Count;
+            var voiceName = (string)generateVoiceStyleComboBox.SelectedItem!;
+
             foreach (var stratagem in StratagemManager.Stratagems)
             {
                 if (!_isGeneratingVoice)
@@ -684,8 +684,8 @@ public partial class MainForm : Form
 
                 count++;
 
-                var voiceName = (string)generateVoiceStyleComboBox.SelectedItem!;
-                await GenerateVoiceFile(stratagem.Name, Path.Combine(VoiceRootPath, voiceName, stratagem.Name + ".mp3"));
+                await GenerateVoiceFile(stratagem.Name,
+                    Path.Combine(VoiceRootPath, Settings.Language, voiceName, stratagem.Name + ".mp3"));
                 generateVoiceMessageLabel.Text = @$"正在生成民主语音（{count}/{total}）：{stratagem.Name}";
             }
         }
@@ -835,11 +835,11 @@ public partial class MainForm : Form
         _settingsChanged = true;
     }
 
-    private async void languageComboBox_SelectionChangeCommitted(object sender, EventArgs e)
+    private async void LocaleComboBoxSelectionChangeCommitted(object sender, EventArgs e)
     {
-        if (languageComboBox.SelectedItem is string language)
+        if (localeComboBox.SelectedItem is string locale)
         {
-            Settings.Language = language;
+            Settings.Locale = locale;
             _settingsChanged = true;
 
             await LoadByLanguage();
