@@ -28,7 +28,6 @@ public partial class MainForm : Form
             args.DrawBackground();
             args.DrawBorder();
             args.Graphics.DrawString(args.ToolTipText, Font, Brushes.Black, new PointF(2, 2));
-
         };
     }
 
@@ -456,10 +455,10 @@ public partial class MainForm : Form
 
                 toolTip.SetToolTip(stratagemCheckBox,
                     $"""
-                    {StratagemManager.GetSystemAlias(stratagem.Name)}
-                        自定义名称：{StratagemManager.GetUserAlias(stratagem.Name)}
-                        按右键编辑自定义名称。
-                    """);
+                     {StratagemManager.GetSystemAlias(stratagem.Name)}
+                         自定义名称：{StratagemManager.GetUserAlias(stratagem.Name)}
+                         按右键编辑自定义名称。
+                     """);
 
                 stratagemCheckBox.MouseUp += async (_, args) =>
                 {
@@ -976,8 +975,13 @@ public partial class MainForm : Form
     private async void checkForUpdateButton_Click(object sender, EventArgs e)
     {
         if (await AutoUpdate.HasUpdate())
-            await AutoUpdate.Update();
+        {
+            if (MessageBox.Show(@"发现新版本，是否更新？", @"提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                await AutoUpdate.Update();
+        }
         else
+        {
             MessageBox.Show(@"已经是最新版本", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }
