@@ -1,8 +1,8 @@
-﻿using AutoHotkey.Interop;
+﻿using System.Diagnostics;
+using System.Globalization;
+using AutoHotkey.Interop;
 using EdgeTTS;
 using NAudio.Wave;
-using System.Diagnostics;
-using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -974,14 +974,23 @@ public partial class MainForm : Form
 
     private async void checkForUpdateButton_Click(object sender, EventArgs e)
     {
-        if (await AutoUpdate.HasUpdate())
+        checkForUpdateButton.Enabled = false;
+
+        try
         {
-            if (MessageBox.Show(@"发现新版本，是否更新？", @"提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                AutoUpdate.SelfUpdate();
+            if (await AutoUpdate.HasUpdate())
+            {
+                if (MessageBox.Show(@"发现新版本，是否更新？", @"提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    AutoUpdate.SelfUpdate();
+            }
+            else
+            {
+                MessageBox.Show(@"已经是最新版本", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
-        else
+        finally
         {
-            MessageBox.Show(@"已经是最新版本", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            checkForUpdateButton.Enabled = true;
         }
     }
 }
