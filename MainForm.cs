@@ -771,7 +771,7 @@ public partial class MainForm : Form
         if (_isLoading)
             return;
 
-        var shouldStart = Settings.EnableVoiceTrigger && (_settingsChanged || _autoHotkeyEngine == null);
+        var shouldStart = Settings.EnableHotkeyTrigger && (_settingsChanged || _autoHotkeyEngine == null);
 
         if (_settingsChanged)
         {
