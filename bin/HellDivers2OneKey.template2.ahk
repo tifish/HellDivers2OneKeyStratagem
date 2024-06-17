@@ -1,18 +1,20 @@
 CallStratagem(keys)
 {
+    global
+
     Send, % "{" TriggerKey " down}"
     Sleep, 50
 
     Loop, parse, keys
     {
         key := A_LoopField
-        if key == "↓"
+        if (key == "↓")
             key := DownKey
-        else if key == "↑"
+        else if (key == "↑")
             key := UpKey
-        else if key == "←"
+        else if (key == "←")
             key := LeftKey
-        else if key == "→"
+        else if (key == "→")
             key := RightKey
         else
             continue
