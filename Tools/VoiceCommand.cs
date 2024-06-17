@@ -3,8 +3,6 @@ using System.Speech.AudioFormat;
 using System.Speech.Recognition;
 using NAudio.Wave;
 
-namespace HellDivers2OneKeyStratagem;
-
 public class VoiceCommand : IDisposable
 {
     public struct RecognitionResult
