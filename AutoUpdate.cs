@@ -12,8 +12,9 @@ public static class AutoUpdate
         var updateTime = await HttpHelper.GetHttpFileTime(UpdateUrl);
         if (updateTime == null)
             return false;
+        updateTime = updateTime.Value.ToUniversalTime();
 
-        var exeTime = File.GetLastWriteTimeUtc(Assembly.GetEntryAssembly()!.Location);
+        var exeTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location);
 
         return updateTime - exeTime > TimeSpan.FromMinutes(5);
     }

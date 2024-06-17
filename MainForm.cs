@@ -36,9 +36,6 @@ public partial class MainForm : Form
 
     private async void MainForm_Load(object sender, EventArgs e)
     {
-        if (await AutoUpdate.HasUpdate())
-            await AutoUpdate.Update();
-
         SuspendLayout();
         rootFlowLayoutPanel.SuspendLayout();
 
