@@ -1,12 +1,18 @@
-﻿$zipPath = "$env:TEMP\HellDivers2OneKeyStratagem.zip"
-if (-not (Test-Path $zipPath)) {
-    Exit
-}
-
-# Wait for HellDivers2OneKeyStratagem.exe to exit
+﻿# Wait for HellDivers2OneKeyStratagem.exe to exit
 $process = Get-Process -Name "HellDivers2OneKeyStratagem" -ErrorAction SilentlyContinue
 if ($process) {
     $process.WaitForExit()
+}
+
+# Download HellDivers2OneKeyStratagem.zip to system temp directory
+$downloadUrl = "https://github.com/tifish/HellDivers2OneKeyStratagem/releases/download/latest_release/HellDivers2OneKeyStratagem.zip"
+$zipPath = "$env:TEMP\HellDivers2OneKeyStratagem.zip"
+Invoke-WebRequest -Uri $downloadUrl -OutFile $zipPath
+
+# Check if $zipPath exists
+if (-not (Test-Path $zipPath)) {
+    Write-Host "Zip file not found. Exiting..."
+    Exit
 }
 
 # Delete all directories and files except Settings directory

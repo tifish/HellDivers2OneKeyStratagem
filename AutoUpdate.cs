@@ -19,12 +19,8 @@ public static class AutoUpdate
         return updateTime - exeTime > TimeSpan.FromMinutes(1);
     }
 
-    public static async Task<bool> Update()
+    public static bool SelfUpdate()
     {
-        var zipPath = await HttpHelper.DownloadFile(UpdateUrl, Path.GetTempPath());
-        if (!File.Exists(zipPath))
-            return false;
-
         Process.Start(new ProcessStartInfo
         {
             FileName = "powershell.exe",

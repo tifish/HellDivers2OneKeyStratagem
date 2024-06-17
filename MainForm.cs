@@ -977,7 +977,7 @@ public partial class MainForm : Form
         if (await AutoUpdate.HasUpdate())
         {
             if (MessageBox.Show(@"发现新版本，是否更新？", @"提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                await AutoUpdate.Update();
+                AutoUpdate.SelfUpdate();
         }
         else
         {
