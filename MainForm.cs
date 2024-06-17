@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
-using System.Globalization;
-using AutoHotkey.Interop;
+﻿using AutoHotkey.Interop;
 using EdgeTTS;
 using NAudio.Wave;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -36,6 +36,9 @@ public partial class MainForm : Form
 
     private async void MainForm_Load(object sender, EventArgs e)
     {
+        if (await AutoUpdate.HasUpdate())
+            await AutoUpdate.Update();
+
         SuspendLayout();
         rootFlowLayoutPanel.SuspendLayout();
 
@@ -971,5 +974,13 @@ public partial class MainForm : Form
     private void micComboBox_DropDown(object sender, EventArgs e)
     {
         LoadMicDevices(micComboBox.Text);
+    }
+
+    private async void checkForUpdateButton_Click(object sender, EventArgs e)
+    {
+        if (await AutoUpdate.HasUpdate())
+            await AutoUpdate.Update();
+        else
+            MessageBox.Show(@"已经是最新版本", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 }
