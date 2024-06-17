@@ -16,7 +16,7 @@ public static class AutoUpdate
 
         var exeTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location);
 
-        return updateTime - exeTime > TimeSpan.FromMinutes(5);
+        return updateTime - exeTime > TimeSpan.FromMinutes(1);
     }
 
     public static async Task<bool> Update()
