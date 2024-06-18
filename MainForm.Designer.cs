@@ -30,15 +30,16 @@
         {
             components = new System.ComponentModel.Container();
             rootFlowLayoutPanel = new FlowLayoutPanel();
-            voiceTriggerFlowLayoutPanel = new FlowLayoutPanel();
+            flowLayoutPanel11 = new FlowLayoutPanel();
             openSettingsButton = new Button();
             closeSettingsButton = new Button();
-            playVoiceCheckBox = new CheckBox();
-            voiceNamesComboBox = new ComboBox();
-            refreshVoiceNamesButton = new Button();
             label10 = new Label();
             localeComboBox = new ComboBox();
             checkForUpdateButton = new Button();
+            voiceTriggerFlowLayoutPanel = new FlowLayoutPanel();
+            playVoiceCheckBox = new CheckBox();
+            voiceNamesComboBox = new ComboBox();
+            refreshVoiceNamesButton = new Button();
             settingsFlowLayoutPanel = new FlowLayoutPanel();
             buttonsFlowLayoutPanel = new FlowLayoutPanel();
             flowLayoutPanel2 = new FlowLayoutPanel();
@@ -103,6 +104,7 @@
             checkBox4 = new CheckBox();
             toolTip = new ToolTip(components);
             rootFlowLayoutPanel.SuspendLayout();
+            flowLayoutPanel11.SuspendLayout();
             voiceTriggerFlowLayoutPanel.SuspendLayout();
             settingsFlowLayoutPanel.SuspendLayout();
             buttonsFlowLayoutPanel.SuspendLayout();
@@ -131,6 +133,7 @@
             // 
             rootFlowLayoutPanel.AutoSize = true;
             rootFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            rootFlowLayoutPanel.Controls.Add(flowLayoutPanel11);
             rootFlowLayoutPanel.Controls.Add(voiceTriggerFlowLayoutPanel);
             rootFlowLayoutPanel.Controls.Add(settingsFlowLayoutPanel);
             rootFlowLayoutPanel.Controls.Add(fHotKeyFlowLayoutPanel);
@@ -138,26 +141,24 @@
             rootFlowLayoutPanel.Location = new Point(0, 0);
             rootFlowLayoutPanel.Margin = new Padding(10);
             rootFlowLayoutPanel.Name = "rootFlowLayoutPanel";
-            rootFlowLayoutPanel.Size = new Size(1063, 647);
+            rootFlowLayoutPanel.Size = new Size(1063, 692);
             rootFlowLayoutPanel.TabIndex = 0;
             // 
-            // voiceTriggerFlowLayoutPanel
+            // flowLayoutPanel11
             // 
-            voiceTriggerFlowLayoutPanel.Anchor = AnchorStyles.Left;
-            voiceTriggerFlowLayoutPanel.AutoSize = true;
-            voiceTriggerFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            voiceTriggerFlowLayoutPanel.Controls.Add(openSettingsButton);
-            voiceTriggerFlowLayoutPanel.Controls.Add(closeSettingsButton);
-            voiceTriggerFlowLayoutPanel.Controls.Add(playVoiceCheckBox);
-            voiceTriggerFlowLayoutPanel.Controls.Add(voiceNamesComboBox);
-            voiceTriggerFlowLayoutPanel.Controls.Add(refreshVoiceNamesButton);
-            voiceTriggerFlowLayoutPanel.Controls.Add(label10);
-            voiceTriggerFlowLayoutPanel.Controls.Add(localeComboBox);
-            voiceTriggerFlowLayoutPanel.Controls.Add(checkForUpdateButton);
-            voiceTriggerFlowLayoutPanel.Location = new Point(3, 3);
-            voiceTriggerFlowLayoutPanel.Name = "voiceTriggerFlowLayoutPanel";
-            voiceTriggerFlowLayoutPanel.Size = new Size(939, 39);
-            voiceTriggerFlowLayoutPanel.TabIndex = 7;
+            flowLayoutPanel11.Anchor = AnchorStyles.Left;
+            flowLayoutPanel11.AutoSize = true;
+            flowLayoutPanel11.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            flowLayoutPanel11.Controls.Add(openSettingsButton);
+            flowLayoutPanel11.Controls.Add(closeSettingsButton);
+            flowLayoutPanel11.Controls.Add(label10);
+            flowLayoutPanel11.Controls.Add(localeComboBox);
+            flowLayoutPanel11.Controls.Add(checkForUpdateButton);
+            flowLayoutPanel11.Location = new Point(3, 3);
+            flowLayoutPanel11.Name = "flowLayoutPanel11";
+            flowLayoutPanel11.Size = new Size(483, 39);
+            flowLayoutPanel11.TabIndex = 17;
+            flowLayoutPanel11.WrapContents = false;
             // 
             // openSettingsButton
             // 
@@ -184,13 +185,60 @@
             closeSettingsButton.Visible = false;
             closeSettingsButton.Click += closeSettingsButton_Click;
             // 
+            // label10
+            // 
+            label10.Anchor = AnchorStyles.Left;
+            label10.AutoSize = true;
+            label10.Location = new Point(274, 10);
+            label10.Name = "label10";
+            label10.Size = new Size(48, 19);
+            label10.TabIndex = 10;
+            label10.Text = "语言：";
+            // 
+            // localeComboBox
+            // 
+            localeComboBox.Anchor = AnchorStyles.Left;
+            localeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            localeComboBox.FormattingEnabled = true;
+            localeComboBox.Items.AddRange(new object[] { "LButton", "RButton", "MButton", "XButton1", "XButton2", "WheelDown", "WheelUp", "WheelLeft", "WheelRight", "CapsLock", "Space", "Tab", "Enter", "Return", "Esc", "Backspace", "ScrollLock", "Delete", "Insert", "Home", "End", "PgUp", "PgDn", "Up", "Down", "Left", "Right", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadDot", "NumLock", "NumpadDiv", "NumpadMult", "NumpadAdd", "NumpadSub", "NumpadEnter", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "LWin", "RWin", "Ctrl", "Alt", "Shift", "LCtrl", "RCtrl", "LShift", "RShift", "LAlt", "RAlt", "Browser_Back", "Browser_Forward", "Browser_Refresh", "Browser_Stop", "Browser_Search", "Browser_Favorites", "Browser_Home", "Volume_Mute", "Volume_Down", "Volume_Up", "Media_Next", "Media_Prev", "Media_Stop", "Media_Play_Pause", "Launch_Mail", "Launch_Media", "Launch_App1", "Launch_App2", "AppsKey", "PrintScreen", "CtrlBreak", "Pause", "Break", "Help", "Sleep", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "-", "=", "[", "]", "\\", ";", "'", ",", ".", "/" });
+            localeComboBox.Location = new Point(328, 7);
+            localeComboBox.Name = "localeComboBox";
+            localeComboBox.Size = new Size(71, 27);
+            localeComboBox.TabIndex = 11;
+            localeComboBox.SelectionChangeCommitted += LocaleComboBoxSelectionChangeCommitted;
+            // 
+            // checkForUpdateButton
+            // 
+            checkForUpdateButton.Anchor = AnchorStyles.Left;
+            checkForUpdateButton.AutoSize = true;
+            checkForUpdateButton.Location = new Point(405, 3);
+            checkForUpdateButton.Name = "checkForUpdateButton";
+            checkForUpdateButton.Size = new Size(75, 33);
+            checkForUpdateButton.TabIndex = 12;
+            checkForUpdateButton.Text = "检查更新";
+            checkForUpdateButton.UseVisualStyleBackColor = true;
+            checkForUpdateButton.Click += checkForUpdateButton_Click;
+            // 
+            // voiceTriggerFlowLayoutPanel
+            // 
+            voiceTriggerFlowLayoutPanel.Anchor = AnchorStyles.Left;
+            voiceTriggerFlowLayoutPanel.AutoSize = true;
+            voiceTriggerFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            voiceTriggerFlowLayoutPanel.Controls.Add(playVoiceCheckBox);
+            voiceTriggerFlowLayoutPanel.Controls.Add(voiceNamesComboBox);
+            voiceTriggerFlowLayoutPanel.Controls.Add(refreshVoiceNamesButton);
+            voiceTriggerFlowLayoutPanel.Location = new Point(3, 48);
+            voiceTriggerFlowLayoutPanel.Name = "voiceTriggerFlowLayoutPanel";
+            voiceTriggerFlowLayoutPanel.Size = new Size(456, 39);
+            voiceTriggerFlowLayoutPanel.TabIndex = 7;
+            // 
             // playVoiceCheckBox
             // 
             playVoiceCheckBox.Anchor = AnchorStyles.Left;
             playVoiceCheckBox.AutoSize = true;
             playVoiceCheckBox.Checked = true;
             playVoiceCheckBox.CheckState = CheckState.Checked;
-            playVoiceCheckBox.Location = new Point(274, 8);
+            playVoiceCheckBox.Location = new Point(3, 8);
             playVoiceCheckBox.Name = "playVoiceCheckBox";
             playVoiceCheckBox.Size = new Size(223, 23);
             playVoiceCheckBox.TabIndex = 6;
@@ -203,7 +251,7 @@
             voiceNamesComboBox.Anchor = AnchorStyles.Left;
             voiceNamesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             voiceNamesComboBox.FormattingEnabled = true;
-            voiceNamesComboBox.Location = new Point(503, 7);
+            voiceNamesComboBox.Location = new Point(232, 7);
             voiceNamesComboBox.Name = "voiceNamesComboBox";
             voiceNamesComboBox.Size = new Size(140, 27);
             voiceNamesComboBox.TabIndex = 7;
@@ -213,47 +261,13 @@
             // 
             refreshVoiceNamesButton.Anchor = AnchorStyles.Left;
             refreshVoiceNamesButton.AutoSize = true;
-            refreshVoiceNamesButton.Location = new Point(649, 3);
+            refreshVoiceNamesButton.Location = new Point(378, 3);
             refreshVoiceNamesButton.Name = "refreshVoiceNamesButton";
             refreshVoiceNamesButton.Size = new Size(75, 33);
             refreshVoiceNamesButton.TabIndex = 9;
             refreshVoiceNamesButton.Text = "刷新";
             refreshVoiceNamesButton.UseVisualStyleBackColor = true;
             refreshVoiceNamesButton.Click += refreshVoiceNamesButton_Click;
-            // 
-            // label10
-            // 
-            label10.Anchor = AnchorStyles.Left;
-            label10.AutoSize = true;
-            label10.Location = new Point(730, 10);
-            label10.Name = "label10";
-            label10.Size = new Size(48, 19);
-            label10.TabIndex = 10;
-            label10.Text = "语言：";
-            // 
-            // localeComboBox
-            // 
-            localeComboBox.Anchor = AnchorStyles.Left;
-            localeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            localeComboBox.FormattingEnabled = true;
-            localeComboBox.Items.AddRange(new object[] { "LButton", "RButton", "MButton", "XButton1", "XButton2", "WheelDown", "WheelUp", "WheelLeft", "WheelRight", "CapsLock", "Space", "Tab", "Enter", "Return", "Esc", "Backspace", "ScrollLock", "Delete", "Insert", "Home", "End", "PgUp", "PgDn", "Up", "Down", "Left", "Right", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadDot", "NumLock", "NumpadDiv", "NumpadMult", "NumpadAdd", "NumpadSub", "NumpadEnter", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "LWin", "RWin", "Ctrl", "Alt", "Shift", "LCtrl", "RCtrl", "LShift", "RShift", "LAlt", "RAlt", "Browser_Back", "Browser_Forward", "Browser_Refresh", "Browser_Stop", "Browser_Search", "Browser_Favorites", "Browser_Home", "Volume_Mute", "Volume_Down", "Volume_Up", "Media_Next", "Media_Prev", "Media_Stop", "Media_Play_Pause", "Launch_Mail", "Launch_Media", "Launch_App1", "Launch_App2", "AppsKey", "PrintScreen", "CtrlBreak", "Pause", "Break", "Help", "Sleep", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "-", "=", "[", "]", "\\", ";", "'", ",", ".", "/" });
-            localeComboBox.Location = new Point(784, 7);
-            localeComboBox.Name = "localeComboBox";
-            localeComboBox.Size = new Size(71, 27);
-            localeComboBox.TabIndex = 11;
-            localeComboBox.SelectionChangeCommitted += LocaleComboBoxSelectionChangeCommitted;
-            // 
-            // checkForUpdateButton
-            // 
-            checkForUpdateButton.Anchor = AnchorStyles.Left;
-            checkForUpdateButton.AutoSize = true;
-            checkForUpdateButton.Location = new Point(861, 3);
-            checkForUpdateButton.Name = "checkForUpdateButton";
-            checkForUpdateButton.Size = new Size(75, 33);
-            checkForUpdateButton.TabIndex = 12;
-            checkForUpdateButton.Text = "检查更新";
-            checkForUpdateButton.UseVisualStyleBackColor = true;
-            checkForUpdateButton.Click += checkForUpdateButton_Click;
             // 
             // settingsFlowLayoutPanel
             // 
@@ -265,7 +279,7 @@
             settingsFlowLayoutPanel.Controls.Add(speechSettingsFlowLayoutPanel);
             settingsFlowLayoutPanel.Controls.Add(flowLayoutPanel7);
             settingsFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            settingsFlowLayoutPanel.Location = new Point(3, 48);
+            settingsFlowLayoutPanel.Location = new Point(3, 93);
             settingsFlowLayoutPanel.Name = "settingsFlowLayoutPanel";
             settingsFlowLayoutPanel.Size = new Size(990, 374);
             settingsFlowLayoutPanel.TabIndex = 16;
@@ -769,7 +783,7 @@
             fHotKeyFlowLayoutPanel.Controls.Add(label14);
             fHotKeyFlowLayoutPanel.Controls.Add(stratagemGroupsFlowLayoutPanel);
             fHotKeyFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            fHotKeyFlowLayoutPanel.Location = new Point(3, 428);
+            fHotKeyFlowLayoutPanel.Location = new Point(3, 473);
             fHotKeyFlowLayoutPanel.Name = "fHotKeyFlowLayoutPanel";
             fHotKeyFlowLayoutPanel.Size = new Size(1057, 216);
             fHotKeyFlowLayoutPanel.TabIndex = 1;
@@ -995,7 +1009,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(1127, 648);
+            ClientSize = new Size(1137, 703);
             Controls.Add(rootFlowLayoutPanel);
             Font = new Font("Microsoft YaHei", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 134);
             KeyPreview = true;
@@ -1011,6 +1025,8 @@
             KeyDown += MainForm_KeyDown;
             rootFlowLayoutPanel.ResumeLayout(false);
             rootFlowLayoutPanel.PerformLayout();
+            flowLayoutPanel11.ResumeLayout(false);
+            flowLayoutPanel11.PerformLayout();
             voiceTriggerFlowLayoutPanel.ResumeLayout(false);
             voiceTriggerFlowLayoutPanel.PerformLayout();
             settingsFlowLayoutPanel.ResumeLayout(false);
@@ -1133,5 +1149,6 @@
         private FlowLayoutPanel speechSubSettingsFlowLayoutPanel;
         private FlowLayoutPanel flowLayoutPanel9;
         private FlowLayoutPanel speechSettingsFlowLayoutPanel;
+        private FlowLayoutPanel flowLayoutPanel11;
     }
 }
