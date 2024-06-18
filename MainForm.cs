@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
-using System.Globalization;
-using AutoHotkey.Interop;
+﻿using AutoHotkey.Interop;
 using EdgeTTS;
 using NAudio.Wave;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -166,9 +166,10 @@ public partial class MainForm : Form
 
             _voiceCommand.CommandRecognized += (_, command) =>
             {
-                voiceRecognizeResultLabel.Text = $@"识别概率：{command.Score:F3} 文字：{command.Text}";
+                var failed = command.Score < Settings.VoiceConfidence;
+                voiceRecognizeResultLabel.Text = $@"【{(failed ? "失败" : "成功")}】识别阈值：{command.Score:F3} 识别文字：{command.Text}";
 
-                if (command.Score < Settings.VoiceConfidence)
+                if (failed)
                     return;
 
                 if (!StratagemManager.TryGet(command.Text, out var stratagem))
@@ -205,6 +206,7 @@ public partial class MainForm : Form
     private void StopVoiceTrigger()
     {
         _voiceCommand?.Stop();
+        _voiceCommand = null;
     }
 
     private void LoadVoiceNames()
@@ -296,14 +298,16 @@ public partial class MainForm : Form
                 stratagemSetsComboBox.Items.Add(stratagemSet);
         }
 
-        enableSetFKeyBySpeechCheckBox.Checked = Settings.EnableSetFKeyBySpeech;
-
         speechConfidenceNumericUpDown.Value = (decimal)Settings.VoiceConfidence;
         wakeupWordTextBox.Text = Settings.WakeupWord;
 
         enableSpeechTriggerCheckBox.Checked = Settings.EnableSpeechTrigger;
+        enableSpeechTriggerCheckBox_Click(enableSpeechTriggerCheckBox, EventArgs.Empty);
 
         enableHotkeyTriggerCheckBox.Checked = Settings.EnableHotkeyTrigger;
+        enableHotkeyTriggerCheckBox_Click(enableHotkeyTriggerCheckBox, EventArgs.Empty);
+
+        enableSetFKeyBySpeechCheckBox.Checked = Settings.EnableSetFKeyBySpeech;
     }
 
     private string GetFKeyStratagemString()
@@ -570,10 +574,17 @@ public partial class MainForm : Form
         lines.AddRange(_template2Lines);
         GenerateScript(lines);
 
-        _autoHotkeyEngine?.Terminate();
+        StopAutoHotkeyScript();
         _autoHotkeyEngine = new AutoHotkeyEngine();
         _autoHotkeyEngine.LoadScript(string.Join('\n', lines));
     }
+
+    private void StopAutoHotkeyScript()
+    {
+        _autoHotkeyEngine?.Terminate();
+        _autoHotkeyEngine = null;
+    }
+
 
     private void GenerateScript(List<string> lines)
     {
@@ -824,13 +835,19 @@ public partial class MainForm : Form
 
     private async void enableSpeechTriggerCheckBox_Click(object sender, EventArgs e)
     {
-        Settings.EnableSpeechTrigger = enableSpeechTriggerCheckBox.Checked;
-        _settingsChanged = true;
+        if (!_isLoading)
+        {
+            Settings.EnableSpeechTrigger = enableSpeechTriggerCheckBox.Checked;
+            _settingsChanged = true;
 
-        if (Settings.EnableSpeechTrigger)
-            await StartSpeechTrigger();
-        else
-            StopVoiceTrigger();
+            if (Settings.EnableSpeechTrigger)
+                await StartSpeechTrigger();
+            else
+                StopVoiceTrigger();
+        }
+
+        speechSubSettingsFlowLayoutPanel.Visible = Settings.EnableSpeechTrigger;
+        enableSetFKeyBySpeechCheckBox.Enabled = Settings.EnableSpeechTrigger;
     }
 
     private bool _isClosing;
@@ -838,7 +855,9 @@ public partial class MainForm : Form
     private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
     {
         _isClosing = true;
-        _autoHotkeyEngine?.Terminate();
+
+        StopAutoHotkeyScript();
+        StopVoiceTrigger();
     }
 
     private void enableSetFKeyBySpeechCheckBox_Click(object sender, EventArgs e)
@@ -962,18 +981,19 @@ public partial class MainForm : Form
 
     private void enableHotkeyTriggerCheckBox_Click(object sender, EventArgs e)
     {
-        Settings.EnableHotkeyTrigger = enableHotkeyTriggerCheckBox.Checked;
-        _settingsChanged = true;
+        if (!_isLoading)
+        {
+            Settings.EnableHotkeyTrigger = enableHotkeyTriggerCheckBox.Checked;
+            _settingsChanged = true;
 
-        if (Settings.EnableHotkeyTrigger)
-        {
-            StartAutoHotkeyScript();
+            if (Settings.EnableHotkeyTrigger)
+                StartAutoHotkeyScript();
+            else if (_autoHotkeyEngine != null)
+                StopAutoHotkeyScript();
         }
-        else if (_autoHotkeyEngine != null)
-        {
-            _autoHotkeyEngine.Terminate();
-            _autoHotkeyEngine = null;
-        }
+
+        enableSetFKeyBySpeechCheckBox.Visible = Settings.EnableHotkeyTrigger;
+        fHotKeyFlowLayoutPanel.Visible = Settings.EnableHotkeyTrigger;
     }
 
     private void micComboBox_SelectionChangeCommitted(object sender, EventArgs e)
@@ -1006,5 +1026,19 @@ public partial class MainForm : Form
         {
             checkForUpdateButton.Enabled = true;
         }
+    }
+
+    private void openSettingsButton_Click(object sender, EventArgs e)
+    {
+        settingsFlowLayoutPanel.Show();
+        openSettingsButton.Visible = false;
+        closeSettingsButton.Visible = true;
+    }
+
+    private void closeSettingsButton_Click(object sender, EventArgs e)
+    {
+        settingsFlowLayoutPanel.Hide();
+        openSettingsButton.Visible = true;
+        closeSettingsButton.Visible = false;
     }
 }
