@@ -51,6 +51,7 @@
             wasdRadioButton = new RadioButton();
             arrowRadioButton = new RadioButton();
             suggestionLabel = new Label();
+            flowLayoutPanel13 = new FlowLayoutPanel();
             speechSettingsFlowLayoutPanel = new FlowLayoutPanel();
             enableSpeechTriggerCheckBox = new CheckBox();
             speechSubSettingsFlowLayoutPanel = new FlowLayoutPanel();
@@ -79,6 +80,7 @@
             generateVoiceButton = new Button();
             generateTxtButton = new Button();
             generateVoiceMessageLabel = new Label();
+            flowLayoutPanel14 = new FlowLayoutPanel();
             flowLayoutPanel7 = new FlowLayoutPanel();
             enableHotkeyTriggerCheckBox = new CheckBox();
             enableSetFKeyBySpeechCheckBox = new CheckBox();
@@ -141,7 +143,7 @@
             rootFlowLayoutPanel.Location = new Point(0, 0);
             rootFlowLayoutPanel.Margin = new Padding(10);
             rootFlowLayoutPanel.Name = "rootFlowLayoutPanel";
-            rootFlowLayoutPanel.Size = new Size(1063, 692);
+            rootFlowLayoutPanel.Size = new Size(1063, 702);
             rootFlowLayoutPanel.TabIndex = 0;
             // 
             // flowLayoutPanel11
@@ -276,12 +278,14 @@
             settingsFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             settingsFlowLayoutPanel.BorderStyle = BorderStyle.FixedSingle;
             settingsFlowLayoutPanel.Controls.Add(buttonsFlowLayoutPanel);
+            settingsFlowLayoutPanel.Controls.Add(flowLayoutPanel13);
             settingsFlowLayoutPanel.Controls.Add(speechSettingsFlowLayoutPanel);
+            settingsFlowLayoutPanel.Controls.Add(flowLayoutPanel14);
             settingsFlowLayoutPanel.Controls.Add(flowLayoutPanel7);
             settingsFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
             settingsFlowLayoutPanel.Location = new Point(3, 93);
             settingsFlowLayoutPanel.Name = "settingsFlowLayoutPanel";
-            settingsFlowLayoutPanel.Size = new Size(990, 374);
+            settingsFlowLayoutPanel.Size = new Size(988, 384);
             settingsFlowLayoutPanel.TabIndex = 16;
             settingsFlowLayoutPanel.Visible = false;
             settingsFlowLayoutPanel.WrapContents = false;
@@ -290,14 +294,13 @@
             // 
             buttonsFlowLayoutPanel.AutoSize = true;
             buttonsFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            buttonsFlowLayoutPanel.BorderStyle = BorderStyle.FixedSingle;
             buttonsFlowLayoutPanel.Controls.Add(flowLayoutPanel2);
             buttonsFlowLayoutPanel.Controls.Add(flowLayoutPanel3);
             buttonsFlowLayoutPanel.Controls.Add(suggestionLabel);
             buttonsFlowLayoutPanel.Location = new Point(3, 3);
             buttonsFlowLayoutPanel.Margin = new Padding(3, 3, 3, 10);
             buttonsFlowLayoutPanel.Name = "buttonsFlowLayoutPanel";
-            buttonsFlowLayoutPanel.Size = new Size(982, 37);
+            buttonsFlowLayoutPanel.Size = new Size(980, 35);
             buttonsFlowLayoutPanel.TabIndex = 3;
             // 
             // flowLayoutPanel2
@@ -409,18 +412,27 @@
             suggestionLabel.Text = "强烈建议使用“上下左右”，可以在跑动中呼叫战略。";
             suggestionLabel.Click += suggestionLabel_Click;
             // 
+            // flowLayoutPanel13
+            // 
+            flowLayoutPanel13.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            flowLayoutPanel13.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel13.Location = new Point(3, 51);
+            flowLayoutPanel13.Name = "flowLayoutPanel13";
+            flowLayoutPanel13.Size = new Size(980, 2);
+            flowLayoutPanel13.TabIndex = 9;
+            flowLayoutPanel13.WrapContents = false;
+            // 
             // speechSettingsFlowLayoutPanel
             // 
             speechSettingsFlowLayoutPanel.Anchor = AnchorStyles.Left;
             speechSettingsFlowLayoutPanel.AutoSize = true;
             speechSettingsFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            speechSettingsFlowLayoutPanel.BorderStyle = BorderStyle.FixedSingle;
             speechSettingsFlowLayoutPanel.Controls.Add(enableSpeechTriggerCheckBox);
             speechSettingsFlowLayoutPanel.Controls.Add(speechSubSettingsFlowLayoutPanel);
             speechSettingsFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            speechSettingsFlowLayoutPanel.Location = new Point(3, 53);
+            speechSettingsFlowLayoutPanel.Location = new Point(3, 59);
             speechSettingsFlowLayoutPanel.Name = "speechSettingsFlowLayoutPanel";
-            speechSettingsFlowLayoutPanel.Size = new Size(888, 279);
+            speechSettingsFlowLayoutPanel.Size = new Size(886, 277);
             speechSettingsFlowLayoutPanel.TabIndex = 21;
             speechSettingsFlowLayoutPanel.WrapContents = false;
             // 
@@ -733,16 +745,25 @@
             generateVoiceMessageLabel.Size = new Size(0, 19);
             generateVoiceMessageLabel.TabIndex = 8;
             // 
+            // flowLayoutPanel14
+            // 
+            flowLayoutPanel14.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            flowLayoutPanel14.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel14.Location = new Point(3, 342);
+            flowLayoutPanel14.Name = "flowLayoutPanel14";
+            flowLayoutPanel14.Size = new Size(980, 2);
+            flowLayoutPanel14.TabIndex = 10;
+            flowLayoutPanel14.WrapContents = false;
+            // 
             // flowLayoutPanel7
             // 
             flowLayoutPanel7.AutoSize = true;
             flowLayoutPanel7.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            flowLayoutPanel7.BorderStyle = BorderStyle.FixedSingle;
             flowLayoutPanel7.Controls.Add(enableHotkeyTriggerCheckBox);
             flowLayoutPanel7.Controls.Add(enableSetFKeyBySpeechCheckBox);
-            flowLayoutPanel7.Location = new Point(3, 338);
+            flowLayoutPanel7.Location = new Point(3, 350);
             flowLayoutPanel7.Name = "flowLayoutPanel7";
-            flowLayoutPanel7.Size = new Size(395, 31);
+            flowLayoutPanel7.Size = new Size(393, 29);
             flowLayoutPanel7.TabIndex = 9;
             // 
             // enableHotkeyTriggerCheckBox
@@ -783,7 +804,7 @@
             fHotKeyFlowLayoutPanel.Controls.Add(label14);
             fHotKeyFlowLayoutPanel.Controls.Add(stratagemGroupsFlowLayoutPanel);
             fHotKeyFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            fHotKeyFlowLayoutPanel.Location = new Point(3, 473);
+            fHotKeyFlowLayoutPanel.Location = new Point(3, 483);
             fHotKeyFlowLayoutPanel.Name = "fHotKeyFlowLayoutPanel";
             fHotKeyFlowLayoutPanel.Size = new Size(1057, 216);
             fHotKeyFlowLayoutPanel.TabIndex = 1;
@@ -1150,5 +1171,7 @@
         private FlowLayoutPanel flowLayoutPanel9;
         private FlowLayoutPanel speechSettingsFlowLayoutPanel;
         private FlowLayoutPanel flowLayoutPanel11;
+        private FlowLayoutPanel flowLayoutPanel13;
+        private FlowLayoutPanel flowLayoutPanel14;
     }
 }

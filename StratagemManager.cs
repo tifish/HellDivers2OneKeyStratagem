@@ -37,6 +37,7 @@ public static class StratagemManager
         };
 
         Groups.Clear();
+        _stratagems.Clear();
         _stratagemDictionary.Clear();
         _systemAliasesDictionary.Clear();
         List<Stratagem>? currentGroup = null;
