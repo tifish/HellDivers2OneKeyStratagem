@@ -815,7 +815,12 @@ public partial class MainForm : Form
         else
             _settingsChanged = true;
 
-        PlayStratagemVoice(_fKeyStratagems[SelectedFKeyIndex]?.Name ?? StratagemManager.Stratagems.Last().Name);
+        // The stratagem may be invalid after changing the language
+        var stratagem = _fKeyStratagems[SelectedFKeyIndex];
+        var stratagemName = stratagem != null && StratagemManager.Stratagems.Contains(stratagem)
+            ? stratagem.Name
+            : StratagemManager.Stratagems.Last().Name;
+        PlayStratagemVoice(stratagemName);
     }
 
     private void refreshVoiceNamesButton_Click(object sender, EventArgs e)
