@@ -5,7 +5,7 @@ if ($process) {
 }
 
 # Download HellDivers2OneKeyStratagem.zip to system temp directory
-$downloadUrl = "https://github.com/tifish/HellDivers2OneKeyStratagem/releases/download/latest_release/HellDivers2OneKeyStratagem.zip"
+$downloadUrl = "https://hdokgh.213453245.xyz/HellDivers2OneKeyStratagem.zip"
 $zipPath = "$env:TEMP\HellDivers2OneKeyStratagem.zip"
 Invoke-WebRequest -Uri $downloadUrl -OutFile $zipPath
 

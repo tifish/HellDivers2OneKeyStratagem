@@ -25,6 +25,7 @@ public class AppSettings
     public float VoiceConfidence { get; set; } = 0.6f;
     public string WakeupWord { get; set; } = "";
     public bool EnableHotkeyTrigger { get; set; } = true;
+    public int UpdateFileSize { get; set; }
 }
 
 public static class SettingsContainer

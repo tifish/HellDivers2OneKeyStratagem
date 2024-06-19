@@ -5,18 +5,22 @@ namespace HellDivers2OneKeyStratagem;
 
 public static class AutoUpdate
 {
-    private const string UpdateUrl = "https://github.com/tifish/HellDivers2OneKeyStratagem/releases/download/latest_release/HellDivers2OneKeyStratagem.zip";
+    private const string UpdateUrl = "https://hdokgh.213453245.xyz/HellDivers2OneKeyStratagem.zip";
 
     public static async Task<bool> HasUpdate()
     {
-        var updateTime = await HttpHelper.GetHttpFileTime(UpdateUrl);
+        var headers = await HttpHelper.GetHeaders(UpdateUrl);
+
+        // Get the CloudFlare cache time
+        var updateTime = headers?.GetDateTime("x-ms-creation-time");
         if (updateTime == null)
             return false;
-        updateTime = updateTime.Value.ToUniversalTime();
 
-        var exeTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location);
+        var dllTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location);
+        // The dll's local time is actually the UTC time
+        dllTime = dllTime.ToLocalTime();
 
-        return updateTime - exeTime > TimeSpan.FromMinutes(1);
+        return updateTime - dllTime > TimeSpan.FromMinutes(1);
     }
 
     public static bool SelfUpdate()

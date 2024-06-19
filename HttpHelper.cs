@@ -1,27 +1,81 @@
+using System.Net;
+using System.Net.Http.Headers;
+
 public class HttpHelper
 {
-    public static async Task<DateTime?> GetHttpFileTime(string url)
+    public class HttpHeaders(HttpResponseHeaders responseHeaders)
     {
-        using var client = new HttpClient();
-        var request = new HttpRequestMessage(HttpMethod.Head, url);
-        var response = await client.SendAsync(request);
+        private HttpResponseHeaders _responseHeaders = responseHeaders;
+
+        public DateTime? LastModified => GetDateTime("Last-Modified");
+        public int FileSize => GetInt("Content-Length") ?? -1;
+
+        public DateTime? GetDateTime(string header)
+        {
+            if (!_responseHeaders.TryGetValues(header, out var values))
+                return null;
+
+            var dateString = values.FirstOrDefault();
+            if (DateTime.TryParse(dateString, out var lastModified))
+                return lastModified;
+
+            return null;
+        }
+
+        public int? GetInt(string header)
+        {
+            if (!_responseHeaders.TryGetValues(header, out var values))
+                return null;
+
+            var lengthString = values.FirstOrDefault();
+            if (int.TryParse(lengthString, out var length))
+                return length;
+
+            return null;
+        }
+    }
+
+    public static async Task<HttpHeaders?> GetHeaders(string url)
+    {
+        var respondHeaders = await GetHttpRespondHeaders(url);
+        if (respondHeaders == null)
+            return null;
+
+        return new HttpHeaders(respondHeaders);
+    }
+
+    private static HttpClient GetHttpClient()
+    {
+        var client = new HttpClient();
+        // act like a Chrome browser
+        client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
+        return client;
+    }
+
+    private static async Task<HttpResponseHeaders?> GetHttpRespondHeaders(string url)
+    {
+        using var client = GetHttpClient();
+        using var request = new HttpRequestMessage(HttpMethod.Head, url);
+        using var response = await client.SendAsync(request);
 
         if (!response.IsSuccessStatusCode)
             return null;
 
-        if (!response.Content.Headers.TryGetValues("Last-Modified", out var values))
-            return null;
+        if (response.StatusCode == HttpStatusCode.Redirect)
+        {
+            var redirectUrl = response.Headers.Location?.ToString();
+            if (string.IsNullOrEmpty(redirectUrl))
+                return null;
 
-        var dateString = values.FirstOrDefault();
-        if (DateTime.TryParse(dateString, out var lastModified))
-            return lastModified;
+            return await GetHttpRespondHeaders(redirectUrl);
+        }
 
-        return null;
+        return response.Headers;
     }
 
     public static async Task<string> DownloadFile(string url, string downloadDirectory)
     {
-        using var client = new HttpClient();
+        using var client = GetHttpClient();
         using var response = await client.GetAsync(url);
 
         // get file name from respond
