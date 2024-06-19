@@ -29,7 +29,7 @@ public static class AutoUpdate
         {
             FileName = "powershell.exe",
             Arguments = """
-                        -ExecutionPolicy Bypass -File "SelfUpdate.ps1"
+                        -ExecutionPolicy Bypass -File "AutoUpdate.ps1"
                         """,
             WorkingDirectory = AppSettings.ExeDirectory,
             UseShellExecute = true,
