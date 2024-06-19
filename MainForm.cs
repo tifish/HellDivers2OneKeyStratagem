@@ -245,9 +245,9 @@ public partial class MainForm : Form
         generateVoiceStyleComboBox.SelectedIndex = generateVoiceStyleComboBox.Items.Count - 1;
     }
 
-    private static readonly string TemplateAhk1 = Path.Combine(AppSettings.ExeDirectory, "HellDivers2OneKey.template1.ahk");
+    private static readonly string TemplateAhk1 = Path.Combine(AppSettings.DataDirectory, "HellDivers2OneKey.template1.ahk");
     private string[] _template1Lines = [];
-    private static readonly string TemplateAhk2 = Path.Combine(AppSettings.ExeDirectory, "HellDivers2OneKey.template2.ahk");
+    private static readonly string TemplateAhk2 = Path.Combine(AppSettings.DataDirectory, "HellDivers2OneKey.template2.ahk");
     private string[] _template2Lines = [];
 
     private async Task LoadScriptTemplate()

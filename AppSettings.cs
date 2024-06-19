@@ -8,6 +8,7 @@ public class AppSettings
     public static readonly string ExeDirectory = Path.GetDirectoryName(Application.ExecutablePath)!;
     public static readonly string SettingsDirectory = Path.Combine(ExeDirectory, "Settings");
     public static readonly string SettingsFile = Path.Combine(SettingsDirectory, "Settings.json");
+    public static readonly string DataDirectory = Path.Combine(ExeDirectory, "Data");
 
     public string TriggerKey { get; set; } = "Ctrl";
     public string OperateKeys { get; set; } = "WASD";

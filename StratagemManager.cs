@@ -13,7 +13,7 @@ public static class StratagemManager
     public static IEnumerable<string> StratagemAlias => _stratagemDictionary.Keys.Concat(_userAliasStratagemDictionary.Keys);
     public static int Count => _stratagems.Count;
 
-    private static readonly string StratagemsFile = Path.Combine(AppSettings.ExeDirectory, "Stratagems.tab");
+    private static readonly string StratagemsFile = Path.Combine(AppSettings.DataDirectory, "Stratagems.tab");
 
     public static void Load()
     {
