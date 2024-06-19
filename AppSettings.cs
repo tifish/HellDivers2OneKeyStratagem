@@ -14,8 +14,8 @@ public class AppSettings
     public string OperateKeys { get; set; } = "WASD";
     public bool PlayVoice { get; set; } = true;
     public string VoiceName { get; set; } = "晓妮";
-    public bool EnableSpeechTrigger { get; set; } = true;
-    public bool EnableSetFKeyBySpeech { get; set; } = true;
+    public bool EnableSpeechTrigger { get; set; }
+    public bool EnableSetFKeyBySpeech { get; set; }
     public List<string> StratagemSets { get; set; } = [];
     public string Locale { get; set; } = "";
 
@@ -25,7 +25,6 @@ public class AppSettings
     public float VoiceConfidence { get; set; } = 0.6f;
     public string WakeupWord { get; set; } = "";
     public bool EnableHotkeyTrigger { get; set; } = true;
-    public int UpdateFileSize { get; set; }
 }
 
 public static class SettingsContainer
