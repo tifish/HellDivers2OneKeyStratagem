@@ -1,8 +1,8 @@
-﻿using AutoHotkey.Interop;
+﻿using System.Diagnostics;
+using System.Globalization;
+using AutoHotkey.Interop;
 using EdgeTTS;
 using NAudio.Wave;
-using System.Diagnostics;
-using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -18,7 +18,7 @@ public partial class MainForm : Form
     private void SetTooltipFont()
     {
         toolTip.OwnerDraw = true;
-        toolTip.Popup += (sender, args) =>
+        toolTip.Popup += (_, args) =>
         {
             var text = toolTip.GetToolTip(args.AssociatedControl);
             args.ToolTipSize = TextRenderer.MeasureText(text, Font);
@@ -113,9 +113,7 @@ public partial class MainForm : Form
 
     private async Task ResetVoiceCommand()
     {
-        _voiceCommand?.Stop();
-        _voiceCommand?.Dispose();
-        _voiceCommand = null;
+        await StopVoiceTrigger();
 
         if (Settings.EnableSpeechTrigger)
             await StartSpeechTrigger();
@@ -203,10 +201,14 @@ public partial class MainForm : Form
         PlayVoice(Path.Combine(VoiceRootPath, Settings.Language, Settings.VoiceName, stratagemName + ".mp3"));
     }
 
-    private void StopVoiceTrigger()
+    private async Task StopVoiceTrigger()
     {
-        _voiceCommand?.Stop();
-        _voiceCommand = null;
+        if (_voiceCommand != null)
+        {
+            await _voiceCommand.Stop();
+            _voiceCommand.Dispose();
+            _voiceCommand = null;
+        }
     }
 
     private void LoadVoiceNames()
@@ -848,7 +850,7 @@ public partial class MainForm : Form
             if (Settings.EnableSpeechTrigger)
                 await StartSpeechTrigger();
             else
-                StopVoiceTrigger();
+                await StopVoiceTrigger();
         }
 
         speechSubSettingsFlowLayoutPanel.Visible = Settings.EnableSpeechTrigger;
@@ -857,12 +859,12 @@ public partial class MainForm : Form
 
     private bool _isClosing;
 
-    private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+    private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
     {
         _isClosing = true;
 
         StopAutoHotkeyScript();
-        StopVoiceTrigger();
+        await StopVoiceTrigger();
     }
 
     private void enableSetFKeyBySpeechCheckBox_Click(object sender, EventArgs e)

@@ -70,14 +70,27 @@ public class VoiceCommand : IDisposable
         _isRecognizing = true;
     }
 
-    public void Stop()
+    public async Task Stop()
     {
-        _recognizer.RecognizeAsyncStop();
+        if (!_isRecognizing)
+            return;
+
+        _recognizer.RecognizeAsyncCancel();
+
+        while (_isRecognizing)
+            await Task.Delay(100);
     }
 
     public void Dispose()
     {
+        if (_isRecognizing)
+            _recognizer.RecognizeAsyncCancel();
         _recognizer.Dispose();
+
+        _waveInEvent?.StopRecording();
+        _waveInEvent?.Dispose();
+        _audioStreamer?.Dispose();
+
         GC.SuppressFinalize(this);
     }
 
@@ -198,14 +211,24 @@ public class VoiceCommand : IDisposable
         return new WaveFormat(samplesRate, bitsPerSample, nChannel);
     }
 
-    public async Task UseMic(int deviceIndex)
+    public async Task<bool> UseMic(int deviceIndex)
     {
+        //settings
+        var device = WaveInEvent.GetCapabilities(deviceIndex);
+        SupportedWaveFormat supportFormat = 0;
+        foreach (SupportedWaveFormat format in Enum.GetValues(typeof(SupportedWaveFormat)))
+            if (device.SupportsWaveFormat(format) && format <= SupportedWaveFormat.WAVE_FORMAT_48S16 && (int)Math.Log2((int)format) % 2 == 0) //找个单通道的
+                supportFormat = format; //取最后一个支持的。
+
+        if (supportFormat == 0)
+            return false;
+
+        var isRecognizingBeforeChangingMic = _isRecognizing;
+        if (_isRecognizing)
+            await Stop();
+
         //cleanup
-        if (_waveInEvent != null)
-        {
-            _waveInEvent.StopRecording();
-            _waveInEvent.Dispose();
-        }
+        _waveInEvent?.Dispose();
 
         if (_audioStreamer != null)
         {
@@ -213,15 +236,8 @@ public class VoiceCommand : IDisposable
             await _audioStreamer.DisposeAsync();
         }
 
-        //settings
         _waveInEvent = new WaveInEvent();
         _waveInEvent.DeviceNumber = deviceIndex; //device.ID;
-        var device = WaveInEvent.GetCapabilities(deviceIndex);
-        SupportedWaveFormat supportFormat = 0;
-        foreach (SupportedWaveFormat format in Enum.GetValues(typeof(SupportedWaveFormat)))
-            if (device.SupportsWaveFormat(format) && format <= SupportedWaveFormat.WAVE_FORMAT_48S16 && (int)Math.Log2((int)format) % 2 == 0) //找个单通道的
-                supportFormat = format; //取最后一个支持的。
-
         _waveInEvent.WaveFormat = GetWaveFormat(
             supportFormat, out var samplesRate, out var nChannel, out _,
             out var eBitsPerSample, out var eChannel);
@@ -235,22 +251,17 @@ public class VoiceCommand : IDisposable
 
         var audioFormat = new SpeechAudioFormatInfo(nChannel * samplesRate, eBitsPerSample, eChannel);
 
-        //start record microphone
         _waveInEvent.StartRecording();
+        _recognizer.SetInputToAudioStream(_audioStreamer, audioFormat);
 
         //restart _recognizer
-        if (_isRecognizing)
-        {
-            Stop();
-            while (_isRecognizing)
-                await Task.Delay(100);
-
-            _recognizer.SetInputToAudioStream(_audioStreamer, audioFormat);
+        if (isRecognizingBeforeChangingMic)
             Start();
-        }
+
+        return true;
     }
 
-    public async Task UseMic(string deviceName)
+    public async Task<bool> UseMic(string deviceName)
     {
         for (var i = 0; i < WaveInEvent.DeviceCount; i++)
         {
@@ -258,8 +269,9 @@ public class VoiceCommand : IDisposable
             if (device.ProductName != deviceName)
                 continue;
 
-            await UseMic(i);
-            break;
+            return await UseMic(i);
         }
+
+        return false;
     }
 }
