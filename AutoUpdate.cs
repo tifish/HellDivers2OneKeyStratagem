@@ -12,8 +12,7 @@ public static class AutoUpdate
             return false;
 
         // Get the CloudFlare cache time
-        var updateTime = headers.LastModified
-                         ?? headers.GetDateTime("x-ms-creation-time");
+        var updateTime = headers.LastModified;
         if (updateTime == null)
             return false;
 

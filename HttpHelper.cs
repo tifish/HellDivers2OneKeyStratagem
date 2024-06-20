@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 
 public class HttpHelper
 {
-    public class HttpHeaders(HttpResponseHeaders responseHeaders)
+    public class HttpHeaders(HttpContentHeaders responseHeaders)
     {
         public DateTime? LastModified => GetDateTime("Last-Modified");
         public int FileSize => GetInt("Content-Length") ?? -1;
@@ -36,7 +36,7 @@ public class HttpHelper
 
     public static async Task<HttpHeaders?> GetHeaders(string url)
     {
-        var respondHeaders = await GetHttpRespondHeaders(url);
+        var respondHeaders = await GetHttpContentHeaders(url);
         if (respondHeaders == null)
             return null;
 
@@ -53,7 +53,7 @@ public class HttpHelper
         return client;
     }
 
-    private static async Task<HttpResponseHeaders?> GetHttpRespondHeaders(string url)
+    private static async Task<HttpContentHeaders?> GetHttpContentHeaders(string url)
     {
         try
         {
@@ -70,10 +70,10 @@ public class HttpHelper
                 if (string.IsNullOrEmpty(redirectUrl))
                     return null;
 
-                return await GetHttpRespondHeaders(redirectUrl);
+                return await GetHttpContentHeaders(redirectUrl);
             }
 
-            return response.Headers;
+            return response.Content.Headers;
         }
         catch (Exception ex)
         {
