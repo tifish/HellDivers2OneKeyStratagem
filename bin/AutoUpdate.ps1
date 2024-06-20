@@ -4,8 +4,15 @@ if ($process) {
     $process.WaitForExit()
 }
 
+# Check if there are any command line arguments
+if ($args.Count -eq 0) {
+    Write-Host "No command line arguments provided. Exiting..."
+    Exit
+}
+
+# Get the first command line argument as the download URL
+$downloadUrl = $args[0]
 # Download HellDivers2OneKeyStratagem.zip to system temp directory
-$downloadUrl = "https://hdokgh.213453245.xyz/HellDivers2OneKeyStratagem.zip"
 $zipPath = "$env:TEMP\HellDivers2OneKeyStratagem.zip"
 Invoke-WebRequest -Uri $downloadUrl -OutFile $zipPath
 

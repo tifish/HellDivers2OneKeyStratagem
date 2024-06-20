@@ -29,8 +29,8 @@ public static class AutoUpdate
         Process.Start(new ProcessStartInfo
         {
             FileName = "powershell.exe",
-            Arguments = """
-                        -ExecutionPolicy Bypass -File "AutoUpdate.ps1"
+            Arguments = $"""
+                        -ExecutionPolicy Bypass -File "AutoUpdate.ps1" "{Settings.UpdateUrl}"
                         """,
             WorkingDirectory = AppSettings.ExeDirectory,
             UseShellExecute = true,
