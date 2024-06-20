@@ -12,19 +12,19 @@ if ($args.Count -eq 0) {
 
 # Get the first command line argument as the download URL
 $downloadUrl = $args[0]
-# Download HellDivers2OneKeyStratagem.zip to system temp directory
+# Download HellDivers2OneKeyStratagem.7z to system temp directory
 $packPath = "$env:TEMP\HellDivers2OneKeyStratagem.7z"
 Invoke-WebRequest -Uri $downloadUrl -OutFile $packPath
 
 # Check if $packPath exists
 if (-not (Test-Path $packPath)) {
-    Write-Host "Zip file not found. Exiting..."
+    Write-Host "$packPath file not found. Exiting..."
     Exit
 }
 
 # Delete all directories and files except Settings directory
 Get-ChildItem -Path $PSScriptRoot `
-| Where-Object { $_.Name -ne "Settings" } `
+| Where-Object { $_.Name -ne "Settings" -and $_.Name -ne "7Zip" } `
 | Remove-Item -Recurse -Force
 
 # Extract HellDivers2OneKeyStratagem.7z in to $PSScriptRoot

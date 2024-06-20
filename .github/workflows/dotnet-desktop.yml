@@ -28,7 +28,7 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release HellDivers2OneKeyStratagem.sln
 
-    - name: Compress
+    - name: Pack files
       run: |
         cd bin
         7Zip\7za.exe a -r ..\HellDivers2OneKeyStratagem.7z *
@@ -41,5 +41,5 @@ jobs:
     - name: Create a new tag and release
       run: gh release create ${{ env.RELEASE_TAG }} --generate-notes
 
-    - name: Upload zip
+    - name: Upload pack
       run: gh release upload ${{ env.RELEASE_TAG }} HellDivers2OneKeyStratagem.7z --clobber 
