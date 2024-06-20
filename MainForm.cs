@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
-using System.Globalization;
-using AutoHotkey.Interop;
+﻿using AutoHotkey.Interop;
 using EdgeTTS;
 using NAudio.Wave;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -310,6 +310,8 @@ public partial class MainForm : Form
         enableHotkeyTriggerCheckBox_Click(enableHotkeyTriggerCheckBox, EventArgs.Empty);
 
         enableSetFKeyBySpeechCheckBox.Checked = Settings.EnableSetFKeyBySpeech;
+
+        updateUrlTextBox.Text = Settings.UpdateUrl;
     }
 
     private string GetFKeyStratagemString()
@@ -1022,7 +1024,7 @@ public partial class MainForm : Form
             if (await AutoUpdate.HasUpdate())
             {
                 if (MessageBox.Show(@"发现新版本，是否更新？", @"提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                    AutoUpdate.SelfUpdate();
+                    AutoUpdate.Update();
             }
             else
             {
@@ -1047,5 +1049,11 @@ public partial class MainForm : Form
         settingsFlowLayoutPanel.Hide();
         openSettingsButton.Visible = true;
         closeSettingsButton.Visible = false;
+    }
+
+    private void updateUrlTextBox_TextChanged(object sender, EventArgs e)
+    {
+        Settings.UpdateUrl = updateUrlTextBox.Text;
+        _settingsChanged = true;
     }
 }

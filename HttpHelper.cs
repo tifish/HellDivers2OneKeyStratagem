@@ -5,17 +5,15 @@ public class HttpHelper
 {
     public class HttpHeaders(HttpResponseHeaders responseHeaders)
     {
-        private HttpResponseHeaders _responseHeaders = responseHeaders;
-
         public DateTime? LastModified => GetDateTime("Last-Modified");
         public int FileSize => GetInt("Content-Length") ?? -1;
-
         public DateTime? GetDateTime(string header)
         {
-            if (!_responseHeaders.TryGetValues(header, out var values))
+            if (!responseHeaders.TryGetValues(header, out var values))
                 return null;
 
             var dateString = values.FirstOrDefault();
+
             if (DateTime.TryParse(dateString, out var lastModified))
                 return lastModified;
 
@@ -24,7 +22,7 @@ public class HttpHelper
 
         public int? GetInt(string header)
         {
-            if (!_responseHeaders.TryGetValues(header, out var values))
+            if (!responseHeaders.TryGetValues(header, out var values))
                 return null;
 
             var lengthString = values.FirstOrDefault();
@@ -47,6 +45,8 @@ public class HttpHelper
     private static HttpClient GetHttpClient()
     {
         var client = new HttpClient();
+        // set timeout
+        client.Timeout = TimeSpan.FromSeconds(10);
         // act like a Chrome browser
         client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
         return client;

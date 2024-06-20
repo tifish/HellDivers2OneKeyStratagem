@@ -5,14 +5,15 @@ namespace HellDivers2OneKeyStratagem;
 
 public static class AutoUpdate
 {
-    private const string UpdateUrl = "https://hdokgh.213453245.xyz/HellDivers2OneKeyStratagem.zip";
-
     public static async Task<bool> HasUpdate()
     {
-        var headers = await HttpHelper.GetHeaders(UpdateUrl);
+        var headers = await HttpHelper.GetHeaders(Settings.UpdateUrl);
+        if (headers == null)
+            return false;
 
         // Get the CloudFlare cache time
-        var updateTime = headers?.GetDateTime("x-ms-creation-time");
+        var updateTime = headers.LastModified
+                         ?? headers.GetDateTime("x-ms-creation-time");
         if (updateTime == null)
             return false;
 
@@ -23,7 +24,7 @@ public static class AutoUpdate
         return updateTime - dllTime > TimeSpan.FromMinutes(1);
     }
 
-    public static bool SelfUpdate()
+    public static bool Update()
     {
         Process.Start(new ProcessStartInfo
         {

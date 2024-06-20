@@ -51,6 +51,9 @@
             wasdRadioButton = new RadioButton();
             arrowRadioButton = new RadioButton();
             suggestionLabel = new Label();
+            flowLayoutPanel15 = new FlowLayoutPanel();
+            label15 = new Label();
+            updateUrlTextBox = new TextBox();
             flowLayoutPanel13 = new FlowLayoutPanel();
             speechSettingsFlowLayoutPanel = new FlowLayoutPanel();
             enableSpeechTriggerCheckBox = new CheckBox();
@@ -112,6 +115,7 @@
             buttonsFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             flowLayoutPanel3.SuspendLayout();
+            flowLayoutPanel15.SuspendLayout();
             speechSettingsFlowLayoutPanel.SuspendLayout();
             speechSubSettingsFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel12.SuspendLayout();
@@ -143,7 +147,7 @@
             rootFlowLayoutPanel.Location = new Point(0, 0);
             rootFlowLayoutPanel.Margin = new Padding(10);
             rootFlowLayoutPanel.Name = "rootFlowLayoutPanel";
-            rootFlowLayoutPanel.Size = new Size(1063, 702);
+            rootFlowLayoutPanel.Size = new Size(1063, 739);
             rootFlowLayoutPanel.TabIndex = 0;
             // 
             // flowLayoutPanel11
@@ -203,7 +207,7 @@
             localeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             localeComboBox.FormattingEnabled = true;
             localeComboBox.Items.AddRange(new object[] { "LButton", "RButton", "MButton", "XButton1", "XButton2", "WheelDown", "WheelUp", "WheelLeft", "WheelRight", "CapsLock", "Space", "Tab", "Enter", "Return", "Esc", "Backspace", "ScrollLock", "Delete", "Insert", "Home", "End", "PgUp", "PgDn", "Up", "Down", "Left", "Right", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadDot", "NumLock", "NumpadDiv", "NumpadMult", "NumpadAdd", "NumpadSub", "NumpadEnter", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "LWin", "RWin", "Ctrl", "Alt", "Shift", "LCtrl", "RCtrl", "LShift", "RShift", "LAlt", "RAlt", "Browser_Back", "Browser_Forward", "Browser_Refresh", "Browser_Stop", "Browser_Search", "Browser_Favorites", "Browser_Home", "Volume_Mute", "Volume_Down", "Volume_Up", "Media_Next", "Media_Prev", "Media_Stop", "Media_Play_Pause", "Launch_Mail", "Launch_Media", "Launch_App1", "Launch_App2", "AppsKey", "PrintScreen", "CtrlBreak", "Pause", "Break", "Help", "Sleep", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "-", "=", "[", "]", "\\", ";", "'", ",", ".", "/" });
-            localeComboBox.Location = new Point(328, 7);
+            localeComboBox.Location = new Point(328, 8);
             localeComboBox.Name = "localeComboBox";
             localeComboBox.Size = new Size(71, 27);
             localeComboBox.TabIndex = 11;
@@ -253,7 +257,7 @@
             voiceNamesComboBox.Anchor = AnchorStyles.Left;
             voiceNamesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             voiceNamesComboBox.FormattingEnabled = true;
-            voiceNamesComboBox.Location = new Point(232, 7);
+            voiceNamesComboBox.Location = new Point(232, 8);
             voiceNamesComboBox.Name = "voiceNamesComboBox";
             voiceNamesComboBox.Size = new Size(140, 27);
             voiceNamesComboBox.TabIndex = 7;
@@ -278,6 +282,7 @@
             settingsFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             settingsFlowLayoutPanel.BorderStyle = BorderStyle.FixedSingle;
             settingsFlowLayoutPanel.Controls.Add(buttonsFlowLayoutPanel);
+            settingsFlowLayoutPanel.Controls.Add(flowLayoutPanel15);
             settingsFlowLayoutPanel.Controls.Add(flowLayoutPanel13);
             settingsFlowLayoutPanel.Controls.Add(speechSettingsFlowLayoutPanel);
             settingsFlowLayoutPanel.Controls.Add(flowLayoutPanel14);
@@ -285,7 +290,7 @@
             settingsFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
             settingsFlowLayoutPanel.Location = new Point(3, 93);
             settingsFlowLayoutPanel.Name = "settingsFlowLayoutPanel";
-            settingsFlowLayoutPanel.Size = new Size(988, 384);
+            settingsFlowLayoutPanel.Size = new Size(988, 421);
             settingsFlowLayoutPanel.TabIndex = 16;
             settingsFlowLayoutPanel.Visible = false;
             settingsFlowLayoutPanel.WrapContents = false;
@@ -412,11 +417,43 @@
             suggestionLabel.Text = "强烈建议使用“上下左右”，可以在跑动中呼叫战略。";
             suggestionLabel.Click += suggestionLabel_Click;
             // 
+            // flowLayoutPanel15
+            // 
+            flowLayoutPanel15.Anchor = AnchorStyles.Left;
+            flowLayoutPanel15.AutoSize = true;
+            flowLayoutPanel15.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            flowLayoutPanel15.Controls.Add(label15);
+            flowLayoutPanel15.Controls.Add(updateUrlTextBox);
+            flowLayoutPanel15.Location = new Point(3, 51);
+            flowLayoutPanel15.Name = "flowLayoutPanel15";
+            flowLayoutPanel15.Size = new Size(980, 31);
+            flowLayoutPanel15.TabIndex = 22;
+            flowLayoutPanel15.WrapContents = false;
+            // 
+            // label15
+            // 
+            label15.Anchor = AnchorStyles.Left;
+            label15.AutoSize = true;
+            label15.Location = new Point(3, 6);
+            label15.Name = "label15";
+            label15.Size = new Size(165, 19);
+            label15.TabIndex = 6;
+            label15.Text = "更新地址，群友加速专用：";
+            // 
+            // updateUrlTextBox
+            // 
+            updateUrlTextBox.Anchor = AnchorStyles.Left;
+            updateUrlTextBox.Location = new Point(174, 3);
+            updateUrlTextBox.Name = "updateUrlTextBox";
+            updateUrlTextBox.Size = new Size(803, 25);
+            updateUrlTextBox.TabIndex = 16;
+            updateUrlTextBox.TextChanged += updateUrlTextBox_TextChanged;
+            // 
             // flowLayoutPanel13
             // 
             flowLayoutPanel13.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             flowLayoutPanel13.BorderStyle = BorderStyle.FixedSingle;
-            flowLayoutPanel13.Location = new Point(3, 51);
+            flowLayoutPanel13.Location = new Point(3, 88);
             flowLayoutPanel13.Name = "flowLayoutPanel13";
             flowLayoutPanel13.Size = new Size(980, 2);
             flowLayoutPanel13.TabIndex = 9;
@@ -430,7 +467,7 @@
             speechSettingsFlowLayoutPanel.Controls.Add(enableSpeechTriggerCheckBox);
             speechSettingsFlowLayoutPanel.Controls.Add(speechSubSettingsFlowLayoutPanel);
             speechSettingsFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            speechSettingsFlowLayoutPanel.Location = new Point(3, 59);
+            speechSettingsFlowLayoutPanel.Location = new Point(3, 96);
             speechSettingsFlowLayoutPanel.Name = "speechSettingsFlowLayoutPanel";
             speechSettingsFlowLayoutPanel.Size = new Size(886, 277);
             speechSettingsFlowLayoutPanel.TabIndex = 21;
@@ -637,7 +674,7 @@
             generateVoiceStyleComboBox.Anchor = AnchorStyles.Left;
             generateVoiceStyleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             generateVoiceStyleComboBox.FormattingEnabled = true;
-            generateVoiceStyleComboBox.Location = new Point(3, 7);
+            generateVoiceStyleComboBox.Location = new Point(3, 8);
             generateVoiceStyleComboBox.Name = "generateVoiceStyleComboBox";
             generateVoiceStyleComboBox.Size = new Size(254, 27);
             generateVoiceStyleComboBox.TabIndex = 5;
@@ -749,7 +786,7 @@
             // 
             flowLayoutPanel14.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             flowLayoutPanel14.BorderStyle = BorderStyle.FixedSingle;
-            flowLayoutPanel14.Location = new Point(3, 342);
+            flowLayoutPanel14.Location = new Point(3, 379);
             flowLayoutPanel14.Name = "flowLayoutPanel14";
             flowLayoutPanel14.Size = new Size(980, 2);
             flowLayoutPanel14.TabIndex = 10;
@@ -761,7 +798,7 @@
             flowLayoutPanel7.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             flowLayoutPanel7.Controls.Add(enableHotkeyTriggerCheckBox);
             flowLayoutPanel7.Controls.Add(enableSetFKeyBySpeechCheckBox);
-            flowLayoutPanel7.Location = new Point(3, 350);
+            flowLayoutPanel7.Location = new Point(3, 387);
             flowLayoutPanel7.Name = "flowLayoutPanel7";
             flowLayoutPanel7.Size = new Size(393, 29);
             flowLayoutPanel7.TabIndex = 9;
@@ -804,7 +841,7 @@
             fHotKeyFlowLayoutPanel.Controls.Add(label14);
             fHotKeyFlowLayoutPanel.Controls.Add(stratagemGroupsFlowLayoutPanel);
             fHotKeyFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            fHotKeyFlowLayoutPanel.Location = new Point(3, 483);
+            fHotKeyFlowLayoutPanel.Location = new Point(3, 520);
             fHotKeyFlowLayoutPanel.Name = "fHotKeyFlowLayoutPanel";
             fHotKeyFlowLayoutPanel.Size = new Size(1057, 216);
             fHotKeyFlowLayoutPanel.TabIndex = 1;
@@ -829,7 +866,7 @@
             stratagemSetsComboBox.Anchor = AnchorStyles.Left;
             stratagemSetsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             stratagemSetsComboBox.FormattingEnabled = true;
-            stratagemSetsComboBox.Location = new Point(3, 7);
+            stratagemSetsComboBox.Location = new Point(3, 8);
             stratagemSetsComboBox.Name = "stratagemSetsComboBox";
             stratagemSetsComboBox.Size = new Size(810, 27);
             stratagemSetsComboBox.TabIndex = 5;
@@ -1058,6 +1095,8 @@
             flowLayoutPanel2.PerformLayout();
             flowLayoutPanel3.ResumeLayout(false);
             flowLayoutPanel3.PerformLayout();
+            flowLayoutPanel15.ResumeLayout(false);
+            flowLayoutPanel15.PerformLayout();
             speechSettingsFlowLayoutPanel.ResumeLayout(false);
             speechSettingsFlowLayoutPanel.PerformLayout();
             speechSubSettingsFlowLayoutPanel.ResumeLayout(false);
@@ -1173,5 +1212,8 @@
         private FlowLayoutPanel flowLayoutPanel11;
         private FlowLayoutPanel flowLayoutPanel13;
         private FlowLayoutPanel flowLayoutPanel14;
+        private FlowLayoutPanel flowLayoutPanel15;
+        private Label label15;
+        private TextBox updateUrlTextBox;
     }
 }
