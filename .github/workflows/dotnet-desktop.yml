@@ -28,8 +28,11 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release HellDivers2OneKeyStratagem.sln
 
-    - name: Zip
-      run: Compress-Archive -Path ./bin/* -DestinationPath HellDivers2OneKeyStratagem.zip
+    - name: Compress
+      run: |
+        cd bin
+        7Zip\7za.exe a -r ..\HellDivers2OneKeyStratagem.7z *
+        cd ..
 
     - name: Delete release and tag
       run: gh release delete ${{ env.RELEASE_TAG }} --cleanup-tag -y

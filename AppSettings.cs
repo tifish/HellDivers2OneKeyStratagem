@@ -25,7 +25,7 @@ public class AppSettings
     public float VoiceConfidence { get; set; } = 0.6f;
     public string WakeupWord { get; set; } = "";
     public bool EnableHotkeyTrigger { get; set; } = true;
-    public string UpdateUrl { get; set; } = "https://github.com/tifish/HellDivers2OneKeyStratagem/releases/download/latest_release/HellDivers2OneKeyStratagem.zip";
+    public string UpdateUrl { get; set; } = "https://github.com/tifish/HellDivers2OneKeyStratagem/releases/download/latest_release/HellDivers2OneKeyStratagem.7z";
 }
 
 public static class SettingsContainer
