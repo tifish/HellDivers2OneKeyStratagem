@@ -28,7 +28,9 @@ Get-ChildItem -Path $PSScriptRoot `
 | Remove-Item -Recurse -Force
 
 # Extract HellDivers2OneKeyStratagem.7z in to $PSScriptRoot
-& 7Zip\7za.exe x $packPath -o$PSScriptRoot
+& {
+    7Zip\7za.exe x $packPath -o"$PSScriptRoot" -y
+} -ErrorAction SilentlyContinue
 
 # Start HellDivers2OneKeyStratagem.exe
 Start-Process -FilePath "$PSScriptRoot\HellDivers2OneKeyStratagem.exe"
