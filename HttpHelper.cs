@@ -7,6 +7,7 @@ public class HttpHelper
     {
         public DateTime? LastModified => GetDateTime("Last-Modified");
         public int FileSize => GetInt("Content-Length") ?? -1;
+
         public DateTime? GetDateTime(string header)
         {
             if (!responseHeaders.TryGetValues(header, out var values))
@@ -54,23 +55,30 @@ public class HttpHelper
 
     private static async Task<HttpResponseHeaders?> GetHttpRespondHeaders(string url)
     {
-        using var client = GetHttpClient();
-        using var request = new HttpRequestMessage(HttpMethod.Head, url);
-        using var response = await client.SendAsync(request);
-
-        if (!response.IsSuccessStatusCode)
-            return null;
-
-        if (response.StatusCode == HttpStatusCode.Redirect)
+        try
         {
-            var redirectUrl = response.Headers.Location?.ToString();
-            if (string.IsNullOrEmpty(redirectUrl))
+            using var client = GetHttpClient();
+            using var request = new HttpRequestMessage(HttpMethod.Head, url);
+            using var response = await client.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
                 return null;
 
-            return await GetHttpRespondHeaders(redirectUrl);
-        }
+            if (response.StatusCode == HttpStatusCode.Redirect)
+            {
+                var redirectUrl = response.Headers.Location?.ToString();
+                if (string.IsNullOrEmpty(redirectUrl))
+                    return null;
 
-        return response.Headers;
+                return await GetHttpRespondHeaders(redirectUrl);
+            }
+
+            return response.Headers;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 
     public static async Task<string> DownloadFile(string url, string downloadDirectory)
