@@ -119,20 +119,6 @@ public partial class MainForm : Form
             await StartSpeechTrigger();
     }
 
-    private bool _isActive;
-
-    protected override void OnActivated(EventArgs e)
-    {
-        base.OnActivated(e);
-        _isActive = true;
-    }
-
-    protected override void OnDeactivate(EventArgs e)
-    {
-        base.OnDeactivate(e);
-        _isActive = false;
-    }
-
     private VoiceCommand? _voiceCommand;
 
     private async Task StartSpeechTrigger()
@@ -173,14 +159,15 @@ public partial class MainForm : Form
                 if (!StratagemManager.TryGet(command.Text, out var stratagem))
                     return;
 
-                if (_isActive)
+                var title = WindowHelper.GetActiveWindowTitle();
+                if (title == Text)
                 {
                     if (!Settings.EnableSetFKeyBySpeech)
                         return;
 
                     SetFKeyStratagem(SelectedFKeyIndex, stratagem);
                 }
-                else if (WindowHelper.GetActiveWindowTitle() == "HELLDIVERS™ 2")
+                else if (title == "HELLDIVERS™ 2")
                 {
                     if (Settings.PlayVoice)
                         PlayStratagemVoice(stratagem.Name);

@@ -75,7 +75,7 @@ public class HttpHelper
 
             return response.Content.Headers;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }
