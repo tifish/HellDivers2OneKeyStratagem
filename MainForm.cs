@@ -44,7 +44,7 @@ public partial class MainForm : Form
             await LoadSettings();
 
             InitLanguages();
-            InitUIKeys();
+            InitKeysUI();
 
             await LoadByLanguage();
 
@@ -165,7 +165,7 @@ public partial class MainForm : Form
     private async Task LoadByLanguage()
     {
         StratagemManager.Load();
-        InitStratagemGroups();
+        InitStratagemGroupsUI();
         InitSettingsToUI();
         SetHotkeyGroup();
 
@@ -224,19 +224,16 @@ public partial class MainForm : Form
                 if (!StratagemManager.TryGet(command.Text, out var stratagem))
                     return;
 
-                switch (ActiveWindowMonitor.CurrentProcessFileName)
+                if (ActiveWindowMonitor.CurrentWindowTitle == Text && Settings is { EnableHotkeyTrigger: true, EnableSetKeyBySpeech: true })
                 {
-                    case "HellDivers2OneKeyStratagem.exe" when Settings.EnableSetKeyBySpeech:
-                        SetKeyStratagem(SelectedKeyIndex, stratagem);
-                        break;
-                    case "helldivers2.exe":
-                        {
-                            if (Settings.PlayVoice)
-                                PlayStratagemVoice(stratagem.Name);
+                    SetKeyStratagem(SelectedKeyIndex, stratagem);
+                }
+                else if (ActiveWindowMonitor.CurrentWindowTitle == HellDivers2Title)
+                {
+                    if (Settings.PlayVoice)
+                        PlayStratagemVoice(stratagem.Name);
 
-                            stratagem.PressKeys();
-                            break;
-                        }
+                    stratagem.PressKeys();
                 }
             };
 
@@ -426,18 +423,23 @@ public partial class MainForm : Form
 
     private const string NoStratagem = "无";
 
-    private void InitUIKeys()
+    private void InitKeysUI()
     {
         keysFlowLayoutPanel1.Controls.Clear();
+        keysFlowLayoutPanel2.Controls.Clear();
+        var keysFlowLayoutPanel = keysFlowLayoutPanel1;
 
         for (var i = 0; i < KeyCount; i++)
         {
+            if (i == 11)
+                keysFlowLayoutPanel = keysFlowLayoutPanel2;
+
             var root = new FlowLayoutPanel { FlowDirection = FlowDirection.TopDown, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
             var keyLabel = new Label { Text = Enum.GetName(_keys[i]), AutoSize = true, Anchor = AnchorStyles.Top };
             var stratagemLabel = new Label { Text = NoStratagem, AutoSize = true, Anchor = AnchorStyles.Top };
             root.Controls.Add(keyLabel);
             root.Controls.Add(stratagemLabel);
-            keysFlowLayoutPanel1.Controls.Add(root);
+            keysFlowLayoutPanel.Controls.Add(root);
 
             var i1 = i;
             keyLabel.MouseDown += OnKeyMouseDown;
@@ -494,7 +496,7 @@ public partial class MainForm : Form
             _keySettingsChanged = true;
     }
 
-    private void InitStratagemGroups()
+    private void InitStratagemGroupsUI()
     {
         stratagemGroupsFlowLayoutPanel.Controls.Clear();
 
@@ -526,23 +528,32 @@ public partial class MainForm : Form
                 {
                     switch (args.Button)
                     {
-                        case MouseButtons.Left when stratagemCheckBox.Checked:
-                            {
-                                SetKeyStratagem(SelectedKeyIndex, stratagem);
-
-                                if (SelectedKeyIndex > 0)
-                                    if (_keyLabels[SelectedKeyIndex - 1].Text == NoStratagem)
-                                        SelectedKeyIndex--;
-                                break;
-                            }
                         case MouseButtons.Left:
                             {
-                                var keyIndex = Array.IndexOf(_keyStratagems, stratagem);
-                                if (keyIndex > -1)
-                                    SetKeyStratagem(keyIndex, null);
+                                if (!Settings.EnableHotkeyTrigger)
+                                {
+                                    stratagemCheckBox.Checked = !stratagemCheckBox.Checked;
+                                    return;
+                                }
+
+                                if (stratagemCheckBox.Checked)
+                                {
+                                    SetKeyStratagem(SelectedKeyIndex, stratagem);
+
+                                    if (SelectedKeyIndex > 0)
+                                        if (_keyLabels[SelectedKeyIndex - 1].Text == NoStratagem)
+                                            SelectedKeyIndex--;
+                                }
+                                else
+                                {
+                                    var keyIndex = Array.IndexOf(_keyStratagems, stratagem);
+                                    if (keyIndex > -1)
+                                        SetKeyStratagem(keyIndex, null);
+                                }
 
                                 break;
                             }
+
                         case MouseButtons.Right:
                             var result = new EditAliasesDialog(stratagemCheckBox.Text).ShowDialog();
                             if (result == DialogResult.OK)
@@ -785,6 +796,7 @@ public partial class MainForm : Form
 
         speechSubSettingsFlowLayoutPanel.Visible = Settings.EnableSpeechTrigger;
         enableSetKeyBySpeechCheckBox.Enabled = Settings.EnableSpeechTrigger;
+        stratagemsFlowLayoutPanel.Visible = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger;
     }
 
     private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -923,7 +935,8 @@ public partial class MainForm : Form
         }
 
         enableSetKeyBySpeechCheckBox.Visible = Settings.EnableHotkeyTrigger;
-        fHotKeyFlowLayoutPanel.Visible = Settings.EnableHotkeyTrigger;
+        hotKeyFlowLayoutPanel.Visible = Settings.EnableHotkeyTrigger;
+        stratagemsFlowLayoutPanel.Visible = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger;
     }
 
     private void micComboBox_SelectionChangeCommitted(object sender, EventArgs e)

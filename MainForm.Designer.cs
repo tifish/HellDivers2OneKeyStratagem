@@ -87,21 +87,20 @@
             flowLayoutPanel7 = new FlowLayoutPanel();
             enableHotkeyTriggerCheckBox = new CheckBox();
             enableSetKeyBySpeechCheckBox = new CheckBox();
-            fHotKeyFlowLayoutPanel = new FlowLayoutPanel();
+            hotKeyFlowLayoutPanel = new FlowLayoutPanel();
             flowLayoutPanel4 = new FlowLayoutPanel();
             stratagemSetsComboBox = new ComboBox();
             saveStratagemSetButton = new Button();
             deleteStratagemSetButton = new Button();
-            flowLayoutPanel6 = new FlowLayoutPanel();
             keysFlowLayoutPanel1 = new FlowLayoutPanel();
             fKeyFlowLayoutPanel = new FlowLayoutPanel();
             label2 = new Label();
             label1 = new Label();
             keysFlowLayoutPanel2 = new FlowLayoutPanel();
-            flowLayoutPanel17 = new FlowLayoutPanel();
             flowLayoutPanel18 = new FlowLayoutPanel();
             label16 = new Label();
             label17 = new Label();
+            stratagemsFlowLayoutPanel = new FlowLayoutPanel();
             label14 = new Label();
             stratagemGroupsFlowLayoutPanel = new FlowLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
@@ -130,14 +129,13 @@
             flowLayoutPanel8.SuspendLayout();
             generateVoiceFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel7.SuspendLayout();
-            fHotKeyFlowLayoutPanel.SuspendLayout();
+            hotKeyFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel4.SuspendLayout();
-            flowLayoutPanel6.SuspendLayout();
             keysFlowLayoutPanel1.SuspendLayout();
             fKeyFlowLayoutPanel.SuspendLayout();
             keysFlowLayoutPanel2.SuspendLayout();
-            flowLayoutPanel17.SuspendLayout();
             flowLayoutPanel18.SuspendLayout();
+            stratagemsFlowLayoutPanel.SuspendLayout();
             stratagemGroupsFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel5.SuspendLayout();
@@ -150,12 +148,13 @@
             rootFlowLayoutPanel.Controls.Add(flowLayoutPanel11);
             rootFlowLayoutPanel.Controls.Add(voiceTriggerFlowLayoutPanel);
             rootFlowLayoutPanel.Controls.Add(settingsFlowLayoutPanel);
-            rootFlowLayoutPanel.Controls.Add(fHotKeyFlowLayoutPanel);
+            rootFlowLayoutPanel.Controls.Add(hotKeyFlowLayoutPanel);
+            rootFlowLayoutPanel.Controls.Add(stratagemsFlowLayoutPanel);
             rootFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
             rootFlowLayoutPanel.Location = new Point(0, 0);
             rootFlowLayoutPanel.Margin = new Padding(10);
             rootFlowLayoutPanel.Name = "rootFlowLayoutPanel";
-            rootFlowLayoutPanel.Size = new Size(1063, 802);
+            rootFlowLayoutPanel.Size = new Size(1063, 791);
             rootFlowLayoutPanel.TabIndex = 0;
             // 
             // flowLayoutPanel11
@@ -841,21 +840,19 @@
             // 
             // fHotKeyFlowLayoutPanel
             // 
-            fHotKeyFlowLayoutPanel.Anchor = AnchorStyles.Left;
-            fHotKeyFlowLayoutPanel.AutoSize = true;
-            fHotKeyFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            fHotKeyFlowLayoutPanel.Controls.Add(flowLayoutPanel4);
-            fHotKeyFlowLayoutPanel.Controls.Add(flowLayoutPanel6);
-            fHotKeyFlowLayoutPanel.Controls.Add(keysFlowLayoutPanel2);
-            fHotKeyFlowLayoutPanel.Controls.Add(label14);
-            fHotKeyFlowLayoutPanel.Controls.Add(stratagemGroupsFlowLayoutPanel);
-            fHotKeyFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            fHotKeyFlowLayoutPanel.Location = new Point(3, 520);
-            fHotKeyFlowLayoutPanel.Name = "fHotKeyFlowLayoutPanel";
-            fHotKeyFlowLayoutPanel.Size = new Size(1057, 279);
-            fHotKeyFlowLayoutPanel.TabIndex = 1;
-            fHotKeyFlowLayoutPanel.Visible = false;
-            fHotKeyFlowLayoutPanel.WrapContents = false;
+            hotKeyFlowLayoutPanel.Anchor = AnchorStyles.Left;
+            hotKeyFlowLayoutPanel.AutoSize = true;
+            hotKeyFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            hotKeyFlowLayoutPanel.Controls.Add(flowLayoutPanel4);
+            hotKeyFlowLayoutPanel.Controls.Add(keysFlowLayoutPanel1);
+            hotKeyFlowLayoutPanel.Controls.Add(keysFlowLayoutPanel2);
+            hotKeyFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
+            hotKeyFlowLayoutPanel.Location = new Point(3, 520);
+            hotKeyFlowLayoutPanel.Name = "hotKeyFlowLayoutPanel";
+            hotKeyFlowLayoutPanel.Size = new Size(1057, 152);
+            hotKeyFlowLayoutPanel.TabIndex = 1;
+            hotKeyFlowLayoutPanel.Visible = false;
+            hotKeyFlowLayoutPanel.WrapContents = false;
             // 
             // flowLayoutPanel4
             // 
@@ -903,23 +900,13 @@
             deleteStratagemSetButton.UseVisualStyleBackColor = true;
             deleteStratagemSetButton.Click += deleteStratagemSetButton_Click;
             // 
-            // flowLayoutPanel6
-            // 
-            flowLayoutPanel6.AutoSize = true;
-            flowLayoutPanel6.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            flowLayoutPanel6.Controls.Add(keysFlowLayoutPanel1);
-            flowLayoutPanel6.Location = new Point(3, 48);
-            flowLayoutPanel6.Name = "flowLayoutPanel6";
-            flowLayoutPanel6.Size = new Size(79, 57);
-            flowLayoutPanel6.TabIndex = 3;
-            // 
             // keysFlowLayoutPanel1
             // 
             keysFlowLayoutPanel1.Anchor = AnchorStyles.Left;
             keysFlowLayoutPanel1.AutoSize = true;
             keysFlowLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             keysFlowLayoutPanel1.Controls.Add(fKeyFlowLayoutPanel);
-            keysFlowLayoutPanel1.Location = new Point(3, 3);
+            keysFlowLayoutPanel1.Location = new Point(3, 48);
             keysFlowLayoutPanel1.Margin = new Padding(3, 3, 3, 10);
             keysFlowLayoutPanel1.Name = "keysFlowLayoutPanel1";
             keysFlowLayoutPanel1.Size = new Size(73, 44);
@@ -961,23 +948,11 @@
             // 
             keysFlowLayoutPanel2.AutoSize = true;
             keysFlowLayoutPanel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            keysFlowLayoutPanel2.Controls.Add(flowLayoutPanel17);
-            keysFlowLayoutPanel2.Location = new Point(3, 111);
+            keysFlowLayoutPanel2.Controls.Add(flowLayoutPanel18);
+            keysFlowLayoutPanel2.Location = new Point(3, 105);
             keysFlowLayoutPanel2.Name = "keysFlowLayoutPanel2";
-            keysFlowLayoutPanel2.Size = new Size(79, 57);
+            keysFlowLayoutPanel2.Size = new Size(73, 44);
             keysFlowLayoutPanel2.TabIndex = 6;
-            // 
-            // flowLayoutPanel17
-            // 
-            flowLayoutPanel17.Anchor = AnchorStyles.Left;
-            flowLayoutPanel17.AutoSize = true;
-            flowLayoutPanel17.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            flowLayoutPanel17.Controls.Add(flowLayoutPanel18);
-            flowLayoutPanel17.Location = new Point(3, 3);
-            flowLayoutPanel17.Margin = new Padding(3, 3, 3, 10);
-            flowLayoutPanel17.Name = "flowLayoutPanel17";
-            flowLayoutPanel17.Size = new Size(73, 44);
-            flowLayoutPanel17.TabIndex = 1;
             // 
             // flowLayoutPanel18
             // 
@@ -1011,16 +986,30 @@
             label17.TabIndex = 1;
             label17.Text = "飞鹰空袭";
             // 
+            // stratagemsFlowLayoutPanel
+            // 
+            stratagemsFlowLayoutPanel.Anchor = AnchorStyles.Left;
+            stratagemsFlowLayoutPanel.AutoSize = true;
+            stratagemsFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            stratagemsFlowLayoutPanel.BorderStyle = BorderStyle.FixedSingle;
+            stratagemsFlowLayoutPanel.Controls.Add(label14);
+            stratagemsFlowLayoutPanel.Controls.Add(stratagemGroupsFlowLayoutPanel);
+            stratagemsFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
+            stratagemsFlowLayoutPanel.Location = new Point(3, 678);
+            stratagemsFlowLayoutPanel.Name = "stratagemsFlowLayoutPanel";
+            stratagemsFlowLayoutPanel.Size = new Size(264, 110);
+            stratagemsFlowLayoutPanel.TabIndex = 7;
+            // 
             // label14
             // 
             label14.Anchor = AnchorStyles.Left;
             label14.AutoSize = true;
             label14.Font = new Font("Microsoft YaHei", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 134);
-            label14.Location = new Point(3, 171);
+            label14.Location = new Point(3, 0);
             label14.Name = "label14";
-            label14.Size = new Size(243, 19);
+            label14.Size = new Size(256, 19);
             label14.TabIndex = 3;
-            label14.Text = "左键选择战略，右键自定义语音呼叫名称";
+            label14.Text = "左键选择战略，右键自定义麦克风呼叫名字";
             // 
             // stratagemGroupsFlowLayoutPanel
             // 
@@ -1028,7 +1017,7 @@
             stratagemGroupsFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             stratagemGroupsFlowLayoutPanel.Controls.Add(flowLayoutPanel1);
             stratagemGroupsFlowLayoutPanel.Controls.Add(flowLayoutPanel5);
-            stratagemGroupsFlowLayoutPanel.Location = new Point(3, 193);
+            stratagemGroupsFlowLayoutPanel.Location = new Point(3, 22);
             stratagemGroupsFlowLayoutPanel.Name = "stratagemGroupsFlowLayoutPanel";
             stratagemGroupsFlowLayoutPanel.Size = new Size(252, 83);
             stratagemGroupsFlowLayoutPanel.TabIndex = 2;
@@ -1177,22 +1166,20 @@
             generateVoiceFlowLayoutPanel.PerformLayout();
             flowLayoutPanel7.ResumeLayout(false);
             flowLayoutPanel7.PerformLayout();
-            fHotKeyFlowLayoutPanel.ResumeLayout(false);
-            fHotKeyFlowLayoutPanel.PerformLayout();
+            hotKeyFlowLayoutPanel.ResumeLayout(false);
+            hotKeyFlowLayoutPanel.PerformLayout();
             flowLayoutPanel4.ResumeLayout(false);
             flowLayoutPanel4.PerformLayout();
-            flowLayoutPanel6.ResumeLayout(false);
-            flowLayoutPanel6.PerformLayout();
             keysFlowLayoutPanel1.ResumeLayout(false);
             keysFlowLayoutPanel1.PerformLayout();
             fKeyFlowLayoutPanel.ResumeLayout(false);
             fKeyFlowLayoutPanel.PerformLayout();
             keysFlowLayoutPanel2.ResumeLayout(false);
             keysFlowLayoutPanel2.PerformLayout();
-            flowLayoutPanel17.ResumeLayout(false);
-            flowLayoutPanel17.PerformLayout();
             flowLayoutPanel18.ResumeLayout(false);
             flowLayoutPanel18.PerformLayout();
+            stratagemsFlowLayoutPanel.ResumeLayout(false);
+            stratagemsFlowLayoutPanel.PerformLayout();
             stratagemGroupsFlowLayoutPanel.ResumeLayout(false);
             stratagemGroupsFlowLayoutPanel.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
@@ -1250,7 +1237,6 @@
         private Label label4;
         private CheckBox checkBox3;
         private CheckBox checkBox4;
-        private FlowLayoutPanel flowLayoutPanel6;
         private CheckBox enableSetKeyBySpeechCheckBox;
         private Label label10;
         private ComboBox localeComboBox;
@@ -1273,7 +1259,7 @@
         private Button openSettingsButton;
         private Button closeSettingsButton;
         private FlowLayoutPanel settingsFlowLayoutPanel;
-        private FlowLayoutPanel fHotKeyFlowLayoutPanel;
+        private FlowLayoutPanel hotKeyFlowLayoutPanel;
         private FlowLayoutPanel flowLayoutPanel10;
         private FlowLayoutPanel speechSubSettingsFlowLayoutPanel;
         private FlowLayoutPanel flowLayoutPanel9;
@@ -1285,9 +1271,9 @@
         private Label label15;
         private TextBox updateUrlTextBox;
         private FlowLayoutPanel keysFlowLayoutPanel2;
-        private FlowLayoutPanel flowLayoutPanel17;
         private FlowLayoutPanel flowLayoutPanel18;
         private Label label16;
         private Label label17;
+        private FlowLayoutPanel stratagemsFlowLayoutPanel;
     }
 }
