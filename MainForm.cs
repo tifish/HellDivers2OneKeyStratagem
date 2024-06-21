@@ -4,6 +4,7 @@ using EdgeTTS;
 using HellDivers2OneKeyStratagem.Tools;
 using NAudio.Wave;
 using NHotkey;
+using Array = System.Array;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -474,6 +475,7 @@ public partial class MainForm : Form
 
     private void SetKeyStratagem(int index, Stratagem? stratagem, bool playVoice = true)
     {
+        // Uncheck the previous stratagem
         var currentStratagem = _keyStratagems[index];
         if (currentStratagem != null)
         {
@@ -482,19 +484,33 @@ public partial class MainForm : Form
             _isSettingStratagemCheckBoxChecked = false;
         }
 
-        _keyStratagems[index] = stratagem;
         if (stratagem != null)
         {
+            // Remove the previous hotkey
+            if (stratagem.CheckBox.Checked)
+            {
+                var prevIndex = Array.IndexOf(_keyStratagems, stratagem);
+                if (prevIndex > -1)
+                {
+                    _keyStratagems[prevIndex] = null;
+                    _keyLabels[prevIndex].Text = NoStratagem;
+                }
+            }
+
+            // Set the new hotkey
+            _keyStratagems[index] = stratagem;
+            _keyLabels[index].Text = stratagem.Name;
+
             _isSettingStratagemCheckBoxChecked = true;
             stratagem.CheckBox.Checked = true;
             _isSettingStratagemCheckBoxChecked = false;
-            _keyLabels[index].Text = stratagem.Name;
 
             if (Settings.PlayVoice && playVoice)
                 PlayStratagemVoice(stratagem.Name);
         }
         else
         {
+            _keyStratagems[index] = null;
             _keyLabels[index].Text = NoStratagem;
         }
 
