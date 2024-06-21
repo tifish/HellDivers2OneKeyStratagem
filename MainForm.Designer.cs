@@ -86,17 +86,22 @@
             flowLayoutPanel14 = new FlowLayoutPanel();
             flowLayoutPanel7 = new FlowLayoutPanel();
             enableHotkeyTriggerCheckBox = new CheckBox();
-            enableSetFKeyBySpeechCheckBox = new CheckBox();
+            enableSetKeyBySpeechCheckBox = new CheckBox();
             fHotKeyFlowLayoutPanel = new FlowLayoutPanel();
             flowLayoutPanel4 = new FlowLayoutPanel();
             stratagemSetsComboBox = new ComboBox();
             saveStratagemSetButton = new Button();
             deleteStratagemSetButton = new Button();
             flowLayoutPanel6 = new FlowLayoutPanel();
-            fKeysFlowLayoutPanel = new FlowLayoutPanel();
+            keysFlowLayoutPanel1 = new FlowLayoutPanel();
             fKeyFlowLayoutPanel = new FlowLayoutPanel();
             label2 = new Label();
             label1 = new Label();
+            keysFlowLayoutPanel2 = new FlowLayoutPanel();
+            flowLayoutPanel17 = new FlowLayoutPanel();
+            flowLayoutPanel18 = new FlowLayoutPanel();
+            label16 = new Label();
+            label17 = new Label();
             label14 = new Label();
             stratagemGroupsFlowLayoutPanel = new FlowLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
@@ -128,8 +133,11 @@
             fHotKeyFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel4.SuspendLayout();
             flowLayoutPanel6.SuspendLayout();
-            fKeysFlowLayoutPanel.SuspendLayout();
+            keysFlowLayoutPanel1.SuspendLayout();
             fKeyFlowLayoutPanel.SuspendLayout();
+            keysFlowLayoutPanel2.SuspendLayout();
+            flowLayoutPanel17.SuspendLayout();
+            flowLayoutPanel18.SuspendLayout();
             stratagemGroupsFlowLayoutPanel.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel5.SuspendLayout();
@@ -147,7 +155,7 @@
             rootFlowLayoutPanel.Location = new Point(0, 0);
             rootFlowLayoutPanel.Margin = new Padding(10);
             rootFlowLayoutPanel.Name = "rootFlowLayoutPanel";
-            rootFlowLayoutPanel.Size = new Size(1063, 739);
+            rootFlowLayoutPanel.Size = new Size(1063, 802);
             rootFlowLayoutPanel.TabIndex = 0;
             // 
             // flowLayoutPanel11
@@ -207,7 +215,7 @@
             localeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             localeComboBox.FormattingEnabled = true;
             localeComboBox.Items.AddRange(new object[] { "LButton", "RButton", "MButton", "XButton1", "XButton2", "WheelDown", "WheelUp", "WheelLeft", "WheelRight", "CapsLock", "Space", "Tab", "Enter", "Return", "Esc", "Backspace", "ScrollLock", "Delete", "Insert", "Home", "End", "PgUp", "PgDn", "Up", "Down", "Left", "Right", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadDot", "NumLock", "NumpadDiv", "NumpadMult", "NumpadAdd", "NumpadSub", "NumpadEnter", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "LWin", "RWin", "Ctrl", "Alt", "Shift", "LCtrl", "RCtrl", "LShift", "RShift", "LAlt", "RAlt", "Browser_Back", "Browser_Forward", "Browser_Refresh", "Browser_Stop", "Browser_Search", "Browser_Favorites", "Browser_Home", "Volume_Mute", "Volume_Down", "Volume_Up", "Media_Next", "Media_Prev", "Media_Stop", "Media_Play_Pause", "Launch_Mail", "Launch_Media", "Launch_App1", "Launch_App2", "AppsKey", "PrintScreen", "CtrlBreak", "Pause", "Break", "Help", "Sleep", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "-", "=", "[", "]", "\\", ";", "'", ",", ".", "/" });
-            localeComboBox.Location = new Point(328, 8);
+            localeComboBox.Location = new Point(328, 7);
             localeComboBox.Name = "localeComboBox";
             localeComboBox.Size = new Size(71, 27);
             localeComboBox.TabIndex = 11;
@@ -257,7 +265,7 @@
             voiceNamesComboBox.Anchor = AnchorStyles.Left;
             voiceNamesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             voiceNamesComboBox.FormattingEnabled = true;
-            voiceNamesComboBox.Location = new Point(232, 8);
+            voiceNamesComboBox.Location = new Point(232, 7);
             voiceNamesComboBox.Name = "voiceNamesComboBox";
             voiceNamesComboBox.Size = new Size(140, 27);
             voiceNamesComboBox.TabIndex = 7;
@@ -674,7 +682,7 @@
             generateVoiceStyleComboBox.Anchor = AnchorStyles.Left;
             generateVoiceStyleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             generateVoiceStyleComboBox.FormattingEnabled = true;
-            generateVoiceStyleComboBox.Location = new Point(3, 8);
+            generateVoiceStyleComboBox.Location = new Point(3, 7);
             generateVoiceStyleComboBox.Name = "generateVoiceStyleComboBox";
             generateVoiceStyleComboBox.Size = new Size(254, 27);
             generateVoiceStyleComboBox.TabIndex = 5;
@@ -797,10 +805,10 @@
             flowLayoutPanel7.AutoSize = true;
             flowLayoutPanel7.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             flowLayoutPanel7.Controls.Add(enableHotkeyTriggerCheckBox);
-            flowLayoutPanel7.Controls.Add(enableSetFKeyBySpeechCheckBox);
+            flowLayoutPanel7.Controls.Add(enableSetKeyBySpeechCheckBox);
             flowLayoutPanel7.Location = new Point(3, 387);
             flowLayoutPanel7.Name = "flowLayoutPanel7";
-            flowLayoutPanel7.Size = new Size(393, 29);
+            flowLayoutPanel7.Size = new Size(328, 29);
             flowLayoutPanel7.TabIndex = 9;
             // 
             // enableHotkeyTriggerCheckBox
@@ -811,25 +819,25 @@
             enableHotkeyTriggerCheckBox.CheckState = CheckState.Checked;
             enableHotkeyTriggerCheckBox.Location = new Point(3, 3);
             enableHotkeyTriggerCheckBox.Name = "enableHotkeyTriggerCheckBox";
-            enableHotkeyTriggerCheckBox.Size = new Size(171, 23);
+            enableHotkeyTriggerCheckBox.Size = new Size(119, 23);
             enableHotkeyTriggerCheckBox.TabIndex = 8;
-            enableHotkeyTriggerCheckBox.Text = "开启 F1-F12 快捷键呼叫";
+            enableHotkeyTriggerCheckBox.Text = "开启快捷键呼叫";
             enableHotkeyTriggerCheckBox.UseVisualStyleBackColor = true;
             enableHotkeyTriggerCheckBox.Click += enableHotkeyTriggerCheckBox_Click;
             // 
-            // enableSetFKeyBySpeechCheckBox
+            // enableSetKeyBySpeechCheckBox
             // 
-            enableSetFKeyBySpeechCheckBox.Anchor = AnchorStyles.Left;
-            enableSetFKeyBySpeechCheckBox.AutoSize = true;
-            enableSetFKeyBySpeechCheckBox.Checked = true;
-            enableSetFKeyBySpeechCheckBox.CheckState = CheckState.Checked;
-            enableSetFKeyBySpeechCheckBox.Location = new Point(180, 3);
-            enableSetFKeyBySpeechCheckBox.Name = "enableSetFKeyBySpeechCheckBox";
-            enableSetFKeyBySpeechCheckBox.Size = new Size(210, 23);
-            enableSetFKeyBySpeechCheckBox.TabIndex = 8;
-            enableSetFKeyBySpeechCheckBox.Text = "支持通过语音设置 F1-F12 战略";
-            enableSetFKeyBySpeechCheckBox.UseVisualStyleBackColor = true;
-            enableSetFKeyBySpeechCheckBox.Click += enableSetFKeyBySpeechCheckBox_Click;
+            enableSetKeyBySpeechCheckBox.Anchor = AnchorStyles.Left;
+            enableSetKeyBySpeechCheckBox.AutoSize = true;
+            enableSetKeyBySpeechCheckBox.Checked = true;
+            enableSetKeyBySpeechCheckBox.CheckState = CheckState.Checked;
+            enableSetKeyBySpeechCheckBox.Location = new Point(128, 3);
+            enableSetKeyBySpeechCheckBox.Name = "enableSetKeyBySpeechCheckBox";
+            enableSetKeyBySpeechCheckBox.Size = new Size(197, 23);
+            enableSetKeyBySpeechCheckBox.TabIndex = 8;
+            enableSetKeyBySpeechCheckBox.Text = "支持通过语音设置快捷键战略";
+            enableSetKeyBySpeechCheckBox.UseVisualStyleBackColor = true;
+            enableSetKeyBySpeechCheckBox.Click += EnableSetKeyBySpeechCheckBoxClick;
             // 
             // fHotKeyFlowLayoutPanel
             // 
@@ -838,12 +846,13 @@
             fHotKeyFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             fHotKeyFlowLayoutPanel.Controls.Add(flowLayoutPanel4);
             fHotKeyFlowLayoutPanel.Controls.Add(flowLayoutPanel6);
+            fHotKeyFlowLayoutPanel.Controls.Add(keysFlowLayoutPanel2);
             fHotKeyFlowLayoutPanel.Controls.Add(label14);
             fHotKeyFlowLayoutPanel.Controls.Add(stratagemGroupsFlowLayoutPanel);
             fHotKeyFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
             fHotKeyFlowLayoutPanel.Location = new Point(3, 520);
             fHotKeyFlowLayoutPanel.Name = "fHotKeyFlowLayoutPanel";
-            fHotKeyFlowLayoutPanel.Size = new Size(1057, 216);
+            fHotKeyFlowLayoutPanel.Size = new Size(1057, 279);
             fHotKeyFlowLayoutPanel.TabIndex = 1;
             fHotKeyFlowLayoutPanel.Visible = false;
             fHotKeyFlowLayoutPanel.WrapContents = false;
@@ -866,7 +875,7 @@
             stratagemSetsComboBox.Anchor = AnchorStyles.Left;
             stratagemSetsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             stratagemSetsComboBox.FormattingEnabled = true;
-            stratagemSetsComboBox.Location = new Point(3, 8);
+            stratagemSetsComboBox.Location = new Point(3, 7);
             stratagemSetsComboBox.Name = "stratagemSetsComboBox";
             stratagemSetsComboBox.Size = new Size(810, 27);
             stratagemSetsComboBox.TabIndex = 5;
@@ -898,22 +907,23 @@
             // 
             flowLayoutPanel6.AutoSize = true;
             flowLayoutPanel6.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            flowLayoutPanel6.Controls.Add(fKeysFlowLayoutPanel);
+            flowLayoutPanel6.Controls.Add(keysFlowLayoutPanel1);
             flowLayoutPanel6.Location = new Point(3, 48);
             flowLayoutPanel6.Name = "flowLayoutPanel6";
             flowLayoutPanel6.Size = new Size(79, 57);
             flowLayoutPanel6.TabIndex = 3;
             // 
-            // fKeysFlowLayoutPanel
+            // keysFlowLayoutPanel1
             // 
-            fKeysFlowLayoutPanel.AutoSize = true;
-            fKeysFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            fKeysFlowLayoutPanel.Controls.Add(fKeyFlowLayoutPanel);
-            fKeysFlowLayoutPanel.Location = new Point(3, 3);
-            fKeysFlowLayoutPanel.Margin = new Padding(3, 3, 3, 10);
-            fKeysFlowLayoutPanel.Name = "fKeysFlowLayoutPanel";
-            fKeysFlowLayoutPanel.Size = new Size(73, 44);
-            fKeysFlowLayoutPanel.TabIndex = 1;
+            keysFlowLayoutPanel1.Anchor = AnchorStyles.Left;
+            keysFlowLayoutPanel1.AutoSize = true;
+            keysFlowLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            keysFlowLayoutPanel1.Controls.Add(fKeyFlowLayoutPanel);
+            keysFlowLayoutPanel1.Location = new Point(3, 3);
+            keysFlowLayoutPanel1.Margin = new Padding(3, 3, 3, 10);
+            keysFlowLayoutPanel1.Name = "keysFlowLayoutPanel1";
+            keysFlowLayoutPanel1.Size = new Size(73, 44);
+            keysFlowLayoutPanel1.TabIndex = 1;
             // 
             // fKeyFlowLayoutPanel
             // 
@@ -947,12 +957,66 @@
             label1.TabIndex = 1;
             label1.Text = "飞鹰空袭";
             // 
+            // keysFlowLayoutPanel2
+            // 
+            keysFlowLayoutPanel2.AutoSize = true;
+            keysFlowLayoutPanel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            keysFlowLayoutPanel2.Controls.Add(flowLayoutPanel17);
+            keysFlowLayoutPanel2.Location = new Point(3, 111);
+            keysFlowLayoutPanel2.Name = "keysFlowLayoutPanel2";
+            keysFlowLayoutPanel2.Size = new Size(79, 57);
+            keysFlowLayoutPanel2.TabIndex = 6;
+            // 
+            // flowLayoutPanel17
+            // 
+            flowLayoutPanel17.Anchor = AnchorStyles.Left;
+            flowLayoutPanel17.AutoSize = true;
+            flowLayoutPanel17.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            flowLayoutPanel17.Controls.Add(flowLayoutPanel18);
+            flowLayoutPanel17.Location = new Point(3, 3);
+            flowLayoutPanel17.Margin = new Padding(3, 3, 3, 10);
+            flowLayoutPanel17.Name = "flowLayoutPanel17";
+            flowLayoutPanel17.Size = new Size(73, 44);
+            flowLayoutPanel17.TabIndex = 1;
+            // 
+            // flowLayoutPanel18
+            // 
+            flowLayoutPanel18.AutoSize = true;
+            flowLayoutPanel18.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            flowLayoutPanel18.Controls.Add(label16);
+            flowLayoutPanel18.Controls.Add(label17);
+            flowLayoutPanel18.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel18.Location = new Point(3, 3);
+            flowLayoutPanel18.Name = "flowLayoutPanel18";
+            flowLayoutPanel18.Size = new Size(67, 38);
+            flowLayoutPanel18.TabIndex = 2;
+            // 
+            // label16
+            // 
+            label16.Anchor = AnchorStyles.Top;
+            label16.AutoSize = true;
+            label16.Location = new Point(11, 0);
+            label16.Name = "label16";
+            label16.Size = new Size(44, 19);
+            label16.TabIndex = 0;
+            label16.Text = "Insert";
+            // 
+            // label17
+            // 
+            label17.Anchor = AnchorStyles.Top;
+            label17.AutoSize = true;
+            label17.Location = new Point(3, 19);
+            label17.Name = "label17";
+            label17.Size = new Size(61, 19);
+            label17.TabIndex = 1;
+            label17.Text = "飞鹰空袭";
+            // 
             // label14
             // 
             label14.Anchor = AnchorStyles.Left;
             label14.AutoSize = true;
             label14.Font = new Font("Microsoft YaHei", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 134);
-            label14.Location = new Point(3, 108);
+            label14.Location = new Point(3, 171);
             label14.Name = "label14";
             label14.Size = new Size(243, 19);
             label14.TabIndex = 3;
@@ -964,7 +1028,7 @@
             stratagemGroupsFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             stratagemGroupsFlowLayoutPanel.Controls.Add(flowLayoutPanel1);
             stratagemGroupsFlowLayoutPanel.Controls.Add(flowLayoutPanel5);
-            stratagemGroupsFlowLayoutPanel.Location = new Point(3, 130);
+            stratagemGroupsFlowLayoutPanel.Location = new Point(3, 193);
             stratagemGroupsFlowLayoutPanel.Name = "stratagemGroupsFlowLayoutPanel";
             stratagemGroupsFlowLayoutPanel.Size = new Size(252, 83);
             stratagemGroupsFlowLayoutPanel.TabIndex = 2;
@@ -1067,7 +1131,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(1137, 703);
+            ClientSize = new Size(1137, 815);
             Controls.Add(rootFlowLayoutPanel);
             Font = new Font("Microsoft YaHei", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 134);
             KeyPreview = true;
@@ -1080,7 +1144,6 @@
             Deactivate += MainForm_Deactivate;
             FormClosing += MainForm_FormClosing;
             Load += MainForm_Load;
-            KeyDown += MainForm_KeyDown;
             rootFlowLayoutPanel.ResumeLayout(false);
             rootFlowLayoutPanel.PerformLayout();
             flowLayoutPanel11.ResumeLayout(false);
@@ -1120,10 +1183,16 @@
             flowLayoutPanel4.PerformLayout();
             flowLayoutPanel6.ResumeLayout(false);
             flowLayoutPanel6.PerformLayout();
-            fKeysFlowLayoutPanel.ResumeLayout(false);
-            fKeysFlowLayoutPanel.PerformLayout();
+            keysFlowLayoutPanel1.ResumeLayout(false);
+            keysFlowLayoutPanel1.PerformLayout();
             fKeyFlowLayoutPanel.ResumeLayout(false);
             fKeyFlowLayoutPanel.PerformLayout();
+            keysFlowLayoutPanel2.ResumeLayout(false);
+            keysFlowLayoutPanel2.PerformLayout();
+            flowLayoutPanel17.ResumeLayout(false);
+            flowLayoutPanel17.PerformLayout();
+            flowLayoutPanel18.ResumeLayout(false);
+            flowLayoutPanel18.PerformLayout();
             stratagemGroupsFlowLayoutPanel.ResumeLayout(false);
             stratagemGroupsFlowLayoutPanel.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
@@ -1137,7 +1206,7 @@
         #endregion
 
         private FlowLayoutPanel rootFlowLayoutPanel;
-        private FlowLayoutPanel fKeysFlowLayoutPanel;
+        private FlowLayoutPanel keysFlowLayoutPanel1;
         private FlowLayoutPanel stratagemGroupsFlowLayoutPanel;
         private FlowLayoutPanel fKeyFlowLayoutPanel;
         private Label label2;
@@ -1182,7 +1251,7 @@
         private CheckBox checkBox3;
         private CheckBox checkBox4;
         private FlowLayoutPanel flowLayoutPanel6;
-        private CheckBox enableSetFKeyBySpeechCheckBox;
+        private CheckBox enableSetKeyBySpeechCheckBox;
         private Label label10;
         private ComboBox localeComboBox;
         private Label label11;
@@ -1215,5 +1284,10 @@
         private FlowLayoutPanel flowLayoutPanel15;
         private Label label15;
         private TextBox updateUrlTextBox;
+        private FlowLayoutPanel keysFlowLayoutPanel2;
+        private FlowLayoutPanel flowLayoutPanel17;
+        private FlowLayoutPanel flowLayoutPanel18;
+        private Label label16;
+        private Label label17;
     }
 }

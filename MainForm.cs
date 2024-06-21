@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
-using AutoHotkey.Interop;
 using EdgeTTS;
+using HellDivers2OneKeyStratagem.Tools;
 using NAudio.Wave;
+using NHotkey;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -43,11 +44,9 @@ public partial class MainForm : Form
             await LoadSettings();
 
             InitLanguages();
-            InitFKeys();
+            InitUIKeys();
 
             await LoadByLanguage();
-
-            await LoadScriptTemplate();
 
             LoadMicDevices("");
         }
@@ -59,7 +58,69 @@ public partial class MainForm : Form
 
         CenterToScreen();
 
+        ActiveWindowMonitor.WindowTitleChanged += OnWindowTitleChanged;
+        ActiveWindowMonitor.Start(1000);
+
         _isLoading = false;
+    }
+
+    private const string HellDivers2Title = "HELLDIVERS™ 2";
+
+    private async void OnWindowTitleChanged(object? sender, WindowTitleChangedEventArgs e)
+    {
+        var oldProcessIsActive = e.OldWindowTitle == Text || e.OldWindowTitle == HellDivers2Title;
+        var newProcessIsActive = e.NewWindowTitle == Text || e.NewWindowTitle == HellDivers2Title;
+
+        if (oldProcessIsActive && !newProcessIsActive)
+        {
+            await StopSpeechTrigger();
+        }
+        else if (!oldProcessIsActive && newProcessIsActive)
+        {
+            if (Settings.EnableSpeechTrigger)
+                await StartSpeechTrigger();
+        }
+        else if (newProcessIsActive && _speechSettingsChanged)
+        {
+            _speechSettingsChanged = false;
+            await ResetVoiceCommand();
+        }
+
+        if (e.OldWindowTitle == HellDivers2Title)
+        {
+            HotkeyGroupManager.Enabled = false;
+        }
+        else if (e.NewWindowTitle == HellDivers2Title && Settings.EnableHotkeyTrigger)
+        {
+            if (_keySettingsChanged)
+            {
+                _keySettingsChanged = false;
+                SetHotkeyGroup();
+            }
+
+            HotkeyGroupManager.Enabled = true;
+        }
+    }
+
+    private void SetHotkeyGroup()
+    {
+        var hotkeys = new Dictionary<Keys, EventHandler<HotkeyEventArgs>>();
+        for (var i = 0; i < _keyStratagems.Length; i++)
+        {
+            var stratagem = _keyStratagems[i];
+            if (stratagem == null)
+                continue;
+
+            hotkeys[_keys[i]] = (_, _) =>
+            {
+                if (Settings.PlayVoice)
+                    PlayStratagemVoice(stratagem.Name);
+
+                stratagem.PressKeys();
+            };
+        }
+
+        HotkeyGroupManager.SetHotkeyGroup(hotkeys);
     }
 
     private void LoadMicDevices(string lastSelected)
@@ -106,14 +167,18 @@ public partial class MainForm : Form
         StratagemManager.Load();
         InitStratagemGroups();
         InitSettingsToUI();
+        SetHotkeyGroup();
+
         await ResetVoiceCommand();
+
         await LoadGeneratingVoiceStyles();
+
         LoadVoiceNames();
     }
 
     private async Task ResetVoiceCommand()
     {
-        await StopVoiceTrigger();
+        await StopSpeechTrigger();
 
         if (Settings.EnableSpeechTrigger)
             await StartSpeechTrigger();
@@ -151,8 +216,7 @@ public partial class MainForm : Form
             _voiceCommand.CommandRecognized += (_, command) =>
             {
                 var failed = command.Score < Settings.VoiceConfidence;
-                var fileName = WindowHelper.GetActiveProcessFileName();
-                voiceRecognizeResultLabel.Text = $@"【{(failed ? "失败" : "成功")}】识别阈值：{command.Score:F3} 识别文字：{command.Text} 当前程序：{fileName}";
+                voiceRecognizeResultLabel.Text = $@"【{(failed ? "失败" : "成功")}】识别阈值：{command.Score:F3} 识别文字：{command.Text} 当前程序：{ActiveWindowMonitor.CurrentProcessFileName}";
 
                 if (failed)
                     return;
@@ -160,10 +224,10 @@ public partial class MainForm : Form
                 if (!StratagemManager.TryGet(command.Text, out var stratagem))
                     return;
 
-                switch (fileName)
+                switch (ActiveWindowMonitor.CurrentProcessFileName)
                 {
-                    case "HellDivers2OneKeyStratagem.exe" when Settings.EnableSetFKeyBySpeech:
-                        SetFKeyStratagem(SelectedFKeyIndex, stratagem);
+                    case "HellDivers2OneKeyStratagem.exe" when Settings.EnableSetKeyBySpeech:
+                        SetKeyStratagem(SelectedKeyIndex, stratagem);
                         break;
                     case "helldivers2.exe":
                         {
@@ -188,7 +252,7 @@ public partial class MainForm : Form
         PlayVoice(Path.Combine(VoiceRootPath, Settings.Language, Settings.VoiceName, stratagemName + ".mp3"));
     }
 
-    private async Task StopVoiceTrigger()
+    private async Task StopSpeechTrigger()
     {
         if (_voiceCommand != null)
         {
@@ -234,17 +298,6 @@ public partial class MainForm : Form
         generateVoiceStyleComboBox.SelectedIndex = generateVoiceStyleComboBox.Items.Count - 1;
     }
 
-    private static readonly string TemplateAhk1 = Path.Combine(AppSettings.DataDirectory, "HellDivers2OneKey.template1.ahk");
-    private string[] _template1Lines = [];
-    private static readonly string TemplateAhk2 = Path.Combine(AppSettings.DataDirectory, "HellDivers2OneKey.template2.ahk");
-    private string[] _template2Lines = [];
-
-    private async Task LoadScriptTemplate()
-    {
-        _template1Lines = await File.ReadAllLinesAsync(TemplateAhk1);
-        _template2Lines = await File.ReadAllLinesAsync(TemplateAhk2);
-    }
-
     private readonly JsonFile<AppSettings> _settingsFile = new(AppSettings.SettingsFile);
 
     private async Task LoadSettings()
@@ -280,7 +333,7 @@ public partial class MainForm : Form
 
         if (Settings.StratagemSets.Count > 0)
         {
-            SetFKeyStratagemString(Settings.StratagemSets[0]);
+            SetKeyStratagemString(Settings.StratagemSets[0]);
 
             stratagemSetsComboBox.Items.Clear();
             foreach (var stratagemSet in Settings.StratagemSets.Skip(1))
@@ -296,20 +349,20 @@ public partial class MainForm : Form
         enableHotkeyTriggerCheckBox.Checked = Settings.EnableHotkeyTrigger;
         enableHotkeyTriggerCheckBox_Click(enableHotkeyTriggerCheckBox, EventArgs.Empty);
 
-        enableSetFKeyBySpeechCheckBox.Checked = Settings.EnableSetFKeyBySpeech;
+        enableSetKeyBySpeechCheckBox.Checked = Settings.EnableSetKeyBySpeech;
 
         updateUrlTextBox.Text = Settings.UpdateUrl;
     }
 
-    private string GetFKeyStratagemString()
+    private string GetKeyStratagemString()
     {
-        return string.Join(';', _fKeyStratagems.Select(s => s?.Name ?? ""));
+        return string.Join(';', _keyStratagems.Select(s => s?.Name ?? ""));
     }
 
-    private void SetFKeyStratagemString(string value)
+    private void SetKeyStratagemString(string value)
     {
         var names = value.Split(';');
-        var count = Math.Min(names.Length, 12);
+        var count = Math.Min(names.Length, KeyCount);
         for (var i = 0; i < count; i++)
         {
             var name = names[i];
@@ -319,42 +372,50 @@ public partial class MainForm : Form
             if (!StratagemManager.TryGet(name, out var stratagem))
                 continue;
 
-            SetFKeyStratagem(i, stratagem, false);
+            SetKeyStratagem(i, stratagem, false);
         }
     }
 
     private async Task SaveSettings()
     {
         Settings.StratagemSets.Clear();
-        Settings.StratagemSets.Add(GetFKeyStratagemString());
+        Settings.StratagemSets.Add(GetKeyStratagemString());
         foreach (var item in stratagemSetsComboBox.Items)
             Settings.StratagemSets.Add((string)item);
 
         await _settingsFile.Save(Settings);
     }
 
-    private readonly Label[] _fKeyLabels = new Label[12];
-    private readonly Stratagem?[] _fKeyStratagems = new Stratagem?[12];
-    private readonly FlowLayoutPanel[] _fKeyRoots = new FlowLayoutPanel[12];
+    private const int KeyCount = 17;
 
-    private int _selectedFKeyIndex = 11;
+    private readonly Keys[] _keys =
+    [
+        Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8, Keys.F9, Keys.F10, Keys.F11,
+        Keys.Insert, Keys.Delete, Keys.Home, Keys.End, Keys.PageUp, Keys.PageDown,
+    ];
 
-    private int SelectedFKeyIndex
+    private readonly Label[] _keyLabels = new Label[KeyCount];
+    private readonly Stratagem?[] _keyStratagems = new Stratagem?[KeyCount];
+    private readonly FlowLayoutPanel[] _keyContains = new FlowLayoutPanel[KeyCount];
+
+    private int _selectedKeyIndex = KeyCount - 1;
+
+    private int SelectedKeyIndex
     {
-        get => _selectedFKeyIndex;
+        get => _selectedKeyIndex;
         set
         {
-            if (value == _selectedFKeyIndex)
+            if (value == _selectedKeyIndex)
                 return;
 
             rootFlowLayoutPanel.SuspendLayout();
 
             try
             {
-                if (_selectedFKeyIndex >= 0)
-                    _fKeyRoots[SelectedFKeyIndex].BorderStyle = BorderStyle.None;
-                _fKeyRoots[value].BorderStyle = BorderStyle.FixedSingle;
-                _selectedFKeyIndex = value;
+                if (_selectedKeyIndex >= 0)
+                    _keyContains[SelectedKeyIndex].BorderStyle = BorderStyle.None;
+                _keyContains[value].BorderStyle = BorderStyle.FixedSingle;
+                _selectedKeyIndex = value;
             }
             finally
             {
@@ -365,69 +426,68 @@ public partial class MainForm : Form
 
     private const string NoStratagem = "无";
 
-    private void InitFKeys()
+    private void InitUIKeys()
     {
-        fKeysFlowLayoutPanel.Controls.Clear();
+        keysFlowLayoutPanel1.Controls.Clear();
 
-        for (var i = 1; i <= 12; i++)
+        for (var i = 0; i < KeyCount; i++)
         {
             var root = new FlowLayoutPanel { FlowDirection = FlowDirection.TopDown, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
-            var fKeyLabel = new Label { Text = $@"F{i}", AutoSize = true, Anchor = AnchorStyles.Top };
+            var keyLabel = new Label { Text = Enum.GetName(_keys[i]), AutoSize = true, Anchor = AnchorStyles.Top };
             var stratagemLabel = new Label { Text = NoStratagem, AutoSize = true, Anchor = AnchorStyles.Top };
-            root.Controls.Add(fKeyLabel);
+            root.Controls.Add(keyLabel);
             root.Controls.Add(stratagemLabel);
-            fKeysFlowLayoutPanel.Controls.Add(root);
+            keysFlowLayoutPanel1.Controls.Add(root);
 
             var i1 = i;
+            keyLabel.MouseDown += OnKeyMouseDown;
+            stratagemLabel.MouseDown += OnKeyMouseDown;
+            root.MouseDown += OnKeyMouseDown;
 
-            fKeyLabel.MouseDown += OnFKeyMouseDown;
-            stratagemLabel.MouseDown += OnFKeyMouseDown;
-            root.MouseDown += OnFKeyMouseDown;
-
-            _fKeyLabels[i - 1] = stratagemLabel;
-            _fKeyRoots[i - 1] = root;
+            _keyLabels[i] = stratagemLabel;
+            _keyContains[i] = root;
             continue;
 
-            void OnFKeyMouseDown(object? o, MouseEventArgs e)
+            void OnKeyMouseDown(object? o, MouseEventArgs e)
             {
                 if (e.Button != MouseButtons.Left)
                     return;
-                SelectedFKeyIndex = i1 - 1;
+                SelectedKeyIndex = i1;
 
                 if (!Settings.PlayVoice)
                     return;
 
-                if (Settings.EnableSetFKeyBySpeech)
+                if (Settings.EnableSetKeyBySpeech)
                     return;
 
-                var stratagem = _fKeyStratagems[SelectedFKeyIndex];
+                var stratagem = _keyStratagems[SelectedKeyIndex];
                 if (stratagem != null)
                     PlayStratagemVoice(stratagem.Name);
             }
         }
 
-        SelectedFKeyIndex = _fKeyRoots.Length - 1;
-        _fKeyRoots.Last().BorderStyle = BorderStyle.FixedSingle;
+        SelectedKeyIndex = _keyContains.Length - 1;
+        _keyContains.Last().BorderStyle = BorderStyle.FixedSingle;
     }
 
-    private void SetFKeyStratagem(int index, Stratagem? stratagem, bool playVoice = true)
+    private void SetKeyStratagem(int index, Stratagem? stratagem, bool playVoice = true)
     {
-        var currentStratagem = _fKeyStratagems[index];
+        var currentStratagem = _keyStratagems[index];
         if (currentStratagem != null)
             currentStratagem.CheckBox.Checked = false;
 
-        _fKeyStratagems[index] = stratagem;
+        _keyStratagems[index] = stratagem;
         if (stratagem != null)
         {
             stratagem.CheckBox.Checked = true;
-            _fKeyLabels[index].Text = stratagem.Name;
+            _keyLabels[index].Text = stratagem.Name;
 
             if (Settings.PlayVoice && playVoice)
                 PlayStratagemVoice(stratagem.Name);
         }
         else
         {
-            _fKeyLabels[index].Text = NoStratagem;
+            _keyLabels[index].Text = NoStratagem;
         }
 
         if (!_isLoading)
@@ -438,13 +498,13 @@ public partial class MainForm : Form
     {
         stratagemGroupsFlowLayoutPanel.Controls.Clear();
 
-        foreach (var group in StratagemManager.Groups)
+        foreach (var (groupName, stratagems) in StratagemManager.Groups)
         {
-            var root = new FlowLayoutPanel { FlowDirection = FlowDirection.TopDown, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
-            var groupLabel = new Label { Text = group.Key, AutoSize = true, Anchor = AnchorStyles.Left, Font = new Font(Font, FontStyle.Bold) };
-            root.Controls.Add(groupLabel);
+            var groupContainer = new FlowLayoutPanel { FlowDirection = FlowDirection.TopDown, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
+            var groupLabel = new Label { Text = groupName, AutoSize = true, Anchor = AnchorStyles.Left, Font = new Font(Font, FontStyle.Bold) };
+            groupContainer.Controls.Add(groupLabel);
 
-            foreach (var stratagem in group.Value)
+            foreach (var stratagem in stratagems)
             {
                 var stratagemCheckBox = new CheckBox
                 {
@@ -453,7 +513,7 @@ public partial class MainForm : Form
                     Anchor = AnchorStyles.Left,
                 };
                 stratagem.CheckBox = stratagemCheckBox;
-                root.Controls.Add(stratagemCheckBox);
+                groupContainer.Controls.Add(stratagemCheckBox);
 
                 toolTip.SetToolTip(stratagemCheckBox,
                     $"""
@@ -468,18 +528,18 @@ public partial class MainForm : Form
                     {
                         case MouseButtons.Left when stratagemCheckBox.Checked:
                             {
-                                SetFKeyStratagem(SelectedFKeyIndex, stratagem);
+                                SetKeyStratagem(SelectedKeyIndex, stratagem);
 
-                                if (SelectedFKeyIndex > 0)
-                                    if (_fKeyLabels[SelectedFKeyIndex - 1].Text == NoStratagem)
-                                        SelectedFKeyIndex--;
+                                if (SelectedKeyIndex > 0)
+                                    if (_keyLabels[SelectedKeyIndex - 1].Text == NoStratagem)
+                                        SelectedKeyIndex--;
                                 break;
                             }
                         case MouseButtons.Left:
                             {
-                                var fKeyIndex = Array.IndexOf(_fKeyStratagems, stratagem);
-                                if (fKeyIndex > -1)
-                                    SetFKeyStratagem(fKeyIndex, null);
+                                var keyIndex = Array.IndexOf(_keyStratagems, stratagem);
+                                if (keyIndex > -1)
+                                    SetKeyStratagem(keyIndex, null);
 
                                 break;
                             }
@@ -492,50 +552,7 @@ public partial class MainForm : Form
                 };
             }
 
-            stratagemGroupsFlowLayoutPanel.Controls.Add(root);
-        }
-    }
-
-    private void MainForm_KeyDown(object sender, KeyEventArgs e)
-    {
-        switch (e.KeyCode)
-        {
-            case Keys.F1:
-                SelectedFKeyIndex = 0;
-                break;
-            case Keys.F2:
-                SelectedFKeyIndex = 1;
-                break;
-            case Keys.F3:
-                SelectedFKeyIndex = 2;
-                break;
-            case Keys.F4:
-                SelectedFKeyIndex = 3;
-                break;
-            case Keys.F5:
-                SelectedFKeyIndex = 4;
-                break;
-            case Keys.F6:
-                SelectedFKeyIndex = 5;
-                break;
-            case Keys.F7:
-                SelectedFKeyIndex = 6;
-                break;
-            case Keys.F8:
-                SelectedFKeyIndex = 7;
-                break;
-            case Keys.F9:
-                SelectedFKeyIndex = 8;
-                break;
-            case Keys.F10:
-                SelectedFKeyIndex = 9;
-                break;
-            case Keys.F11:
-                SelectedFKeyIndex = 10;
-                break;
-            case Keys.F12:
-                SelectedFKeyIndex = 11;
-                break;
+            stratagemGroupsFlowLayoutPanel.Controls.Add(groupContainer);
         }
     }
 
@@ -553,81 +570,13 @@ public partial class MainForm : Form
             _keySettingsChanged = true;
     }
 
-    private AutoHotkeyEngine? _autoHotkeyEngine;
-
-    private void StartAutoHotkeyScript()
-    {
-        if (_isClosing)
-            return;
-
-        var lines = new List<string>(_template1Lines);
-        GenerateKeys(lines);
-        lines.AddRange(_template2Lines);
-        GenerateScript(lines);
-
-        StopAutoHotkeyScript();
-        _autoHotkeyEngine = new AutoHotkeyEngine();
-        _autoHotkeyEngine.LoadScript(string.Join('\n', lines));
-    }
-
-    private void StopAutoHotkeyScript()
-    {
-        _autoHotkeyEngine?.Terminate();
-        _autoHotkeyEngine = null;
-    }
-
-
-    private void GenerateScript(List<string> lines)
-    {
-        var voiceName = voiceNamesComboBox.SelectedItem as string ?? "";
-
-        for (var i = 0; i < _fKeyLabels.Length; i++)
-        {
-            var stratagem = _fKeyStratagems[i];
-            if (stratagem == null)
-                continue;
-
-            lines.Add($$"""
-                        F{{i + 1}}::
-                            CallStratagem("{{stratagem.KeySequence}}")
-                        """);
-            if (Settings.PlayVoice)
-                lines.Add($"""
-                               SoundPlay, Voice\{voiceName}\{stratagem.Name}.mp3
-                           """);
-            lines.Add("return");
-        }
-    }
-
-    private void GenerateKeys(List<string> lines)
-    {
-        lines.Add("");
-        lines.Add($"""
-                   TriggerKey := "{(ctrlRadioButton.Checked ? "Ctrl" : "Alt")}"
-                   """);
-        if (wasdRadioButton.Checked)
-            lines.Add("""
-                      UpKey := "w"
-                      DownKey := "s"
-                      LeftKey := "a"
-                      RightKey := "d"
-                      """);
-        else
-            lines.Add("""
-                      UpKey := "up"
-                      DownKey := "down"
-                      LeftKey := "left"
-                      RightKey := "right"
-                      """);
-    }
-
     private void saveStratagemSetButton_Click(object sender, EventArgs e)
     {
-        var fKeyStratagemString = GetFKeyStratagemString();
-        if (stratagemSetsComboBox.Items.Contains(fKeyStratagemString))
+        var keyStratagemString = GetKeyStratagemString();
+        if (stratagemSetsComboBox.Items.Contains(keyStratagemString))
             return;
 
-        stratagemSetsComboBox.Items.Add(fKeyStratagemString);
+        stratagemSetsComboBox.Items.Add(keyStratagemString);
         stratagemSetsComboBox.SelectedIndex = stratagemSetsComboBox.Items.Count - 1;
 
         _settingsChanged = true;
@@ -649,7 +598,7 @@ public partial class MainForm : Form
         if (selectedItem == null)
             return;
 
-        SetFKeyStratagemString(selectedItem);
+        SetKeyStratagemString(selectedItem);
         _keySettingsChanged = true;
     }
 
@@ -719,7 +668,7 @@ public partial class MainForm : Form
     {
         try
         {
-            var text = _fKeyStratagems[SelectedFKeyIndex]?.Name ?? StratagemManager.Stratagems.Last().Name;
+            var text = _keyStratagems[SelectedKeyIndex]?.Name ?? StratagemManager.Stratagems.Last().Name;
             var tmpMp3 = Path.GetTempFileName() + ".mp3";
             await GenerateVoiceFile(text, tmpMp3);
             PlayVoice(tmpMp3, true);
@@ -778,19 +727,11 @@ public partial class MainForm : Form
         if (_isLoading)
             return;
 
-        var shouldStart = Settings.EnableHotkeyTrigger && (_keySettingsChanged || _autoHotkeyEngine == null);
+        if (!_settingsChanged)
+            return;
 
-        if (_settingsChanged || _keySettingsChanged || _speechSettingsChanged)
-        {
-            await SaveSettings();
-
-            _settingsChanged = false;
-            _keySettingsChanged = false;
-            _speechSettingsChanged = false;
-        }
-
-        if (shouldStart)
-            StartAutoHotkeyScript();
+        await SaveSettings();
+        _settingsChanged = false;
     }
 
     private void suggestionLabel_Click(object sender, EventArgs e)
@@ -807,7 +748,7 @@ public partial class MainForm : Form
             _settingsChanged = true;
 
         // The stratagem may be invalid after changing the language
-        var stratagem = _fKeyStratagems[SelectedFKeyIndex];
+        var stratagem = _keyStratagems[SelectedKeyIndex];
         var stratagemName = stratagem != null && StratagemManager.Stratagems.Contains(stratagem)
             ? stratagem.Name
             : StratagemManager.Stratagems.Last().Name;
@@ -839,26 +780,22 @@ public partial class MainForm : Form
             if (Settings.EnableSpeechTrigger)
                 await StartSpeechTrigger();
             else
-                await StopVoiceTrigger();
+                await StopSpeechTrigger();
         }
 
         speechSubSettingsFlowLayoutPanel.Visible = Settings.EnableSpeechTrigger;
-        enableSetFKeyBySpeechCheckBox.Enabled = Settings.EnableSpeechTrigger;
+        enableSetKeyBySpeechCheckBox.Enabled = Settings.EnableSpeechTrigger;
     }
-
-    private bool _isClosing;
 
     private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
     {
-        _isClosing = true;
-
-        StopAutoHotkeyScript();
-        await StopVoiceTrigger();
+        HotkeyGroupManager.ClearHotkeyGroup();
+        await StopSpeechTrigger();
     }
 
-    private void enableSetFKeyBySpeechCheckBox_Click(object sender, EventArgs e)
+    private void EnableSetKeyBySpeechCheckBoxClick(object sender, EventArgs e)
     {
-        Settings.EnableSetFKeyBySpeech = enableSetFKeyBySpeechCheckBox.Checked;
+        Settings.EnableSetKeyBySpeech = enableSetKeyBySpeechCheckBox.Checked;
         _settingsChanged = true;
     }
 
@@ -982,13 +919,10 @@ public partial class MainForm : Form
             Settings.EnableHotkeyTrigger = enableHotkeyTriggerCheckBox.Checked;
             _settingsChanged = true;
 
-            if (Settings.EnableHotkeyTrigger)
-                StartAutoHotkeyScript();
-            else if (_autoHotkeyEngine != null)
-                StopAutoHotkeyScript();
+            HotkeyGroupManager.Enabled = Settings.EnableHotkeyTrigger;
         }
 
-        enableSetFKeyBySpeechCheckBox.Visible = Settings.EnableHotkeyTrigger;
+        enableSetKeyBySpeechCheckBox.Visible = Settings.EnableHotkeyTrigger;
         fHotKeyFlowLayoutPanel.Visible = Settings.EnableHotkeyTrigger;
     }
 

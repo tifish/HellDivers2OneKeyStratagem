@@ -15,7 +15,7 @@ public class AppSettings
     public bool PlayVoice { get; set; } = true;
     public string VoiceName { get; set; } = "晓妮";
     public bool EnableSpeechTrigger { get; set; }
-    public bool EnableSetFKeyBySpeech { get; set; }
+    public bool EnableSetKeyBySpeech { get; set; }
     public List<string> StratagemSets { get; set; } = [];
     public string Locale { get; set; } = "";
 

@@ -47,7 +47,7 @@ public static class WindowHelper
 
             return process.MainModule.FileName;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return "";
         }
