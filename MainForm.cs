@@ -555,7 +555,10 @@ public partial class MainForm : Form
                     {
                         var keyIndex = Array.IndexOf(_keyStratagems, stratagem);
                         if (keyIndex > -1)
+                        {
                             SetKeyStratagem(keyIndex, null);
+                            SelectedKeyIndex = keyIndex;
+                        }
                     }
                 };
 
