@@ -341,10 +341,8 @@ public partial class MainForm : Form
         wakeupWordTextBox.Text = Settings.WakeupWord;
 
         enableSpeechTriggerCheckBox.Checked = Settings.EnableSpeechTrigger;
-        enableSpeechTriggerCheckBox_Click(enableSpeechTriggerCheckBox, EventArgs.Empty);
 
         enableHotkeyTriggerCheckBox.Checked = Settings.EnableHotkeyTrigger;
-        enableHotkeyTriggerCheckBox_Click(enableHotkeyTriggerCheckBox, EventArgs.Empty);
 
         enableSetKeyBySpeechCheckBox.Checked = Settings.EnableSetKeyBySpeech;
 
@@ -472,16 +470,24 @@ public partial class MainForm : Form
         _keyContains.Last().BorderStyle = BorderStyle.FixedSingle;
     }
 
+    private bool _isSettingStratagemCheckBoxChecked;
+
     private void SetKeyStratagem(int index, Stratagem? stratagem, bool playVoice = true)
     {
         var currentStratagem = _keyStratagems[index];
         if (currentStratagem != null)
+        {
+            _isSettingStratagemCheckBoxChecked = true;
             currentStratagem.CheckBox.Checked = false;
+            _isSettingStratagemCheckBoxChecked = false;
+        }
 
         _keyStratagems[index] = stratagem;
         if (stratagem != null)
         {
+            _isSettingStratagemCheckBoxChecked = true;
             stratagem.CheckBox.Checked = true;
+            _isSettingStratagemCheckBoxChecked = false;
             _keyLabels[index].Text = stratagem.Name;
 
             if (Settings.PlayVoice && playVoice)
@@ -524,42 +530,43 @@ public partial class MainForm : Form
                          按右键编辑自定义名称。
                      """);
 
+                stratagemCheckBox.CheckedChanged += (_, _) =>
+                {
+                    if (_isSettingStratagemCheckBoxChecked)
+                        return;
+
+                    if (!Settings.EnableHotkeyTrigger)
+                    {
+                        _isSettingStratagemCheckBoxChecked = true;
+                        stratagemCheckBox.Checked = !stratagemCheckBox.Checked;
+                        _isSettingStratagemCheckBoxChecked = false;
+                        return;
+                    }
+
+                    if (stratagemCheckBox.Checked)
+                    {
+                        SetKeyStratagem(SelectedKeyIndex, stratagem);
+
+                        if (SelectedKeyIndex > 0)
+                            if (_keyLabels[SelectedKeyIndex - 1].Text == NoStratagem)
+                                SelectedKeyIndex--;
+                    }
+                    else
+                    {
+                        var keyIndex = Array.IndexOf(_keyStratagems, stratagem);
+                        if (keyIndex > -1)
+                            SetKeyStratagem(keyIndex, null);
+                    }
+                };
+
                 stratagemCheckBox.MouseUp += async (_, args) =>
                 {
-                    switch (args.Button)
-                    {
-                        case MouseButtons.Left:
-                            {
-                                if (!Settings.EnableHotkeyTrigger)
-                                {
-                                    stratagemCheckBox.Checked = !stratagemCheckBox.Checked;
-                                    return;
-                                }
+                    if (args.Button != MouseButtons.Right)
+                        return;
 
-                                if (stratagemCheckBox.Checked)
-                                {
-                                    SetKeyStratagem(SelectedKeyIndex, stratagem);
-
-                                    if (SelectedKeyIndex > 0)
-                                        if (_keyLabels[SelectedKeyIndex - 1].Text == NoStratagem)
-                                            SelectedKeyIndex--;
-                                }
-                                else
-                                {
-                                    var keyIndex = Array.IndexOf(_keyStratagems, stratagem);
-                                    if (keyIndex > -1)
-                                        SetKeyStratagem(keyIndex, null);
-                                }
-
-                                break;
-                            }
-
-                        case MouseButtons.Right:
-                            var result = new EditAliasesDialog(stratagemCheckBox.Text).ShowDialog();
-                            if (result == DialogResult.OK)
-                                await ResetVoiceCommand();
-                            break;
-                    }
+                    var result = new EditAliasesDialog(stratagemCheckBox.Text).ShowDialog();
+                    if (result == DialogResult.OK)
+                        await ResetVoiceCommand();
                 };
             }
 
@@ -613,8 +620,11 @@ public partial class MainForm : Form
         _keySettingsChanged = true;
     }
 
-    private void playVoiceCheckBox_Click(object sender, EventArgs e)
+    private void playVoiceCheckBox_CheckedChanged(object sender, EventArgs e)
     {
+        if (_isLoading)
+            return;
+
         Settings.PlayVoice = playVoiceCheckBox.Checked;
         _keySettingsChanged = true;
     }
@@ -781,7 +791,7 @@ public partial class MainForm : Form
         generateVoiceMessageLabel.Text = @"txt 生成完毕";
     }
 
-    private async void enableSpeechTriggerCheckBox_Click(object sender, EventArgs e)
+    private async void enableSpeechTriggerCheckBox_CheckedChanged(object sender, EventArgs e)
     {
         if (!_isLoading)
         {
@@ -924,7 +934,7 @@ public partial class MainForm : Form
         }
     }
 
-    private void enableHotkeyTriggerCheckBox_Click(object sender, EventArgs e)
+    private void enableHotkeyTriggerCheckBox_CheckedChanged(object sender, EventArgs e)
     {
         if (!_isLoading)
         {
