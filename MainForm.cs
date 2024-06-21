@@ -1,8 +1,8 @@
-﻿using AutoHotkey.Interop;
+﻿using System.Diagnostics;
+using System.Globalization;
+using AutoHotkey.Interop;
 using EdgeTTS;
 using NAudio.Wave;
-using System.Diagnostics;
-using System.Globalization;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -151,7 +151,8 @@ public partial class MainForm : Form
             _voiceCommand.CommandRecognized += (_, command) =>
             {
                 var failed = command.Score < Settings.VoiceConfidence;
-                voiceRecognizeResultLabel.Text = $@"【{(failed ? "失败" : "成功")}】识别阈值：{command.Score:F3} 识别文字：{command.Text}";
+                var fileName = WindowHelper.GetActiveProcessFileName();
+                voiceRecognizeResultLabel.Text = $@"【{(failed ? "失败" : "成功")}】识别阈值：{command.Score:F3} 识别文字：{command.Text} 当前程序：{fileName}";
 
                 if (failed)
                     return;
@@ -159,20 +160,19 @@ public partial class MainForm : Form
                 if (!StratagemManager.TryGet(command.Text, out var stratagem))
                     return;
 
-                var title = WindowHelper.GetActiveWindowTitle();
-                if (title == Text)
+                switch (fileName)
                 {
-                    if (!Settings.EnableSetFKeyBySpeech)
-                        return;
+                    case "HellDivers2OneKeyStratagem.exe" when Settings.EnableSetFKeyBySpeech:
+                        SetFKeyStratagem(SelectedFKeyIndex, stratagem);
+                        break;
+                    case "helldivers2.exe":
+                        {
+                            if (Settings.PlayVoice)
+                                PlayStratagemVoice(stratagem.Name);
 
-                    SetFKeyStratagem(SelectedFKeyIndex, stratagem);
-                }
-                else if (title == "HELLDIVERS™ 2")
-                {
-                    if (Settings.PlayVoice)
-                        PlayStratagemVoice(stratagem.Name);
-
-                    stratagem.PressKeys();
+                            stratagem.PressKeys();
+                            break;
+                        }
                 }
             };
 

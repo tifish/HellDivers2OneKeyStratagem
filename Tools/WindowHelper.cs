@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 public static class WindowHelper
@@ -18,5 +19,43 @@ public static class WindowHelper
         if (GetWindowText(handle, buff, nChars) > 0)
             return buff.ToString();
         return null;
+    }
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
+    public static string GetActiveProcessPath()
+    {
+        try
+        {
+            // Get the handle of the currently active window
+            var hWnd = GetForegroundWindow();
+
+            if (hWnd == IntPtr.Zero)
+                return "";
+
+            // Get the process ID of the active window
+            if (GetWindowThreadProcessId(hWnd, out var processId) == 0)
+                return "";
+
+            // Get the process by ID
+            var process = Process.GetProcessById((int)processId);
+
+            // Get the executable path of the process
+            if (process.MainModule == null)
+                return "";
+
+            return process.MainModule.FileName;
+        }
+        catch (Exception ex)
+        {
+            return "";
+        }
+    }
+
+    public static string GetActiveProcessFileName()
+    {
+        var filePath = GetActiveProcessPath();
+        return filePath == "" ? "" : Path.GetFileName(filePath);
     }
 }
