@@ -802,7 +802,7 @@ public partial class MainWindow
                 await StopSpeechTrigger();
         }
 
-        SpeechSubSettingsStackPanel.Visibility = Settings.EnableSpeechTrigger ? Visibility.Visible : Visibility.Collapsed;
+        SpeechSubSettingsBorder.Visibility = Settings.EnableSpeechTrigger ? Visibility.Visible : Visibility.Collapsed;
         EnableSetKeyBySpeechCheckBox.IsEnabled = Settings.EnableSpeechTrigger;
         StratagemsStackPanel.Visibility = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
     }
@@ -833,7 +833,7 @@ public partial class MainWindow
 
     private void MicLabel_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        GenerateVoiceStackPanel.Visibility = GenerateVoiceStackPanel.Visibility == Visibility.Visible
+        GenerateVoiceBorder.Visibility = GenerateVoiceBorder.Visibility == Visibility.Visible
             ? Visibility.Collapsed
             : Visibility.Visible;
     }
@@ -849,7 +849,7 @@ public partial class MainWindow
         }
 
         EnableSetKeyBySpeechCheckBox.Visibility = Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
-        HotKeyStackPanel.Visibility = Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
+        HotKeysStackPanel.Visibility = Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
         StratagemsStackPanel.Visibility = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
     }
 
