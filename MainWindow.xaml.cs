@@ -1033,7 +1033,7 @@ public partial class MainWindow
                     continue;
 
                 dialog.Hide();
-                SpeechConfidenceNumberBox.Value = scores.Average() - (scores.Max() - scores.Min());
+                SpeechConfidenceNumberBox.Value = Math.Round(scores.Average() - (scores.Max() - scores.Min()), 3);
                 break;
             }
         }
