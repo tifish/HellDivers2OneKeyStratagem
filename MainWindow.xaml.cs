@@ -111,7 +111,7 @@ public partial class MainWindow
             if (stratagem == null)
                 continue;
 
-            hotkeys[_keys[i]] = (_, _) =>
+            hotkeys[_keys[i]] = (_, e) =>
             {
                 if (Settings.PlayVoice)
                     PlayStratagemVoice(stratagem.Name);

@@ -12,21 +12,24 @@ public static class SendKey
 
     public static void Down(Key key)
     {
-        keybd_event((byte)key, 0, KEYEVENTF_KEYDOWN, 0);
+        var vk = KeyInterop.VirtualKeyFromKey(key);
+        keybd_event((byte)vk, 0, KEYEVENTF_KEYDOWN, 0);
         Thread.Sleep(50);
     }
 
     public static void Up(Key key)
     {
-        keybd_event((byte)key, 0, KEYEVENTF_KEYUP, 0);
+        var vk = KeyInterop.VirtualKeyFromKey(key);
+        keybd_event((byte)vk, 0, KEYEVENTF_KEYUP, 0);
         Thread.Sleep(40);
     }
 
     public static void Press(Key key)
     {
-        keybd_event((byte)key, 0, KEYEVENTF_KEYDOWN, 0);
+        var vk = KeyInterop.VirtualKeyFromKey(key);
+        keybd_event((byte)vk, 0, KEYEVENTF_KEYDOWN, 0);
         Thread.Sleep(30);
-        keybd_event((byte)key, 0, KEYEVENTF_KEYUP, 0);
+        keybd_event((byte)vk, 0, KEYEVENTF_KEYUP, 0);
         Thread.Sleep(40);
     }
 }
