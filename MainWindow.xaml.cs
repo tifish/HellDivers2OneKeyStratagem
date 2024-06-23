@@ -380,8 +380,10 @@ public partial class MainWindow
         WakeupWordTextBox.Text = Settings.WakeupWord;
 
         EnableSpeechTriggerCheckBox.IsChecked = Settings.EnableSpeechTrigger;
+        RefreshAfterEnableSpeechTriggerChanged();
 
         EnableHotkeyTriggerCheckBox.IsChecked = Settings.EnableHotkeyTrigger;
+        RefreshAfterEnableHotkeyTriggerChanged();
 
         EnableSetKeyBySpeechCheckBox.IsChecked = Settings.EnableSetKeyBySpeech;
 
@@ -791,17 +793,22 @@ public partial class MainWindow
 
     private async void EnableSpeechTriggerCheckBox_OnCheckedUnchecked(object sender, RoutedEventArgs e)
     {
-        if (!IsLoading)
-        {
-            Settings.EnableSpeechTrigger = EnableSpeechTriggerCheckBox.IsChecked == true;
-            _settingsChanged = true;
+        if (IsLoading)
+            return;
 
-            if (Settings.EnableSpeechTrigger)
-                await StartSpeechTrigger();
-            else
-                await StopSpeechTrigger();
-        }
+        Settings.EnableSpeechTrigger = EnableSpeechTriggerCheckBox.IsChecked == true;
+        _settingsChanged = true;
 
+        if (Settings.EnableSpeechTrigger)
+            await StartSpeechTrigger();
+        else
+            await StopSpeechTrigger();
+
+        RefreshAfterEnableSpeechTriggerChanged();
+    }
+
+    private void RefreshAfterEnableSpeechTriggerChanged()
+    {
         SpeechSubSettingsBorder.Visibility = Settings.EnableSpeechTrigger ? Visibility.Visible : Visibility.Collapsed;
         EnableSetKeyBySpeechCheckBox.IsEnabled = Settings.EnableSpeechTrigger;
         StratagemsStackPanel.Visibility = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
@@ -840,14 +847,19 @@ public partial class MainWindow
 
     private void EnableHotkeyTriggerCheckBox_OnCheckedUnchecked(object sender, RoutedEventArgs e)
     {
-        if (!IsLoading)
-        {
-            Settings.EnableHotkeyTrigger = EnableHotkeyTriggerCheckBox.IsChecked == true;
-            _settingsChanged = true;
+        if (IsLoading)
+            return;
 
-            HotkeyGroupManager.Enabled = Settings.EnableHotkeyTrigger;
-        }
+        Settings.EnableHotkeyTrigger = EnableHotkeyTriggerCheckBox.IsChecked == true;
+        _settingsChanged = true;
 
+        HotkeyGroupManager.Enabled = Settings.EnableHotkeyTrigger;
+
+        RefreshAfterEnableHotkeyTriggerChanged();
+    }
+
+    private void RefreshAfterEnableHotkeyTriggerChanged()
+    {
         EnableSetKeyBySpeechCheckBox.Visibility = Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
         HotKeysStackPanel.Visibility = Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
         StratagemsStackPanel.Visibility = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
