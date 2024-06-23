@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Windows.Input;
 
 public static class SendKey
 {
@@ -9,19 +10,19 @@ public static class SendKey
     private const uint KEYEVENTF_KEYDOWN = 0x0000;
     private const uint KEYEVENTF_KEYUP = 0x0002;
 
-    public static void Down(Keys key)
+    public static void Down(Key key)
     {
         keybd_event((byte)key, 0, KEYEVENTF_KEYDOWN, 0);
         Thread.Sleep(50);
     }
 
-    public static void Up(Keys key)
+    public static void Up(Key key)
     {
         keybd_event((byte)key, 0, KEYEVENTF_KEYUP, 0);
         Thread.Sleep(40);
     }
 
-    public static void Press(Keys key)
+    public static void Press(Key key)
     {
         keybd_event((byte)key, 0, KEYEVENTF_KEYDOWN, 0);
         Thread.Sleep(30);

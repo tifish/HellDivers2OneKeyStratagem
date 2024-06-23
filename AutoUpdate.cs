@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Windows;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -30,7 +32,7 @@ public static class AutoUpdate
             UseShellExecute = true,
         });
 
-        Application.Exit();
+        Application.Current.Shutdown();
         return true;
     }
 }

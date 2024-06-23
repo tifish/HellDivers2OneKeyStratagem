@@ -1,12 +1,12 @@
-﻿using Timer = System.Windows.Forms.Timer;
+﻿using System.Windows.Threading;
 
 public static class ActiveWindowMonitor
 {
-    private static Timer _timer = new();
+    private static DispatcherTimer _timer = new();
 
-    public static void Start(int intervalMilliseconds)
+    public static void Start(TimeSpan timeSpan)
     {
-        _timer.Interval = intervalMilliseconds;
+        _timer.Interval = timeSpan;
         _timer.Tick += TimerOnTick;
         _timer.Start();
     }

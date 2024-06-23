@@ -1,0 +1,184 @@
+﻿<Window
+    x:Class="HellDivers2OneKeyStratagem.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+
+    xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+    ui:WindowHelper.UseModernWindowStyle="True"
+    ui:WindowHelper.SystemBackdropType="Mica"
+    ui:TitleBar.Height="48"
+
+    mc:Ignorable="d"
+    Title="HellDivers 2 一键战略"
+    WindowStartupLocation="CenterScreen"
+    SizeToContent="WidthAndHeight"
+    FontFamily="Microsoft YaHei UI"
+    FontSize="12"
+
+    Loaded="Window_Loaded"
+    Deactivated="Window_Deactivated">
+
+    <ui:SimpleStackPanel Margin="20,0,20,20">
+
+        <Expander Header="第一次使用前一定要先设置...">
+            <ui:SimpleStackPanel Margin="20,10,10,10">
+
+                <ui:SimpleStackPanel>
+
+                    <ui:SimpleStackPanel Orientation="Horizontal" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+                        <Label Content="语言：" />
+                        <ComboBox x:Name="LocaleComboBox" SelectionChanged="LocaleComboBox_OnSelectionChanged" />
+                    </ui:SimpleStackPanel>
+
+                    <Border BorderBrush="{DynamicResource SolidBackgroundFillColorBaseBrush}" BorderThickness="1" Height="1" />
+
+                    <ui:SimpleStackPanel x:Name="SettingsStackPanel" Orientation="Horizontal">
+                        <Label Content="与游戏内设置的按键保持一致，注意必须设置为“按住”：" />
+                        <ui:RadioButtons>
+                            <RadioButton x:Name="CtrlRadioButton" Content="Ctrl" Checked="CtrlRadioButton_OnChecked" />
+                            <RadioButton x:Name="AltRadioButton" Content="Alt" Checked="AltRadioButton_OnChecked" />
+                        </ui:RadioButtons>
+                        <ui:RadioButtons>
+                            <RadioButton x:Name="WasdRadioButton" Content="WASD" Checked="WasdRadioButton_OnChecked" />
+                            <RadioButton x:Name="ArrowRadioButton" Content="上下左右" Checked="ArrowRadioButton_OnChecked" />
+                        </ui:RadioButtons>
+                        <Label Content="强烈建议使用“上下左右”，可以在跑动中呼叫战略。" />
+                    </ui:SimpleStackPanel>
+
+                    <Border BorderBrush="{DynamicResource SolidBackgroundFillColorBaseBrush}" BorderThickness="1" Height="1" />
+
+                    <ui:SimpleStackPanel Orientation="Horizontal">
+                        <CheckBox x:Name="PlayVoiceCheckBox" Content="呼叫时播放战略名字，选择声优："
+                                  Checked="PlayVoiceCheckBox_OnCheckedUnchecked"
+                                  Unchecked="PlayVoiceCheckBox_OnCheckedUnchecked" />
+                        <ComboBox x:Name="VoiceNamesComboBox" SelectionChanged="VoiceNamesComboBox_OnSelectionChanged" />
+                        <Button x:Name="RefreshVoiceNamesButton" Content="刷新" Click="RefreshVoiceNamesButton_OnClick" />
+                    </ui:SimpleStackPanel>
+
+                    <Border BorderBrush="{DynamicResource SolidBackgroundFillColorBaseBrush}" BorderThickness="1" Height="1" />
+
+                    <ui:SimpleStackPanel Orientation="Horizontal">
+                        <Label Content="更新地址，群友加速专用：" />
+                        <TextBox x:Name="UpdateUrlTextBox" TextChanged="UpdateUrlTextBox_OnTextChanged" />
+                        <Button x:Name="CheckForUpdateButton" Content="检查更新" Click="CheckForUpdateButton_OnClick" />
+                    </ui:SimpleStackPanel>
+
+                </ui:SimpleStackPanel>
+
+                <ui:SimpleStackPanel Orientation="Horizontal">
+                    <CheckBox x:Name="EnableSpeechTriggerCheckBox" Content="开启麦克风呼叫，君子动口不动手"
+                              Checked="EnableSpeechTriggerCheckBox_OnCheckedUnchecked"
+                              Unchecked="EnableSpeechTriggerCheckBox_OnCheckedUnchecked" />
+                </ui:SimpleStackPanel>
+
+                <ui:SimpleStackPanel x:Name="SpeechSubSettingsStackPanel" Margin="20,10,10,10" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+                    <ui:SimpleStackPanel Orientation="Horizontal">
+                        <Button x:Name="OpenSpeechRecognitionControlPanelButton" Content="打开系统语音设置，选择“训练你的计算机”可以提高识别率..." Click="OpenSpeechRecognitionControlPanelButton_OnClick" />
+                    </ui:SimpleStackPanel>
+
+                    <Border BorderBrush="{DynamicResource SolidBackgroundFillColorBaseBrush}" BorderThickness="1" Height="1" />
+
+                    <ui:SimpleStackPanel Orientation="Horizontal">
+                        <Label Content="唤醒词（可选）。例如“好好学习”，就要用“好好学习飞鹰空袭”来呼叫“飞鹰空袭”。可以减少误识别率：" />
+                        <TextBox x:Name="WakeupWordTextBox" TextChanged="WakeupWordTextBox_OnTextChanged" />
+                    </ui:SimpleStackPanel>
+
+                    <Border BorderBrush="{DynamicResource SolidBackgroundFillColorBaseBrush}" BorderThickness="1" Height="1" />
+
+                    <ui:SimpleStackPanel Orientation="Horizontal">
+                        <Label Content="识别阈值。太大无法识别，太小经常误识别。按“识别校准”自动校准，或者根据识别结果手动调整：" />
+                        <ui:NumberBox x:Name="SpeechConfidenceNumberBox" SpinButtonPlacementMode="Inline" SmallChange="0.001" ValueChanged="SpeechConfidenceNumberBox_OnValueChanged" Maximum="1" Minimum="0.3" RenderTransformOrigin="-19,0" LargeChange="0.01" InputScope="Digits" />
+                    </ui:SimpleStackPanel>
+
+                    <Border BorderBrush="{DynamicResource SolidBackgroundFillColorBaseBrush}" BorderThickness="1" Height="1" />
+
+                    <ui:SimpleStackPanel Orientation="Horizontal">
+                        <Button x:Name="CalibrateVoiceButton" Content="识别校准，通过念三次战略名字自动校准..." Click="CalibrateVoiceButton_Click" />
+                        <Label x:Name="VoiceRecognizeResultLabel" Content="暂无识别结果" />
+                    </ui:SimpleStackPanel>
+
+                    <Border BorderBrush="{DynamicResource SolidBackgroundFillColorBaseBrush}" BorderThickness="1" Height="1" />
+
+                    <ui:SimpleStackPanel Orientation="Horizontal">
+                        <Label Content="如果有多个麦克风，且无法识别语音，可以尝试手动选择麦克风：" MouseDoubleClick="MicLabel_OnMouseDoubleClick" />
+                        <ComboBox x:Name="MicComboBox" SelectionChanged="MicComboBox_OnSelectionChanged" DropDownOpened="MicComboBox_OnDropDownOpened" />
+                    </ui:SimpleStackPanel>
+                </ui:SimpleStackPanel>
+
+                <ui:SimpleStackPanel x:Name="GenerateVoiceStackPanel" Visibility="Collapsed" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+                    <ui:SimpleStackPanel Orientation="Horizontal">
+                        <ComboBox x:Name="GenerateVoiceStyleComboBox" SelectionChanged="GenerateVoiceStyleComboBox_OnSelectionChanged" />
+                        <Button x:Name="TryVoiceButton" Content="试听" Click="TryVoiceButton_OnClick" />
+                        <Label Content="速率：" />
+                        <TextBox x:Name="VoiceRateTextBox" Text="+0%" />
+                        <Label Content="音量：" />
+                        <TextBox x:Name="VoiceVolumeTextBox" Text="+0%" />
+                        <Label Content="音调：" />
+                        <TextBox x:Name="VoicePitchTextBox" Text="+0Hz" />
+                        <Button x:Name="GenerateVoiceButton" Content="生成语音" Click="GenerateVoiceButton_OnClick" />
+                        <Button x:Name="GenerateTxtButton" Content="生成 txt" />
+                        <Label x:Name="GenerateVoiceMessageLabel" Content="未生成" />
+                    </ui:SimpleStackPanel>
+                </ui:SimpleStackPanel>
+
+                <ui:SimpleStackPanel Orientation="Horizontal">
+                    <CheckBox x:Name="EnableHotkeyTriggerCheckBox" Content="开启快捷键呼叫"
+                              Checked="EnableHotkeyTriggerCheckBox_OnCheckedUnchecked"
+                              Unchecked="EnableHotkeyTriggerCheckBox_OnCheckedUnchecked" />
+                    <CheckBox x:Name="EnableSetKeyBySpeechCheckBox" Content="支持通过语音设置快捷键战略"
+                              Checked="EnableSetKeyBySpeechCheckBox_OnCheckedUnchecked"
+                              Unchecked="EnableSetKeyBySpeechCheckBox_OnCheckedUnchecked" />
+                </ui:SimpleStackPanel>
+
+            </ui:SimpleStackPanel>
+
+        </Expander>
+
+        <ui:SimpleStackPanel x:Name="HotKeyStackPanel">
+
+            <ui:SimpleStackPanel Orientation="Horizontal">
+                <ComboBox x:Name="StratagemSetsComboBox" SelectionChanged="StratagemSetsComboBox_OnSelectionChanged" />
+                <Button x:Name="SaveStratagemSetButton" Content="保存配置(_S)" Click="SaveStratagemSetButton_OnClick" />
+                <Button x:Name="DeleteStratagemSetButton" Content="删除配置(_D)" Click="DeleteStratagemSetButton_OnClick" />
+            </ui:SimpleStackPanel>
+
+            <ui:SimpleStackPanel x:Name="KeysStackPanel1" Orientation="Horizontal" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+                <Border BorderThickness="1" BorderBrush="Black">
+                    <ui:SimpleStackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <Label Content="F1" />
+                        <Label Content="飞鹰空袭" />
+                    </ui:SimpleStackPanel>
+                </Border>
+            </ui:SimpleStackPanel>
+            <ui:SimpleStackPanel x:Name="KeysStackPanel2" Orientation="Horizontal" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+                <Border BorderThickness="1" BorderBrush="Black">
+                    <ui:SimpleStackPanel Orientation="Vertical">
+                        <Label Content="F1" />
+                        <Label Content="飞鹰空袭" />
+                    </ui:SimpleStackPanel>
+                </Border>
+            </ui:SimpleStackPanel>
+
+        </ui:SimpleStackPanel>
+
+        <ui:SimpleStackPanel x:Name="StratagemsStackPanel">
+            <Label Content="左键选择战略，右键自定义麦克风呼叫名字" />
+
+            <ui:SimpleStackPanel x:Name="StratagemGroupsStackPanel" Orientation="Horizontal" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+                <ui:SimpleStackPanel Orientation="Vertical">
+                    <Label Content="飞鹰" />
+                    <CheckBox Content="飞鹰空袭" />
+                    <CheckBox Content="飞鹰500KG炸弹" />
+                </ui:SimpleStackPanel>
+                <ui:SimpleStackPanel Orientation="Vertical">
+                    <Label Content="轨道" />
+                    <CheckBox Content="轨道毒气攻击" />
+                    <CheckBox Content="轨道炮攻击" />
+                </ui:SimpleStackPanel>
+            </ui:SimpleStackPanel>
+        </ui:SimpleStackPanel>
+
+    </ui:SimpleStackPanel>
+</Window>

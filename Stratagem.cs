@@ -1,3 +1,6 @@
+﻿using System.Windows.Controls;
+using System.Windows.Input;
+
 namespace HellDivers2OneKeyStratagem;
 
 public class Stratagem
@@ -8,19 +11,27 @@ public class Stratagem
 
     public void PressKeys()
     {
-        SendKey.Down(Settings.TriggerKey == "Ctrl" ? Keys.ControlKey : Keys.Alt);
+        SendKey.Down(Settings.TriggerKey == "Ctrl" ? Key.LeftCtrl : Key.LeftAlt);
 
         foreach (var key in KeySequence)
         {
             switch (key)
             {
-                case '↑': SendKey.Press(Settings.OperateKeys == "WASD" ? Keys.W :Keys.Up); break;
-                case '↓': SendKey.Press(Settings.OperateKeys == "WASD" ? Keys.S :Keys.Down); break;
-                case '←': SendKey.Press(Settings.OperateKeys == "WASD" ? Keys.A :Keys.Left); break;
-                case '→': SendKey.Press(Settings.OperateKeys == "WASD" ? Keys.D :Keys.Right); break;
+                case '↑':
+                    SendKey.Press(Settings.OperateKeys == "WASD" ? Key.W : Key.Up);
+                    break;
+                case '↓':
+                    SendKey.Press(Settings.OperateKeys == "WASD" ? Key.S : Key.Down);
+                    break;
+                case '←':
+                    SendKey.Press(Settings.OperateKeys == "WASD" ? Key.A : Key.Left);
+                    break;
+                case '→':
+                    SendKey.Press(Settings.OperateKeys == "WASD" ? Key.D : Key.Right);
+                    break;
             }
         }
 
-        SendKey.Up(Settings.TriggerKey == "Ctrl" ? Keys.ControlKey : Keys.Alt);
+        SendKey.Up(Settings.TriggerKey == "Ctrl" ? Key.LeftCtrl : Key.LeftAlt);
     }
 }

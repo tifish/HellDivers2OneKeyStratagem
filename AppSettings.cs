@@ -1,14 +1,29 @@
 ﻿global using static HellDivers2OneKeyStratagem.SettingsContainer;
+using System.IO;
 using System.Text.Json.Serialization;
 
 namespace HellDivers2OneKeyStratagem;
 
 public class AppSettings
 {
-    public static readonly string ExeDirectory = Path.GetDirectoryName(Application.ExecutablePath)!;
+    public static readonly string ExeDirectory = AppDomain.CurrentDomain.BaseDirectory;
     public static readonly string SettingsDirectory = Path.Combine(ExeDirectory, "Settings");
     public static readonly string SettingsFile = Path.Combine(SettingsDirectory, "Settings.json");
     public static readonly string DataDirectory = Path.Combine(ExeDirectory, "Data");
+
+    private static readonly JsonFile<AppSettings> _settingsFile = new(SettingsFile);
+
+    public static async Task LoadSettings()
+    {
+        var settings = await _settingsFile.Load();
+        if (settings != null)
+            SettingsContainer.Settings = settings;
+    }
+
+    public static async Task SaveSettings()
+    {
+        await _settingsFile.Save(SettingsContainer.Settings);
+    }
 
     public string TriggerKey { get; set; } = "Ctrl";
     public string OperateKeys { get; set; } = "WASD";

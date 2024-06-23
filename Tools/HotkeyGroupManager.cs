@@ -1,13 +1,12 @@
-﻿using NHotkey;
-using NHotkey.WindowsForms;
-
-namespace HellDivers2OneKeyStratagem.Tools;
+﻿using System.Windows.Input;
+using NHotkey;
+using NHotkey.Wpf;
 
 public static class HotkeyGroupManager
 {
-    private static Dictionary<Keys, EventHandler<HotkeyEventArgs>> _hotkeyGroup = new();
+    private static Dictionary<Key, EventHandler<HotkeyEventArgs>> _hotkeyGroup = new();
 
-    public static void SetHotkeyGroup(Dictionary<Keys, EventHandler<HotkeyEventArgs>> hotkeys)
+    public static void SetHotkeyGroup(Dictionary<Key, EventHandler<HotkeyEventArgs>> hotkeys)
     {
         if (Enabled)
             UnregisterHotkeys();
@@ -48,7 +47,7 @@ public static class HotkeyGroupManager
     private static void RegisterHotkeys()
     {
         foreach (var (hotkey, handler) in _hotkeyGroup)
-            HotkeyManager.Current.AddOrReplace(Enum.GetName(hotkey), hotkey, handler);
+            HotkeyManager.Current.AddOrReplace(Enum.GetName(hotkey), hotkey, ModifierKeys.None, handler);
     }
 
     private static void UnregisterHotkeys()
