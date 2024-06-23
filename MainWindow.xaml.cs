@@ -376,7 +376,7 @@ public partial class MainWindow
                 StratagemSetsComboBox.Items.Add(stratagemSet);
         }
 
-        SpeechConfidenceNumberBox.Value = MathF.Round(Settings.VoiceConfidence, 3);
+        SpeechConfidenceNumberBox.Value = Math.Round(Settings.VoiceConfidence, 3);
         WakeupWordTextBox.Text = Settings.WakeupWord;
 
         EnableSpeechTriggerCheckBox.IsChecked = Settings.EnableSpeechTrigger;
@@ -827,7 +827,7 @@ public partial class MainWindow
         if (IsLoading)
             return;
 
-        Settings.VoiceConfidence = MathF.Round((float)SpeechConfidenceNumberBox.Value, 3);
+        Settings.VoiceConfidence = Math.Round(SpeechConfidenceNumberBox.Value, 3);
         _settingsChanged = true;
     }
 
