@@ -400,13 +400,10 @@ public partial class MainWindow
         for (var i = 0; i < count; i++)
         {
             var name = names[i];
-            if (string.IsNullOrWhiteSpace(name))
-                continue;
-
-            if (!StratagemManager.TryGet(name, out var stratagem))
-                continue;
-
-            SetKeyStratagem(i, stratagem, false);
+            if (string.IsNullOrWhiteSpace(name) || !StratagemManager.TryGet(name, out var stratagem))
+                SetKeyStratagem(i, null, false);
+            else
+                SetKeyStratagem(i, stratagem, false);
         }
     }
 
