@@ -25,9 +25,9 @@
         <Expander Header="第一次使用前一定要先设置...">
             <ui:SimpleStackPanel Margin="20,10,10,10">
 
-                <ui:SimpleStackPanel>
+                <ui:SimpleStackPanel Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
 
-                    <ui:SimpleStackPanel Orientation="Horizontal" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+                    <ui:SimpleStackPanel Orientation="Horizontal">
                         <Label Content="语言：" />
                         <ComboBox x:Name="LocaleComboBox" SelectionChanged="LocaleComboBox_OnSelectionChanged" />
                     </ui:SimpleStackPanel>
