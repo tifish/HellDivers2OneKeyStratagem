@@ -1,13 +1,13 @@
-﻿using System.Diagnostics;
+﻿using EdgeTTS;
+using iNKORE.UI.WPF.Modern.Controls;
+using NAudio.Wave;
+using NHotkey;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using EdgeTTS;
-using iNKORE.UI.WPF.Modern.Controls;
-using NAudio.Wave;
-using NHotkey;
 using Brushes = System.Windows.Media.Brushes;
 using CheckBox = System.Windows.Controls.CheckBox;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
@@ -254,12 +254,24 @@ public partial class MainWindow
 
         foreach (var (groupName, stratagems) in StratagemManager.Groups)
         {
-            var groupContainer = new StackPanel
+            var border = new Border
+            {
+                Padding = new Thickness(10, 10, 10, 10),
+                Margin = new Thickness(1, 1, 1, 1),
+                Width = double.NaN,
+                VerticalAlignment = VerticalAlignment.Stretch,
+            };
+            border.SetResourceReference(Border.BackgroundProperty, "CardBackgroundFillColorDefaultBrush");
+            StratagemGroupsStackPanel.Children.Add(border);
+
+            var groupContainer = new SimpleStackPanel
             {
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Orientation = Orientation.Vertical,
             };
+            border.Child = groupContainer;
+
             var groupLabel = new Label { Content = groupName, HorizontalAlignment = HorizontalAlignment.Center };
             groupContainer.Children.Add(groupLabel);
 
@@ -338,8 +350,6 @@ public partial class MainWindow
                     }
                 }
             }
-
-            StratagemGroupsStackPanel.Children.Add(groupContainer);
         }
     }
 
@@ -1092,5 +1102,14 @@ public partial class MainWindow
     private void MicComboBox_OnDropDownOpened(object? sender, EventArgs e)
     {
         LoadMicDevices(MicComboBox.Text);
+    }
+
+    private void GenerateTxtButton_Click(object sender, RoutedEventArgs e)
+    {
+        var folder = "VoiceTxt";
+        Directory.CreateDirectory(folder);
+        foreach (var stratagem in StratagemManager.Stratagems)
+            File.WriteAllText(Path.Combine(folder, stratagem.Name), stratagem.Name);
+        GenerateVoiceMessageLabel.Content = @"txt 生成完毕";
     }
 }
