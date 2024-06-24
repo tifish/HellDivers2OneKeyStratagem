@@ -326,7 +326,7 @@ public partial class MainWindow
                     if (!Settings.EnableHotkeyTrigger)
                     {
                         _isSettingStratagemCheckBoxChecked = true;
-                        routedEventArgs.Handled = true;
+                        stratagemCheckBox.IsChecked = !stratagemCheckBox.IsChecked;
                         _isSettingStratagemCheckBoxChecked = false;
                         return;
                     }
