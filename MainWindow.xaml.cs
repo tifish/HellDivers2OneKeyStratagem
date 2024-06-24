@@ -250,7 +250,7 @@ public partial class MainWindow
 
     private void InitStratagemGroupsUI()
     {
-        StratagemGroupsStackPanel.Children.Clear();
+        StratagemGroupsContainer.Children.Clear();
 
         foreach (var (groupName, stratagems) in StratagemManager.Groups)
         {
@@ -262,7 +262,7 @@ public partial class MainWindow
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
             border.SetResourceReference(Border.BackgroundProperty, "CardBackgroundFillColorDefaultBrush");
-            StratagemGroupsStackPanel.Children.Add(border);
+            StratagemGroupsContainer.Children.Add(border);
 
             var groupContainer = new SimpleStackPanel
             {
@@ -819,9 +819,9 @@ public partial class MainWindow
 
     private void RefreshAfterEnableSpeechTriggerChanged()
     {
-        SpeechSubSettingsBorder.Visibility = Settings.EnableSpeechTrigger ? Visibility.Visible : Visibility.Collapsed;
+        SpeechSubSettingsContainer.Visibility = Settings.EnableSpeechTrigger ? Visibility.Visible : Visibility.Collapsed;
         EnableSetKeyBySpeechCheckBox.IsEnabled = Settings.EnableSpeechTrigger;
-        StratagemsStackPanel.Visibility = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
+        StratagemsContainer.Visibility = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void OpenSpeechRecognitionControlPanelButton_OnClick(object sender, RoutedEventArgs e)
@@ -850,7 +850,7 @@ public partial class MainWindow
 
     private void MicLabel_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        GenerateVoiceBorder.Visibility = GenerateVoiceBorder.Visibility == Visibility.Visible
+        GenerateVoiceContainer.Visibility = GenerateVoiceContainer.Visibility == Visibility.Visible
             ? Visibility.Collapsed
             : Visibility.Visible;
     }
@@ -872,7 +872,7 @@ public partial class MainWindow
     {
         EnableSetKeyBySpeechCheckBox.Visibility = Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
         HotKeysStackPanel.Visibility = Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
-        StratagemsStackPanel.Visibility = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
+        StratagemsContainer.Visibility = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void EnableSetKeyBySpeechCheckBox_OnCheckedUnchecked(object sender, RoutedEventArgs e)

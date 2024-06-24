@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
 
     xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
     ui:WindowHelper.UseModernWindowStyle="True"
@@ -74,7 +73,7 @@
                               Unchecked="EnableSpeechTriggerCheckBox_OnCheckedUnchecked" />
                 </ui:SimpleStackPanel>
 
-                <ui:SimpleStackPanel x:Name="SpeechSubSettingsBorder">
+                <ui:SimpleStackPanel x:Name="SpeechSubSettingsContainer">
                     <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}" Padding="20,10,20,10" Margin="0,1,0,1" Height="Auto" HorizontalAlignment="Stretch">
                         <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
                             <Button x:Name="OpenSpeechRecognitionControlPanelButton" Content="打开系统语音设置，选择“训练你的计算机”可以提高识别率..." Click="OpenSpeechRecognitionControlPanelButton_OnClick" />
@@ -110,7 +109,7 @@
                     </Border>
                 </ui:SimpleStackPanel>
 
-                <Border x:Name="GenerateVoiceBorder" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}" Padding="20,10,20,10" Margin="0,1,0,1" Height="Auto" HorizontalAlignment="Stretch" Visibility="Collapsed">
+                <Border x:Name="GenerateVoiceContainer" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}" Padding="20,10,20,10" Margin="0,1,0,1" Height="Auto" HorizontalAlignment="Stretch" Visibility="Collapsed">
                     <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
                         <ComboBox x:Name="GenerateVoiceStyleComboBox" SelectionChanged="GenerateVoiceStyleComboBox_OnSelectionChanged" />
                         <Button x:Name="TryVoiceButton" Content="试听" Click="TryVoiceButton_OnClick" />
@@ -170,12 +169,12 @@
 
         </ui:SimpleStackPanel>
 
-        <ui:SimpleStackPanel x:Name="StratagemsStackPanel">
+        <ui:SimpleStackPanel x:Name="StratagemsContainer">
             <Border Padding="20,10,20,10" Margin="0,1,0,1" Height="Auto" HorizontalAlignment="Stretch">
                 <Label Content="左键选择战略，右键自定义麦克风呼叫名字" />
             </Border>
 
-            <ui:SimpleStackPanel x:Name="StratagemGroupsStackPanel" Orientation="Horizontal">
+            <ui:SimpleStackPanel x:Name="StratagemGroupsContainer" Orientation="Horizontal">
                 <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}" Padding="20,10,20,10" Margin="0,1,0,1" Width="Auto" VerticalAlignment="Stretch">
                     <ui:SimpleStackPanel Orientation="Vertical">
                         <Label Content="飞鹰" />
