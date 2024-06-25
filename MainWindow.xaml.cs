@@ -50,7 +50,7 @@ public partial class MainWindow
             await AppSettings.LoadSettings();
 
             InitLanguages();
-            InitKeysUI();
+            InitHotkeysUI();
 
             await LoadByLanguage();
         }
@@ -187,7 +187,7 @@ public partial class MainWindow
 
     private const string NoStratagem = "无";
 
-    private void InitKeysUI()
+    private void InitHotkeysUI()
     {
         KeysStackPanel1.Children.Clear();
         KeysStackPanel2.Children.Clear();
@@ -211,8 +211,9 @@ public partial class MainWindow
             var i1 = i;
             stackPanel.MouseDown += (_, e) =>
             {
-                if (e.ChangedButton == MouseButton.Right)
+                if (e.ChangedButton != MouseButton.Left)
                     return;
+
                 SelectedKeyIndex = i1;
 
                 if (!Settings.PlayVoice)
