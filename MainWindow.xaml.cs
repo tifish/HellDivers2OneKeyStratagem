@@ -23,26 +23,23 @@ public partial class MainWindow
 {
     public MainWindow()
     {
-        InitializeComponent();
-    }
+        MainViewModel.Instance.IsLoading = true;
 
-    private int _isLoadingCounter;
-
-    private bool IsLoading
-    {
-        get => _isLoadingCounter > 0;
-        set
+        try
         {
-            if (value)
-                _isLoadingCounter++;
-            else
-                _isLoadingCounter--;
+            InitializeComponent();
+        }
+        finally
+        {
+            M.IsLoading = false;
         }
     }
 
-    private async void MainWindow_OnInitialized(object? sender, EventArgs e)
+    private MainViewModel M => (MainViewModel)DataContext;
+
+    private async void MainWindow_Loaded(object? sender, EventArgs e)
     {
-        IsLoading = true;
+        M.IsLoading = true;
 
         try
         {
@@ -55,7 +52,7 @@ public partial class MainWindow
         }
         finally
         {
-            IsLoading = false;
+            M.IsLoading = false;
         }
 
         ActiveWindowMonitor.WindowTitleChanged += OnWindowTitleChanged;
@@ -78,9 +75,9 @@ public partial class MainWindow
             if (Settings.EnableSpeechTrigger)
                 await StartSpeechTrigger();
         }
-        else if (newProcessIsActive && _speechSettingsChanged)
+        else if (newProcessIsActive && M.SpeechSettingsChanged)
         {
-            _speechSettingsChanged = false;
+            M.SpeechSettingsChanged = false;
             await ResetVoiceCommand();
         }
 
@@ -90,9 +87,9 @@ public partial class MainWindow
         }
         else if (e.NewWindowTitle == HellDivers2Title && Settings.EnableHotkeyTrigger)
         {
-            if (_keySettingsChanged)
+            if (M.KeySettingsChanged)
             {
-                _keySettingsChanged = false;
+                M.KeySettingsChanged = false;
                 SetHotkeyGroup();
             }
 
@@ -138,8 +135,8 @@ public partial class MainWindow
             else
                 Settings.Locale = speechLocales.First();
 
-            _keySettingsChanged = true;
-            _speechSettingsChanged = true;
+            M.KeySettingsChanged = true;
+            M.SpeechSettingsChanged = true;
         }
 
         LocaleComboBox.SelectedItem = Settings.Locale;
@@ -385,7 +382,7 @@ public partial class MainWindow
                 StratagemSetsComboBox.Items.Add(stratagemSet);
         }
 
-        SpeechConfidenceNumberBox.Value = Math.Round(Settings.VoiceConfidence, 3);
+        M.SpeechConfidence = Math.Round(Settings.VoiceConfidence, 3);
         WakeupWordTextBox.Text = Settings.WakeupWord;
 
         EnableSpeechTriggerCheckBox.IsChecked = Settings.EnableSpeechTrigger;
@@ -427,7 +424,7 @@ public partial class MainWindow
         if (Settings.Locale == "")
             return;
 
-        IsLoading = true;
+        M.IsLoading = true;
 
         try
         {
@@ -442,13 +439,13 @@ public partial class MainWindow
         }
         finally
         {
-            IsLoading = false;
+            M.IsLoading = false;
         }
     }
 
     private void LoadVoiceNames()
     {
-        IsLoading = true;
+        M.IsLoading = true;
 
         try
         {
@@ -470,7 +467,7 @@ public partial class MainWindow
         }
         finally
         {
-            IsLoading = false;
+            M.IsLoading = false;
         }
     }
 
@@ -533,8 +530,8 @@ public partial class MainWindow
             _keyLabels[index].Content = NoStratagem;
         }
 
-        if (!IsLoading)
-            _keySettingsChanged = true;
+        if (!M.IsLoading)
+            M.KeySettingsChanged = true;
     }
 
     private static readonly string VoiceRootPath = Path.Combine(AppSettings.ExeDirectory, "Voice");
@@ -546,7 +543,7 @@ public partial class MainWindow
 
     private void PlayVoice(string filePath, bool deleteAfterPlay = false)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         if (!File.Exists(filePath))
@@ -566,16 +563,12 @@ public partial class MainWindow
     }
 
 
-    private bool _settingsChanged;
-    private bool _keySettingsChanged;
-    private bool _speechSettingsChanged;
-
     private async void Window_Deactivated(object sender, EventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
-        if (!_settingsChanged)
+        if (!M.SettingsChanged)
             return;
 
         Settings.StratagemSets.Clear();
@@ -584,7 +577,7 @@ public partial class MainWindow
             Settings.StratagemSets.Add((string)item);
         await AppSettings.SaveSettings();
 
-        _settingsChanged = false;
+        M.SettingsChanged = false;
     }
 
     private async Task ResetVoiceCommand()
@@ -684,15 +677,15 @@ public partial class MainWindow
 
     private async void LocaleComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         if (LocaleComboBox.SelectedItem is string locale)
         {
             Settings.Locale = locale;
             if (Settings.PlayVoice)
-                _keySettingsChanged = true;
-            _speechSettingsChanged = true;
+                M.KeySettingsChanged = true;
+            M.SpeechSettingsChanged = true;
 
             await LoadByLanguage();
         }
@@ -700,14 +693,14 @@ public partial class MainWindow
 
     private void VoiceNamesComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         Settings.VoiceName = VoiceNamesComboBox.SelectedItem as string ?? "";
         if (Settings.PlayVoice)
-            _keySettingsChanged = true;
+            M.KeySettingsChanged = true;
         else
-            _settingsChanged = true;
+            M.SettingsChanged = true;
 
         // The stratagem may be invalid after changing the language
         var stratagem = _keyStratagems[SelectedKeyIndex];
@@ -725,47 +718,47 @@ public partial class MainWindow
 
     private void CtrlRadioButton_OnChecked(object sender, RoutedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         Settings.TriggerKey = "Ctrl";
-        _keySettingsChanged = true;
+        M.KeySettingsChanged = true;
     }
 
     private void AltRadioButton_OnChecked(object sender, RoutedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         Settings.TriggerKey = "Alt";
-        _keySettingsChanged = true;
+        M.KeySettingsChanged = true;
     }
 
     private void WasdRadioButton_OnChecked(object sender, RoutedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         Settings.OperateKeys = "WASD";
-        _keySettingsChanged = true;
+        M.KeySettingsChanged = true;
     }
 
     private void ArrowRadioButton_OnChecked(object sender, RoutedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         Settings.OperateKeys = "Arrow";
-        _keySettingsChanged = true;
+        M.KeySettingsChanged = true;
     }
 
     private void UpdateUrlTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         Settings.UpdateUrl = UpdateUrlTextBox.Text;
-        _settingsChanged = true;
+        M.SettingsChanged = true;
     }
 
     private async void CheckForUpdateButton_OnClick(object sender, RoutedEventArgs e)
@@ -804,11 +797,11 @@ public partial class MainWindow
 
     private async void EnableSpeechTriggerCheckBox_OnCheckedUnchecked(object sender, RoutedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         Settings.EnableSpeechTrigger = EnableSpeechTriggerCheckBox.IsChecked == true;
-        _settingsChanged = true;
+        M.SettingsChanged = true;
 
         if (Settings.EnableSpeechTrigger)
             await StartSpeechTrigger();
@@ -833,21 +826,12 @@ public partial class MainWindow
 
     private async void WakeupWordTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         Settings.WakeupWord = WakeupWordTextBox.Text.Trim();
-        _settingsChanged = true;
+        M.SettingsChanged = true;
         await ResetVoiceCommand();
-    }
-
-    private void SpeechConfidenceNumberBox_OnValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
-    {
-        if (IsLoading)
-            return;
-
-        Settings.VoiceConfidence = Math.Round(SpeechConfidenceNumberBox.Value, 3);
-        _settingsChanged = true;
     }
 
     private void MicLabel_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -859,11 +843,11 @@ public partial class MainWindow
 
     private void EnableHotkeyTriggerCheckBox_OnCheckedUnchecked(object sender, RoutedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         Settings.EnableHotkeyTrigger = EnableHotkeyTriggerCheckBox.IsChecked == true;
-        _settingsChanged = true;
+        M.SettingsChanged = true;
 
         HotkeyGroupManager.Enabled = Settings.EnableHotkeyTrigger;
 
@@ -879,11 +863,11 @@ public partial class MainWindow
 
     private void EnableSetKeyBySpeechCheckBox_OnCheckedUnchecked(object sender, RoutedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         Settings.EnableSetKeyBySpeech = EnableSetKeyBySpeechCheckBox.IsChecked == true;
-        _settingsChanged = true;
+        M.SettingsChanged = true;
     }
 
     private void SaveStratagemSetButton_OnClick(object sender, RoutedEventArgs e)
@@ -895,7 +879,7 @@ public partial class MainWindow
         StratagemSetsComboBox.Items.Add(keyStratagemString);
         StratagemSetsComboBox.SelectedIndex = StratagemSetsComboBox.Items.Count - 1;
 
-        _settingsChanged = true;
+        M.SettingsChanged = true;
     }
 
     private void DeleteStratagemSetButton_OnClick(object sender, RoutedEventArgs e)
@@ -905,7 +889,7 @@ public partial class MainWindow
 
         StratagemSetsComboBox.Items.RemoveAt(StratagemSetsComboBox.SelectedIndex);
 
-        _settingsChanged = true;
+        M.SettingsChanged = true;
     }
 
     private bool _isGeneratingVoice;
@@ -992,7 +976,7 @@ public partial class MainWindow
 
     private async void GenerateVoiceStyleComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         await TryVoice();
@@ -1045,7 +1029,7 @@ public partial class MainWindow
                     continue;
 
                 dialog.Hide();
-                SpeechConfidenceNumberBox.Value = Math.Round(scores.Average() - (scores.Max() - scores.Min()), 3);
+                M.SpeechConfidence = Math.Round(scores.Average() - (scores.Max() - scores.Min()), 3);
                 break;
             }
         }
@@ -1081,21 +1065,21 @@ public partial class MainWindow
             return;
 
         SetKeyStratagemString(selectedItem);
-        _keySettingsChanged = true;
+        M.KeySettingsChanged = true;
     }
 
     private void PlayVoiceCheckBox_OnCheckedUnchecked(object sender, RoutedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         Settings.PlayVoice = PlayVoiceCheckBox.IsChecked == true;
-        _keySettingsChanged = true;
+        M.KeySettingsChanged = true;
     }
 
     private void MicComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (IsLoading)
+        if (M.IsLoading)
             return;
 
         _voiceCommand?.UseMic(MicComboBox.SelectedItem as string ?? "");

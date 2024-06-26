@@ -4,22 +4,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
+        xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
 
         xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         ui:WindowHelper.UseModernWindowStyle="True"
         ui:WindowHelper.SystemBackdropType="Mica"
 
+        DataContext="{Binding Source={StaticResource MainViewModel}}"
+
         WindowStartupLocation="CenterScreen"
         SizeToContent="WidthAndHeight"
         Topmost="True"
         ResizeMode="NoResize"
-        
+
         Title="HellDivers2 一键战略信息"
 
         Closed="InfoWindow_OnClosed">
 
-    <StackPanel Margin="20,10,20,10">
+    <ui:SimpleStackPanel Margin="20,10,20,10" Spacing="10">
         <Label Name="InfoLabel" Content="暂无信息" />
-    </StackPanel>
+        <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+            <Label Content="识别阈值：" />
+            <ui:NumberBox Value="{Binding SpeechConfidence, Mode=TwoWay}"
+                          SpinButtonPlacementMode="Inline"
+                          SmallChange="0.01"
+                          Maximum="1" Minimum="0.3" RenderTransformOrigin="-19,0" LargeChange="0.01"
+                          InputScope="Digits" />
+        </ui:SimpleStackPanel>
+    </ui:SimpleStackPanel>
 
 </Window>

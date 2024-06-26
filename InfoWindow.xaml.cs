@@ -4,12 +4,23 @@ public partial class InfoWindow()
 {
     private readonly MainWindow _mainWindow = null!;
 
-    public InfoWindow(MainWindow mainWindow): this()
+    public InfoWindow(MainWindow mainWindow) : this()
     {
         _mainWindow = mainWindow;
 
-        InitializeComponent();
+        MainViewModel.Instance.IsLoading = true;
+
+        try
+        {
+            InitializeComponent();
+        }
+        finally
+        {
+            M.IsLoading = false;
+        }
     }
+
+    private MainViewModel M => (MainViewModel)DataContext;
 
     public void SetInfo(string info)
     {

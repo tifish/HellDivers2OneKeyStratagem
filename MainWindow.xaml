@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
     xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
 
     xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
@@ -11,13 +12,14 @@
     ui:WindowHelper.SystemBackdropType="Mica"
     ui:TitleBar.Height="48"
 
-    mc:Ignorable="d"
+    DataContext="{Binding Source={StaticResource MainViewModel}}"
+
     Title="HellDivers 2 一键战略"
     WindowStartupLocation="CenterScreen"
     SizeToContent="WidthAndHeight"
     ResizeMode="CanMinimize"
 
-    Initialized="MainWindow_OnInitialized"
+    Loaded="MainWindow_Loaded"
     Deactivated="Window_Deactivated"
     Closed="MainWindow_OnClosed">
 
@@ -88,8 +90,9 @@
 
                     <local:MyHorizontalBlock>
                         <Label Content="识别阈值。太大无法识别，太小经常误识别。按“识别校准”自动校准，或者根据识别结果手动调整：" />
-                        <ui:NumberBox x:Name="SpeechConfidenceNumberBox" SpinButtonPlacementMode="Inline"
-                                      SmallChange="0.001" ValueChanged="SpeechConfidenceNumberBox_OnValueChanged"
+                        <ui:NumberBox Value="{Binding SpeechConfidence, Mode=TwoWay}"
+                                      SpinButtonPlacementMode="Inline"
+                                      SmallChange="0.01"
                                       Maximum="1" Minimum="0.3" RenderTransformOrigin="-19,0" LargeChange="0.01"
                                       InputScope="Digits" />
                     </local:MyHorizontalBlock>

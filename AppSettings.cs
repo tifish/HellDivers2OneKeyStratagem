@@ -17,12 +17,12 @@ public class AppSettings
     {
         var settings = await _settingsFile.Load();
         if (settings != null)
-            SettingsContainer.Settings = settings;
+            Settings = settings;
     }
 
     public static async Task SaveSettings()
     {
-        await _settingsFile.Save(SettingsContainer.Settings);
+        await _settingsFile.Save(Settings);
     }
 
     public string TriggerKey { get; set; } = "Ctrl";
