@@ -17,8 +17,9 @@
     SizeToContent="WidthAndHeight"
     ResizeMode="CanMinimize"
 
-    Loaded="Window_Loaded"
-    Deactivated="Window_Deactivated">
+    Initialized="MainWindow_OnInitialized"
+    Deactivated="Window_Deactivated"
+    Closed="MainWindow_OnClosed">
 
     <ui:SimpleStackPanel Margin="20,0,20,20">
 
@@ -132,6 +133,12 @@
                 </local:MyHorizontalStackPanel>
             </ui:SimpleStackPanel>
         </Expander>
+
+        <local:MyHorizontalBlock Margin="0, 10, 0, 0">
+            <CheckBox Name="ShowSpeechInfoWindowCheckBox" Content="显示语音信息窗口"
+                      Checked="ShowSpeechInfoWindowCheckBox_OnChecked"
+                      Unchecked="ShowSpeechInfoWindowCheckBox_OnUnchecked" />
+        </local:MyHorizontalBlock>
 
         <ui:SimpleStackPanel x:Name="HotKeysStackPanel" Margin="0, 10, 0, 0">
 

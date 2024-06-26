@@ -1,13 +1,13 @@
-﻿using EdgeTTS;
-using iNKORE.UI.WPF.Modern.Controls;
-using NAudio.Wave;
-using NHotkey;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using EdgeTTS;
+using iNKORE.UI.WPF.Modern.Controls;
+using NAudio.Wave;
+using NHotkey;
 using Brushes = System.Windows.Media.Brushes;
 using CheckBox = System.Windows.Controls.CheckBox;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
@@ -40,10 +40,9 @@ public partial class MainWindow
         }
     }
 
-    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void MainWindow_OnInitialized(object? sender, EventArgs e)
     {
         IsLoading = true;
-        BeginInit();
 
         try
         {
@@ -56,7 +55,6 @@ public partial class MainWindow
         }
         finally
         {
-            EndInit();
             IsLoading = false;
         }
 
@@ -644,7 +642,9 @@ public partial class MainWindow
             _voiceCommand.CommandRecognized += (_, command) =>
             {
                 var failed = command.Score < Settings.VoiceConfidence;
-                VoiceRecognizeResultLabel.Content = $@"【{(failed ? "失败" : "成功")}】识别阈值：{command.Score:F3} 识别文字：{command.Text} 当前程序：{ActiveWindowMonitor.CurrentProcessFileName}";
+                var info = $"【{(failed ? "失败" : "成功")}】识别阈值：{command.Score:F3} 识别文字：{command.Text}";
+                VoiceRecognizeResultLabel.Content = info;
+                _infoWindow?.SetInfo(info);
 
                 if (failed)
                     return;
@@ -823,6 +823,7 @@ public partial class MainWindow
         SpeechSubSettingsContainer.Visibility = Settings.EnableSpeechTrigger ? Visibility.Visible : Visibility.Collapsed;
         EnableSetKeyBySpeechCheckBox.IsEnabled = Settings.EnableSpeechTrigger;
         StratagemsContainer.Visibility = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
+        ShowSpeechInfoWindowCheckBox.Visibility = Settings.EnableSpeechTrigger ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void OpenSpeechRecognitionControlPanelButton_OnClick(object sender, RoutedEventArgs e)
@@ -1112,5 +1113,45 @@ public partial class MainWindow
         foreach (var stratagem in StratagemManager.Stratagems)
             File.WriteAllText(Path.Combine(folder, stratagem.Name), stratagem.Name);
         GenerateVoiceMessageLabel.Content = @"txt 生成完毕";
+    }
+
+    private InfoWindow? _infoWindow;
+
+    private void ShowInfoWindow()
+    {
+        if (_infoWindow != null)
+            return;
+
+        _infoWindow = new InfoWindow(this);
+        _infoWindow.Show();
+    }
+
+    private void HideInfoWindow()
+    {
+        _infoWindow?.Close();
+        _infoWindow = null;
+    }
+
+    public void NotifyInfoWindowClosed()
+    {
+        _infoWindow = null;
+        ShowSpeechInfoWindowCheckBox.IsChecked = false;
+    }
+
+    private void ShowSpeechInfoWindowCheckBox_OnChecked(object sender, RoutedEventArgs e)
+    {
+        ShowInfoWindow();
+    }
+
+    private void ShowSpeechInfoWindowCheckBox_OnUnchecked(object sender, RoutedEventArgs e)
+    {
+        HideInfoWindow();
+    }
+
+    private async void MainWindow_OnClosed(object? sender, EventArgs e)
+    {
+        HideInfoWindow();
+        HotkeyGroupManager.ClearHotkeyGroup();
+        await StopSpeechTrigger();
     }
 }
