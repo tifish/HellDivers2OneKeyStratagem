@@ -1,9 +1,12 @@
-﻿namespace HellDivers2OneKeyStratagem;
+﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
+
+namespace HellDivers2OneKeyStratagem;
 
 /// <summary>
 ///     Interaction logic for CalibrateVoiceDialogPage.xaml
 /// </summary>
-public partial class CalibrateVoiceDialog
+public partial class CalibrateVoiceDialog : Window
 {
     public CalibrateVoiceDialog()
     {
@@ -13,5 +16,10 @@ public partial class CalibrateVoiceDialog
     public void SetMessage(string msg)
     {
         MessageLabel.Content = msg;
+    }
+
+    private void CloseButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        Close();
     }
 }

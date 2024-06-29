@@ -1,11 +1,12 @@
 ﻿global using static HellDivers2OneKeyStratagem.SettingsContainer;
-using System.IO;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace HellDivers2OneKeyStratagem;
 
 public class AppSettings
 {
+    public static readonly string ExeFileName = Path.GetFileNameWithoutExtension(Environment.ProcessPath!);
     public static readonly string ExeDirectory = AppDomain.CurrentDomain.BaseDirectory;
     public static readonly string SettingsDirectory = Path.Combine(ExeDirectory, "Settings");
     public static readonly string SettingsFile = Path.Combine(SettingsDirectory, "Settings.json");

@@ -1,0 +1,186 @@
+﻿<Window x:Class="HellDivers2OneKeyStratagem.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
+        d:DesignWidth="800" d:DesignHeight="450"
+
+        x:DataType="local:MainViewModel"
+
+        Title="HellDivers 2 一键战略"
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="WidthAndHeight"
+        CanResize="False"
+
+        Loaded="Window_OnLoaded"
+        Deactivated="Window_Deactivated"
+        Closing="Window_OnClosing">
+
+    <StackPanel Margin="20,0,20,20">
+
+        <Expander Header="第一次使用前一定要先设置...">
+            <StackPanel Margin="20,10,20,0">
+
+                <StackPanel>
+
+                    <local:MyHorizontalBlock>
+                        <Label Content="语言：" />
+                        <ComboBox Name="LocaleComboBox" SelectionChanged="LocaleComboBox_OnSelectionChanged" />
+                    </local:MyHorizontalBlock>
+
+                    <local:MyHorizontalBlock>
+                        <Label Content="与游戏内设置的按键保持一致，注意必须设置为“按住”：" />
+                        <RadioButton Name="CtrlRadioButton" Content="Ctrl" GroupName="CtrlAltGroup"
+                                     IsCheckedChanged="CtrlAltRadioButton_OnIsCheckedChanged" />
+                        <RadioButton Name="AltRadioButton" Content="Alt" GroupName="CtrlAltGroup" />
+                        <Label Content="+" />
+                        <RadioButton Name="WasdRadioButton" Content="WASD" GroupName="WasdArrowGroup"
+                                     IsCheckedChanged="WasdArrowRadioButton_OnIsCheckedChanged" />
+                        <RadioButton Name="ArrowRadioButton" Content="上下左右" GroupName="WasdArrowGroup" />
+                        <Label Content="强烈建议使用“上下左右”，可以在跑动中呼叫战略。" />
+                    </local:MyHorizontalBlock>
+
+                    <local:MyHorizontalBlock>
+                        <CheckBox Name="PlayVoiceCheckBox" Content="呼叫时播放战略名字，选择声优："
+                                  IsCheckedChanged="PlayVoiceCheckBox_OnIsCheckedChanged" />
+                        <ComboBox Name="VoiceNamesComboBox"
+                                  SelectionChanged="VoiceNamesComboBox_OnSelectionChanged" />
+                        <Button Name="RefreshVoiceNamesButton" Content="刷新"
+                                Click="RefreshVoiceNamesButton_OnClick" />
+                    </local:MyHorizontalBlock>
+
+                    <local:MyHorizontalBlock>
+                        <Label Content="更新地址，群友加速专用：" />
+                        <TextBox Name="UpdateUrlTextBox" TextChanged="UpdateUrlTextBox_OnTextChanged" />
+                        <Button Name="CheckForUpdateButton" Content="检查更新"
+                                Click="CheckForUpdateButton_OnClick" />
+                    </local:MyHorizontalBlock>
+
+                </StackPanel>
+
+                <local:MyHorizontalStackPanel>
+                    <CheckBox Name="EnableSpeechTriggerCheckBox" Content="开启麦克风呼叫，君子动口不动手"
+                              IsCheckedChanged="EnableSpeechTriggerCheckBox_OnIsCheckedChanged" />
+                </local:MyHorizontalStackPanel>
+
+                <StackPanel Name="SpeechSubSettingsContainer">
+                    <local:MyHorizontalBlock>
+                        <Button Name="OpenSpeechRecognitionControlPanelButton"
+                                Content="打开系统语音设置，选择“训练你的计算机”可以提高识别率..."
+                                Click="OpenSpeechRecognitionControlPanelButton_OnClick" />
+                    </local:MyHorizontalBlock>
+
+                    <local:MyHorizontalBlock>
+                        <Label Content="唤醒词（可选）。例如“好好学习”，就要用“好好学习飞鹰空袭”来呼叫“飞鹰空袭”。可以减少误识别率：" />
+                        <TextBox Name="WakeupWordTextBox" TextChanged="WakeupWordTextBox_OnTextChanged" />
+                    </local:MyHorizontalBlock>
+
+                    <local:MyHorizontalBlock>
+                        <Label Content="识别阈值。太大无法识别，太小经常误识别。按“识别校准”自动校准，或者根据识别结果手动调整：" />
+                        <NumericUpDown Value="{Binding SpeechConfidence, Mode=TwoWay}"
+                                       Increment="0.01" Maximum="1" Minimum="0.3" FormatString="F3" />
+                    </local:MyHorizontalBlock>
+
+                    <local:MyHorizontalBlock>
+                        <Button Name="CalibrateVoiceButton" Content="识别校准，通过念三次战略名字自动校准..."
+                                Click="CalibrateVoiceButton_Click" />
+                        <Label Name="VoiceRecognizeResultLabel" Content="暂无识别结果" />
+                    </local:MyHorizontalBlock>
+
+                    <local:MyHorizontalBlock>
+                        <Label Content="如果有多个麦克风，且无法识别语音，可以尝试手动选择麦克风："
+                               DoubleTapped="MicLabel_OnMouseDoubleClick" />
+                        <ComboBox Name="MicComboBox" SelectionChanged="MicComboBox_OnSelectionChanged"
+                                  DropDownOpened="MicComboBox_OnDropDownOpened" />
+                    </local:MyHorizontalBlock>
+                </StackPanel>
+
+                <local:MyHorizontalBlock Name="GenerateVoiceContainer" IsVisible="False">
+                    <ComboBox Name="GenerateVoiceStyleComboBox"
+                              SelectionChanged="GenerateVoiceStyleComboBox_OnSelectionChanged" />
+                    <Button Name="TryVoiceButton" Content="试听" Click="TryVoiceButton_OnClick" />
+                    <Label Content="速率：" />
+                    <TextBox Name="VoiceRateTextBox" Text="+0%" />
+                    <Label Content="音量：" />
+                    <TextBox Name="VoiceVolumeTextBox" Text="+0%" />
+                    <Label Content="音调：" />
+                    <TextBox Name="VoicePitchTextBox" Text="+0Hz" />
+                    <Button Name="GenerateVoiceButton" Content="生成语音" Click="GenerateVoiceButton_OnClick" />
+                    <Button Name="GenerateTxtButton" Content="生成 txt" Click="GenerateTxtButton_Click" />
+                    <Label Name="GenerateVoiceMessageLabel" Content="未生成" />
+                </local:MyHorizontalBlock>
+
+                <local:MyHorizontalStackPanel>
+                    <CheckBox Name="EnableHotkeyTriggerCheckBox" Content="开启快捷键呼叫"
+                              IsCheckedChanged="EnableHotkeyTriggerCheckBox_OnIsCheckedChanged" />
+                    <CheckBox Name="EnableSetKeyBySpeechCheckBox" Content="支持通过语音设置快捷键战略"
+                              IsCheckedChanged="EnableSetKeyBySpeechCheckBox_OnIsCheckedChanged" />
+                </local:MyHorizontalStackPanel>
+            </StackPanel>
+        </Expander>
+
+        <local:MyHorizontalBlock Name="ShowSpeechInfoWindowCheckBoxContainer" Margin="0, 10, 0, 0">
+            <CheckBox Name="ShowSpeechInfoWindowCheckBox" Content="显示语音信息窗口"
+                      IsCheckedChanged="ShowSpeechInfoWindowCheckBox_OnIsCheckedChanged" />
+        </local:MyHorizontalBlock>
+
+        <StackPanel Name="HotKeysStackPanel" Margin="0, 10, 0, 0">
+
+            <local:MyHorizontalStackPanel>
+                <ComboBox Name="StratagemSetsComboBox"
+                          SelectionChanged="StratagemSetsComboBox_OnSelectionChanged" />
+                <Button Name="SaveStratagemSetButton" Content="保存配置(_S)" Click="SaveStratagemSetButton_OnClick" />
+                <Button Name="DeleteStratagemSetButton" Content="删除配置(_D)"
+                        Click="DeleteStratagemSetButton_OnClick" />
+            </local:MyHorizontalStackPanel>
+
+            <StackPanel>
+                <local:MyHorizontalBlock Name="KeysStackPanel1">
+                    <Border BorderThickness="1" BorderBrush="Black">
+                        <StackPanel>
+                            <Label Content="F1" />
+                            <Label Content="飞鹰空袭" />
+                        </StackPanel>
+                    </Border>
+                </local:MyHorizontalBlock>
+                <local:MyHorizontalBlock Name="KeysStackPanel2">
+                    <Border BorderThickness="1" BorderBrush="Black">
+                        <StackPanel>
+                            <Label Content="F1" />
+                            <Label Content="飞鹰空袭" />
+                        </StackPanel>
+                    </Border>
+                </local:MyHorizontalBlock>
+            </StackPanel>
+
+        </StackPanel>
+
+        <StackPanel Name="StratagemsContainer">
+            <local:MyHorizontalStackPanel>
+                <Label Content="左键选择战略，右键自定义麦克风呼叫名字" />
+            </local:MyHorizontalStackPanel>
+
+            <StackPanel Name="StratagemGroupsContainer" Orientation="Horizontal">
+                <Border Background="{DynamicResource SystemControlBackgroundListLowBrush}" Padding="20,10,20,10"
+                        Margin="0,1,0,1" VerticalAlignment="Stretch">
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="飞鹰" />
+                        <CheckBox Content="飞鹰空袭" />
+                        <CheckBox Content="飞鹰500KG炸弹" />
+                    </StackPanel>
+                </Border>
+                <Border Background="{DynamicResource SystemControlBackgroundListLowBrush}" Padding="20,10,20,10"
+                        Margin="0,1,0,1" VerticalAlignment="Stretch">
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="轨道" />
+                        <CheckBox Content="轨道毒气攻击" />
+                        <CheckBox Content="轨道炮攻击" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </StackPanel>
+
+    </StackPanel>
+</Window>

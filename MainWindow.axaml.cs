@@ -1,29 +1,27 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Layout;
+using Avalonia.Media;
 using EdgeTTS;
-using iNKORE.UI.WPF.Modern.Controls;
+using GlobalHotKeys;
 using NAudio.Wave;
-using NHotkey;
-using Brushes = System.Windows.Media.Brushes;
-using CheckBox = System.Windows.Controls.CheckBox;
-using HorizontalAlignment = System.Windows.HorizontalAlignment;
-using Label = System.Windows.Controls.Label;
-using Orientation = System.Windows.Controls.Orientation;
 
 namespace HellDivers2OneKeyStratagem;
 
 /// <summary>
 ///     Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow
+public partial class MainWindow : Window
 {
     public MainWindow()
     {
-        MainViewModel.Instance.IsLoading = true;
+        DataContext = MainViewModel.Instance;
+
+        M.IsLoading = true;
 
         try
         {
@@ -35,9 +33,9 @@ public partial class MainWindow
         }
     }
 
-    private MainViewModel M => (MainViewModel)DataContext;
+    private MainViewModel M => (MainViewModel)DataContext!;
 
-    private async void MainWindow_Loaded(object? sender, EventArgs e)
+    private async void Window_OnLoaded(object? sender, RoutedEventArgs e)
     {
         M.IsLoading = true;
 
@@ -63,8 +61,8 @@ public partial class MainWindow
 
     private async void OnWindowTitleChanged(object? sender, WindowTitleChangedEventArgs e)
     {
-        var oldProcessIsActive = e.OldWindowTitle == Title || e.OldWindowTitle == HellDivers2Title;
-        var newProcessIsActive = e.NewWindowTitle == Title || e.NewWindowTitle == HellDivers2Title;
+        var oldProcessIsActive = e.OldWindowTitle == HellDivers2Title;
+        var newProcessIsActive = e.NewWindowTitle == HellDivers2Title || ActiveWindowMonitor.CurrentProcessFileName == AppSettings.ExeFileName;
 
         if (oldProcessIsActive && !newProcessIsActive)
         {
@@ -99,7 +97,7 @@ public partial class MainWindow
 
     private void SetHotkeyGroup()
     {
-        var hotkeys = new Dictionary<Key, EventHandler<HotkeyEventArgs>>();
+        var hotkeys = new Dictionary<Key, EventHandler<HotKey>>();
         for (var i = 0; i < _keyStratagems.Length; i++)
         {
             var stratagem = _keyStratagems[i];
@@ -204,11 +202,8 @@ public partial class MainWindow
             stackPanel.Children.Add(stratagemLabel);
 
             var i1 = i;
-            stackPanel.MouseDown += (_, e) =>
+            stackPanel.PointerPressed += (_, e) =>
             {
-                if (e.ChangedButton != MouseButton.Left)
-                    return;
-
                 SelectedKeyIndex = i1;
 
                 if (!Settings.PlayVoice)
@@ -257,10 +252,10 @@ public partial class MainWindow
                 Width = double.NaN,
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
-            border.SetResourceReference(Border.BackgroundProperty, "CardBackgroundFillColorDefaultBrush");
+            border.Bind(Border.BackgroundProperty, Resources.GetResourceObservable("SystemControlBackgroundListLowBrush"));
             StratagemGroupsContainer.Children.Add(border);
 
-            var groupContainer = new SimpleStackPanel
+            var groupContainer = new StackPanel
             {
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
@@ -281,40 +276,31 @@ public partial class MainWindow
                 stratagem.CheckBox = stratagemCheckBox;
                 groupContainer.Children.Add(stratagemCheckBox);
 
-                stratagemCheckBox.ToolTip = $"""
-                                             {StratagemManager.GetSystemAlias(stratagem.Name)}
-                                                 自定义名称：{StratagemManager.GetUserAlias(stratagem.Name)}
-                                                 按右键编辑自定义名称。
-                                             """;
+                ToolTip.SetTip(stratagemCheckBox, $"""
+                                                   {StratagemManager.GetSystemAlias(stratagem.Name)}
+                                                       自定义名称：{StratagemManager.GetUserAlias(stratagem.Name)}
+                                                       按右键编辑自定义名称。
+                                                   """);
 
-                stratagemCheckBox.Checked += OnStratagemCheckBoxCheckedAndUnchecked;
-                stratagemCheckBox.Unchecked += OnStratagemCheckBoxCheckedAndUnchecked;
+                stratagemCheckBox.IsCheckedChanged += StratagemCheckBoxOnIsCheckedChanged;
 
-                stratagemCheckBox.MouseDown += async (_, args) =>
+                stratagemCheckBox.PointerPressed += async (_, args) =>
                 {
-                    if (args.ChangedButton != MouseButton.Right)
+                    if (args.GetCurrentPoint(null).Properties.PointerUpdateKind != PointerUpdateKind.RightButtonPressed)
                         return;
 
-                    var page = new EditAliasesDialog((string)stratagemCheckBox.Content);
-                    var dialog = new ContentDialog
-                    {
-                        Title = "编辑自定义名称",
-                        Content = page,
-                        PrimaryButtonText = "确定",
-                        SecondaryButtonText = "取消",
-                    };
+                    var dialog = new EditAliasesDialog((string)stratagemCheckBox.Content);
 
-                    var result = await dialog.ShowAsync();
-                    if (result == ContentDialogResult.Primary)
+                    if (await dialog.ShowDialog<bool>(this))
                     {
-                        page.Commit();
+                        dialog.Commit();
                         await ResetVoiceCommand();
                     }
                 };
 
                 continue;
 
-                void OnStratagemCheckBoxCheckedAndUnchecked(object o, RoutedEventArgs routedEventArgs)
+                void StratagemCheckBoxOnIsCheckedChanged(object? o, RoutedEventArgs routedEventArgs)
                 {
                     if (_isSettingStratagemCheckBoxChecked)
                         return;
@@ -332,7 +318,7 @@ public partial class MainWindow
                         SetKeyStratagem(SelectedKeyIndex, stratagem);
 
                         if (SelectedKeyIndex > 0)
-                            if ((string)_keyLabels[SelectedKeyIndex - 1].Content == NoStratagem)
+                            if (_keyLabels[SelectedKeyIndex - 1].Content as string == NoStratagem)
                                 SelectedKeyIndex--;
                     }
                     else
@@ -562,7 +548,6 @@ public partial class MainWindow
         waveOut.Play();
     }
 
-
     private async void Window_Deactivated(object sender, EventArgs e)
     {
         if (M.IsLoading)
@@ -574,7 +559,7 @@ public partial class MainWindow
         Settings.StratagemSets.Clear();
         Settings.StratagemSets.Add(GetKeyStratagemString());
         foreach (var item in StratagemSetsComboBox.Items)
-            Settings.StratagemSets.Add((string)item);
+            Settings.StratagemSets.Add(item as string ?? "");
         await AppSettings.SaveSettings();
 
         M.SettingsChanged = false;
@@ -597,23 +582,13 @@ public partial class MainWindow
             var languages = VoiceCommand.GetInstalledRecognizers();
             if (languages.Count == 0)
             {
-                await new ContentDialog
-                {
-                    Title = "错误",
-                    Content = new Label { Content = "没有安装语音识别引擎" },
-                    PrimaryButtonText = "确定",
-                }.ShowAsync();
+                await new MessageDialog("错误", "没有安装语音识别引擎").ShowDialog(this);
                 return;
             }
 
             if (!languages.Contains(Settings.Locale))
             {
-                await new ContentDialog
-                {
-                    Title = "错误",
-                    Content = new Label { Content = $"没有安装 {Settings.Locale} 的语音识别引擎" },
-                    PrimaryButtonText = "确定",
-                }.ShowAsync();
+                await new MessageDialog("错误", $"没有安装 {Settings.Locale} 的语音识别引擎").ShowDialog(this);
                 return;
             }
 
@@ -623,12 +598,7 @@ public partial class MainWindow
             }
             catch (Exception)
             {
-                await new ContentDialog
-                {
-                    Title = "错误",
-                    Content = new Label { Content = "创建语音识别失败" },
-                    PrimaryButtonText = "确定",
-                }.ShowAsync();
+                await new MessageDialog("错误", "创建语音识别失败").ShowDialog(this);
                 return;
             }
 
@@ -658,8 +628,8 @@ public partial class MainWindow
                 }
             };
 
-            if (MicComboBox.Text != "")
-                await _voiceCommand.UseMic(MicComboBox.Text);
+            if (MicComboBox.SelectedValue is string mic && mic != "")
+                await _voiceCommand.UseMic(mic);
         }
 
         _voiceCommand.Start();
@@ -716,39 +686,21 @@ public partial class MainWindow
         LoadVoiceNames();
     }
 
-    private void CtrlRadioButton_OnChecked(object sender, RoutedEventArgs e)
+    private void CtrlAltRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs routedEventArgs)
     {
         if (M.IsLoading)
             return;
 
-        Settings.TriggerKey = "Ctrl";
+        Settings.TriggerKey = CtrlRadioButton.IsChecked!.Value ? "Ctrl" : "Alt";
         M.KeySettingsChanged = true;
     }
 
-    private void AltRadioButton_OnChecked(object sender, RoutedEventArgs e)
+    private void WasdArrowRadioButton_OnIsCheckedChanged(object sender, RoutedEventArgs e)
     {
         if (M.IsLoading)
             return;
 
-        Settings.TriggerKey = "Alt";
-        M.KeySettingsChanged = true;
-    }
-
-    private void WasdRadioButton_OnChecked(object sender, RoutedEventArgs e)
-    {
-        if (M.IsLoading)
-            return;
-
-        Settings.OperateKeys = "WASD";
-        M.KeySettingsChanged = true;
-    }
-
-    private void ArrowRadioButton_OnChecked(object sender, RoutedEventArgs e)
-    {
-        if (M.IsLoading)
-            return;
-
-        Settings.OperateKeys = "Arrow";
+        Settings.OperateKeys = WasdRadioButton.IsChecked!.Value ? "WASD" : "Arrow";
         M.KeySettingsChanged = true;
     }
 
@@ -757,7 +709,7 @@ public partial class MainWindow
         if (M.IsLoading)
             return;
 
-        Settings.UpdateUrl = UpdateUrlTextBox.Text;
+        Settings.UpdateUrl = UpdateUrlTextBox.Text ?? "";
         M.SettingsChanged = true;
     }
 
@@ -769,24 +721,12 @@ public partial class MainWindow
         {
             if (await AutoUpdate.HasUpdate())
             {
-                var dialogResult = await new ContentDialog
-                {
-                    Title = "提示",
-                    Content = new Label { Content = "发现新版本，是否更新？" },
-                    PrimaryButtonText = "是",
-                    SecondaryButtonText = "否",
-                }.ShowAsync();
-                if (dialogResult == ContentDialogResult.Primary)
+                if (await new YesNoDialog("提示", "发现新版本，是否更新？").ShowDialog<bool>(this))
                     AutoUpdate.Update();
             }
             else
             {
-                await new ContentDialog
-                {
-                    Title = "提示",
-                    Content = new Label { Content = "已经是最新版本" },
-                    PrimaryButtonText = "确定",
-                }.ShowAsync();
+                await new MessageDialog("提示", "已经是最新版本").ShowDialog<bool>(this);
             }
         }
         finally
@@ -795,7 +735,7 @@ public partial class MainWindow
         }
     }
 
-    private async void EnableSpeechTriggerCheckBox_OnCheckedUnchecked(object sender, RoutedEventArgs e)
+    private async void EnableSpeechTriggerCheckBox_OnIsCheckedChanged(object sender, RoutedEventArgs e)
     {
         if (M.IsLoading)
             return;
@@ -813,10 +753,10 @@ public partial class MainWindow
 
     private void RefreshAfterEnableSpeechTriggerChanged()
     {
-        SpeechSubSettingsContainer.Visibility = Settings.EnableSpeechTrigger ? Visibility.Visible : Visibility.Collapsed;
+        SpeechSubSettingsContainer.IsVisible = Settings.EnableSpeechTrigger;
         EnableSetKeyBySpeechCheckBox.IsEnabled = Settings.EnableSpeechTrigger;
-        StratagemsContainer.Visibility = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
-        ShowSpeechInfoWindowCheckBox.Visibility = Settings.EnableSpeechTrigger ? Visibility.Visible : Visibility.Collapsed;
+        StratagemsContainer.IsVisible = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger;
+        ShowSpeechInfoWindowCheckBoxContainer.IsVisible = Settings.EnableSpeechTrigger;
     }
 
     private void OpenSpeechRecognitionControlPanelButton_OnClick(object sender, RoutedEventArgs e)
@@ -829,19 +769,17 @@ public partial class MainWindow
         if (M.IsLoading)
             return;
 
-        Settings.WakeupWord = WakeupWordTextBox.Text.Trim();
+        Settings.WakeupWord = WakeupWordTextBox.Text?.Trim() ?? "";
         M.SettingsChanged = true;
         await ResetVoiceCommand();
     }
 
-    private void MicLabel_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void MicLabel_OnMouseDoubleClick(object? sender, TappedEventArgs tappedEventArgs)
     {
-        GenerateVoiceContainer.Visibility = GenerateVoiceContainer.Visibility == Visibility.Visible
-            ? Visibility.Collapsed
-            : Visibility.Visible;
+        GenerateVoiceContainer.IsVisible = !GenerateVoiceContainer.IsVisible;
     }
 
-    private void EnableHotkeyTriggerCheckBox_OnCheckedUnchecked(object sender, RoutedEventArgs e)
+    private void EnableHotkeyTriggerCheckBox_OnIsCheckedChanged(object sender, RoutedEventArgs e)
     {
         if (M.IsLoading)
             return;
@@ -856,12 +794,12 @@ public partial class MainWindow
 
     private void RefreshAfterEnableHotkeyTriggerChanged()
     {
-        EnableSetKeyBySpeechCheckBox.Visibility = Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
-        HotKeysStackPanel.Visibility = Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
-        StratagemsContainer.Visibility = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger ? Visibility.Visible : Visibility.Collapsed;
+        EnableSetKeyBySpeechCheckBox.IsVisible = Settings.EnableHotkeyTrigger;
+        HotKeysStackPanel.IsVisible = Settings.EnableHotkeyTrigger;
+        StratagemsContainer.IsVisible = Settings.EnableSpeechTrigger || Settings.EnableHotkeyTrigger;
     }
 
-    private void EnableSetKeyBySpeechCheckBox_OnCheckedUnchecked(object sender, RoutedEventArgs e)
+    private void EnableSetKeyBySpeechCheckBox_OnIsCheckedChanged(object sender, RoutedEventArgs e)
     {
         if (M.IsLoading)
             return;
@@ -950,7 +888,7 @@ public partial class MainWindow
             Directory.CreateDirectory(voiceDir);
 
         var voiceName = (string)GenerateVoiceStyleComboBox.SelectedItem!;
-        var communicate = new Communicate(text, voiceName, VoiceRateTextBox.Text, VoiceVolumeTextBox.Text, VoicePitchTextBox.Text);
+        var communicate = new Communicate(text, voiceName, VoiceRateTextBox.Text!, VoiceVolumeTextBox.Text!, VoicePitchTextBox.Text!);
         await communicate.Save(filePath);
     }
 
@@ -986,12 +924,7 @@ public partial class MainWindow
     {
         if (_voiceCommand == null)
         {
-            await new ContentDialog
-            {
-                Title = "提示",
-                Content = new Label { Content = "请先开启语音触发功能" },
-                PrimaryButtonText = "确定",
-            }.ShowAsync();
+            await new MessageDialog("提示", "请先开启语音触发功能").ShowDialog(this);
             return;
         }
 
@@ -1003,24 +936,18 @@ public partial class MainWindow
             $"请朗读 “{Settings.WakeupWord}消耗性反坦克武器”",
         };
         var times = 0;
-        var page = new CalibrateVoiceDialog();
-        var dialog = new ContentDialog
-        {
-            Title = "校准语音识别",
-            Content = page,
-            PrimaryButtonText = "关闭",
-        };
+        var dialog = new CalibrateVoiceDialog();
 
         _voiceCommand.CommandRecognized += TestEvent;
 
         try
         {
             var currentTime = times;
-            _ = dialog.ShowAsync();
+            _ = dialog.ShowDialog(this);
 
             while (dialog.IsVisible)
             {
-                page.SetMessage(messages[currentTime]);
+                dialog.SetMessage(messages[currentTime]);
 
                 while (times == currentTime && dialog.IsVisible)
                     await Task.Delay(100);
@@ -1068,7 +995,7 @@ public partial class MainWindow
         M.KeySettingsChanged = true;
     }
 
-    private void PlayVoiceCheckBox_OnCheckedUnchecked(object sender, RoutedEventArgs e)
+    private void PlayVoiceCheckBox_OnIsCheckedChanged(object sender, RoutedEventArgs e)
     {
         if (M.IsLoading)
             return;
@@ -1087,7 +1014,7 @@ public partial class MainWindow
 
     private void MicComboBox_OnDropDownOpened(object? sender, EventArgs e)
     {
-        LoadMicDevices(MicComboBox.Text);
+        LoadMicDevices(MicComboBox.SelectedValue as string ?? "");
     }
 
     private void GenerateTxtButton_Click(object sender, RoutedEventArgs e)
@@ -1122,20 +1049,19 @@ public partial class MainWindow
         ShowSpeechInfoWindowCheckBox.IsChecked = false;
     }
 
-    private void ShowSpeechInfoWindowCheckBox_OnChecked(object sender, RoutedEventArgs e)
+    private void ShowSpeechInfoWindowCheckBox_OnIsCheckedChanged(object sender, RoutedEventArgs e)
     {
-        ShowInfoWindow();
+        if (ShowSpeechInfoWindowCheckBox.IsChecked == true)
+            ShowInfoWindow();
+        else
+            HideInfoWindow();
     }
 
-    private void ShowSpeechInfoWindowCheckBox_OnUnchecked(object sender, RoutedEventArgs e)
-    {
-        HideInfoWindow();
-    }
-
-    private async void MainWindow_OnClosed(object? sender, EventArgs e)
+    private async void Window_OnClosing(object? sender, WindowClosingEventArgs e)
     {
         HideInfoWindow();
         HotkeyGroupManager.ClearHotkeyGroup();
         await StopSpeechTrigger();
     }
+
 }

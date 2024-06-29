@@ -1,4 +1,4 @@
-﻿using System.Windows.Threading;
+﻿using Avalonia.Threading;
 
 public static class ActiveWindowMonitor
 {

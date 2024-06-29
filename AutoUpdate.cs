@@ -2,6 +2,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -32,7 +34,9 @@ public static class AutoUpdate
             UseShellExecute = true,
         });
 
-        Application.Current.Shutdown();
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
+            lifetime.MainWindow?.Close();
+
         return true;
     }
 }

@@ -1,12 +1,26 @@
-﻿using System.Windows.Input;
-using NHotkey;
-using NHotkey.Wpf;
+﻿using Avalonia.Input;
+using Avalonia.Win32.Input;
+using GlobalHotKeys;
+using GlobalHotKeys.Native.Types;
 
 public static class HotkeyGroupManager
 {
-    private static Dictionary<Key, EventHandler<HotkeyEventArgs>> _hotkeyGroup = new();
+    private static HotKeyManager? _hotKeyManager;
 
-    public static void SetHotkeyGroup(Dictionary<Key, EventHandler<HotkeyEventArgs>> hotkeys)
+    static HotkeyGroupManager()
+    {
+    }
+
+    private static void OnHotkeyPressed(HotKey hotkey)
+    {
+        var key = KeyInterop.KeyFromVirtualKey((int)hotkey.Key, 0);
+        if (_hotkeyGroup.TryGetValue(key, out var handler))
+            handler.Invoke(_hotKeyManager, hotkey);
+    }
+
+    private static Dictionary<Key, EventHandler<HotKey>> _hotkeyGroup = new();
+
+    public static void SetHotkeyGroup(Dictionary<Key, EventHandler<HotKey>> hotkeys)
     {
         if (Enabled)
             UnregisterHotkeys();
@@ -46,13 +60,25 @@ public static class HotkeyGroupManager
 
     private static void RegisterHotkeys()
     {
+        if (_hotKeyManager != null)
+        {
+            UnregisterHotkeys();
+            return;
+        }
+
+        _hotKeyManager = new HotKeyManager();
+        _hotKeyManager.HotKeyPressed.Subscribe(OnHotkeyPressed);
+
         foreach (var (hotkey, handler) in _hotkeyGroup)
-            HotkeyManager.Current.AddOrReplace(Enum.GetName(hotkey), hotkey, ModifierKeys.None, handler);
+            _hotKeyManager.Register((VirtualKeyCode)KeyInterop.VirtualKeyFromKey(hotkey), Modifiers.NoRepeat);
     }
 
     private static void UnregisterHotkeys()
     {
-        foreach (var hotkey in _hotkeyGroup.Keys)
-            HotkeyManager.Current.Remove(Enum.GetName(hotkey));
+        if (_hotKeyManager == null)
+            return;
+
+        _hotKeyManager.Dispose();
+        _hotKeyManager = null;
     }
 }

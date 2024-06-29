@@ -1,10 +1,17 @@
-﻿using System.Windows.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Threading;
 
 namespace HellDivers2OneKeyStratagem;
 
-public partial class EditAliasesDialog
+public partial class EditAliasesDialog : Window
 {
     private readonly string _stratagemName;
+
+    public EditAliasesDialog()
+    {
+        _stratagemName = "";
+    }
 
     public EditAliasesDialog(string stratagemName)
     {
@@ -25,6 +32,16 @@ public partial class EditAliasesDialog
 
     public void Commit()
     {
-        StratagemManager.SetUserAlias(_stratagemName, UserAliasesTextBox.Text.Trim());
+        StratagemManager.SetUserAlias(_stratagemName, UserAliasesTextBox.Text?.Trim() ?? "");
+    }
+
+    private void OkButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        Close(true);
+    }
+
+    private void CancelButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        Close(false);
     }
 }

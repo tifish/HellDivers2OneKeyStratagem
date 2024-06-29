@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
-using System.Windows.Input;
+using Avalonia.Input;
+using Avalonia.Win32.Input;
 
 public static class SendKey
 {
