@@ -6,16 +6,17 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="HellDivers2OneKeyStratagem.YesNoDialog"
         TransparencyLevelHint="AcrylicBlur"
+        CanResize="False"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner">
 
-    <StackPanel>
+    <StackPanel Margin="20,10,20,10">
         <local:MyHorizontalBlock>
             <Label Name="MessageLabel" />
         </local:MyHorizontalBlock>
-        <StackPanel Orientation="Horizontal" Spacing="10">
+        <local:MyHorizontalStackPanel HorizontalAlignment="Center">
             <Button Name="YesButton" Content="是" Click="YesButton_OnClick" />
             <Button Name="NoButton" Content="否" Click="NoButton_OnClick" />
-        </StackPanel>
+        </local:MyHorizontalStackPanel>
     </StackPanel>
 </Window>
