@@ -5,7 +5,8 @@ namespace HellDivers2OneKeyStratagem;
 
 public class AppSettings
 {
-    public static readonly string ExeFileName = Path.GetFileNameWithoutExtension(Environment.ProcessPath!);
+    public static readonly string ExePath = Environment.ProcessPath!;
+    public static readonly string ExeFileName = Path.GetFileNameWithoutExtension(ExePath);
     public static readonly string ExeDirectory = AppDomain.CurrentDomain.BaseDirectory;
     public static readonly string SettingsDirectory = Path.Combine(ExeDirectory, "Settings");
     public static readonly string SettingsFile = Path.Combine(SettingsDirectory, "Settings.json");

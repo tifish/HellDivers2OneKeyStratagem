@@ -12,9 +12,6 @@ using NAudio.Wave;
 
 namespace HellDivers2OneKeyStratagem;
 
-/// <summary>
-///     Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow : Window
 {
     public MainWindow()
@@ -1063,5 +1060,4 @@ public partial class MainWindow : Window
         HotkeyGroupManager.ClearHotkeyGroup();
         await StopSpeechTrigger();
     }
-
 }

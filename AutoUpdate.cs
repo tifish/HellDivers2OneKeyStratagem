@@ -17,7 +17,7 @@ public static class AutoUpdate
         if (updateTime == null)
             return false;
 
-        var dllTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location);
+        var dllTime = File.GetLastWriteTime(AppSettings.ExePath);
 
         return updateTime - dllTime > TimeSpan.FromMinutes(1);
     }
