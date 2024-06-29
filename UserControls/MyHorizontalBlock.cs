@@ -12,23 +12,21 @@ public class MyHorizontalBlock : UserControl
 
     public MyHorizontalBlock()
     {
-        _border = new Border
+        Content = _border = new Border
         {
             Padding = new Thickness(20, 10, 20, 10),
             Margin = new Thickness(0, 1, 0, 1),
             VerticalAlignment = VerticalAlignment.Top,
             HorizontalAlignment = HorizontalAlignment.Stretch,
+
+            Child =  _stackPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 10,
+            },
         };
 
         _border.Bind(Border.BackgroundProperty, Resources.GetResourceObservable("SystemControlBackgroundListLowBrush"));
-        Content = _border;
-
-        _stackPanel = new StackPanel
-        {
-            Orientation = Orientation.Horizontal,
-            Spacing = 10,
-        };
-        _border.Child = _stackPanel;
     }
 
     [Content]

@@ -11,13 +11,12 @@ public class MyHorizontalStackPanel : UserControl
 
     public MyHorizontalStackPanel()
     {
-        _stackPanel = new StackPanel
+        Content = _stackPanel = new StackPanel
         {
             Orientation = Orientation.Horizontal,
             Spacing = 10,
             Margin = new Thickness(0, 10, 0, 10),
         };
-        Content = _stackPanel;
     }
 
     [Content]
