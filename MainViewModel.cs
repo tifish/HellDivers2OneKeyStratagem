@@ -149,6 +149,8 @@ public partial class MainViewModel : ObservableObject
             InitHotkeysUI();
 
             await LoadByLanguage();
+
+            CenterWindow();
         }
         finally
         {
@@ -157,6 +159,23 @@ public partial class MainViewModel : ObservableObject
 
         ActiveWindowMonitor.WindowTitleChanged += OnWindowTitleChanged;
         ActiveWindowMonitor.Start(TimeSpan.FromSeconds(1));
+    }
+
+    private void CenterWindow()
+    {
+        // Get the current screen size
+        var screen = _mainWindow.Screens.Primary!;
+        var screenBounds = screen.Bounds;
+
+        // Get the window size
+        var windowSize = _mainWindow.Bounds;
+
+        // Calculate the centered position
+        var centerX = (screenBounds.Width - windowSize.Width) / 2;
+        var centerY = (screenBounds.Height - windowSize.Height) / 2;
+
+        // Set the window position
+        _mainWindow.Position = new PixelPoint((int)centerX, (int)centerY);
     }
 
     private const string HellDivers2Title = "HELLDIVERS™ 2";
