@@ -11,9 +11,9 @@
         WindowStartupLocation="CenterOwner">
 
     <StackPanel Margin="20,10,20,10">
-        <local:MyHorizontalBlock>
+        <local:MyHorizontalStackPanel>
             <Label Name="MessageLabel" Content="Message" />
-        </local:MyHorizontalBlock>
+        </local:MyHorizontalStackPanel>
         <local:MyHorizontalStackPanel HorizontalAlignment="Center">
             <Button Name="OkButton" Content="确定" Click="OkButton_OnClick" />
         </local:MyHorizontalStackPanel>
