@@ -32,11 +32,6 @@ public partial class InfoWindow : Window
 
     private MainViewModel M => (MainViewModel)DataContext!;
 
-    public void SetInfo(string info)
-    {
-        InfoLabel.Content = info;
-    }
-
     private void InfoWindow_OnClosed(object? sender, EventArgs e)
     {
         MainViewModel.Instance.ShowSpeechInfoWindow = false;

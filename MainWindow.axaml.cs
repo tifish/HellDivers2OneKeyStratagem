@@ -1,14 +1,4 @@
-﻿using System.Diagnostics;
-using System.Globalization;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.Layout;
-using Avalonia.Media;
-using EdgeTTS;
-using GlobalHotKeys;
-using NAudio.Wave;
+﻿using Avalonia.Controls;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -32,5 +22,4 @@ public partial class MainWindow : Window
     }
 
     private MainViewModel M => (MainViewModel)DataContext!;
-
 }

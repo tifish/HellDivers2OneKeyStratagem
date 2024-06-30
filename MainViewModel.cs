@@ -713,7 +713,6 @@ public partial class MainViewModel : ObservableObject
                 var failed = command.Score < Settings.VoiceConfidence;
                 var info = $"【{(failed ? "失败" : "成功")}】识别阈值：{command.Score:F3} 识别文字：{command.Text}";
                 VoiceRecognizeResult = info;
-                _infoWindow?.SetInfo(info);
 
                 if (failed)
                     return;
