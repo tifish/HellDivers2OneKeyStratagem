@@ -529,10 +529,10 @@ public partial class MainViewModel : ObservableObject
             foreach (var style in styles)
                 VoiceNames.Add(style!);
 
-            CurrentVoiceName =
-                styles.Contains(Settings.VoiceName)
-                    ? Settings.VoiceName
-                    : styles.FirstOrDefault() ?? "";
+            if (styles.Contains(Settings.VoiceName))
+                CurrentVoiceName = Settings.VoiceName;
+            else
+                Settings.VoiceName = CurrentVoiceName = styles.FirstOrDefault() ?? "";
         }
         finally
         {
