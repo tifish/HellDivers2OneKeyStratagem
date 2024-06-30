@@ -39,7 +39,7 @@ public partial class InfoWindow : Window
 
     private void InfoWindow_OnClosed(object? sender, EventArgs e)
     {
-        _mainWindow.NotifyInfoWindowClosed();
+        MainViewModel.Instance.ShowSpeechInfoWindow = false;
     }
 
     private void Window_OnPointerPressed(object? sender, PointerPressedEventArgs e)
