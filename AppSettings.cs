@@ -1,5 +1,6 @@
 ﻿global using static HellDivers2OneKeyStratagem.SettingsContainer;
 using System.Text.Json.Serialization;
+using Avalonia.Controls;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -23,6 +24,9 @@ public class AppSettings
 
     public static async Task SaveSettings()
     {
+        if (Design.IsDesignMode)
+            return;
+
         await _settingsFile.Save(Settings);
     }
 
