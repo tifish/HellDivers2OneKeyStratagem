@@ -671,12 +671,15 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _voiceRecognizeResult = "暂无识别结果";
+    private string _speechRecognizeResult = "暂无识别结果";
 
     private VoiceCommand? _voiceCommand;
 
     private async Task StartSpeechTrigger()
     {
+        if (Design.IsDesignMode)
+            return;
+
         if (_voiceCommand == null)
         {
             var languages = VoiceCommand.GetInstalledRecognizers();
@@ -706,7 +709,7 @@ public partial class MainViewModel : ObservableObject
             {
                 var failed = command.Score < Settings.VoiceConfidence;
                 var info = $"【{(failed ? "失败" : "成功")}】识别阈值：{command.Score:F3} 识别文字：{command.Text}";
-                VoiceRecognizeResult = info;
+                SpeechRecognizeResult = info;
 
                 if (failed)
                     return;
@@ -1114,7 +1117,7 @@ public partial class MainViewModel : ObservableObject
         if (_infoWindow != null)
             return;
 
-        _infoWindow = new InfoWindow(_mainWindow);
+        _infoWindow = new InfoWindow();
         _infoWindow.Show();
     }
 

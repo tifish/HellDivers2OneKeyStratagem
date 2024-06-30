@@ -1,7 +1,9 @@
-﻿using Avalonia.Input;
+﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Win32.Input;
 using GlobalHotKeys;
 using GlobalHotKeys.Native.Types;
+using HotKeyManager = GlobalHotKeys.HotKeyManager;
 
 public static class HotkeyGroupManager
 {
@@ -60,6 +62,9 @@ public static class HotkeyGroupManager
 
     private static void RegisterHotkeys()
     {
+        if (Design.IsDesignMode)
+            return;
+
         if (_hotKeyManager != null)
         {
             UnregisterHotkeys();

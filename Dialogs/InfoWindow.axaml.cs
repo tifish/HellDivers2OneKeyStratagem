@@ -5,17 +5,8 @@ namespace HellDivers2OneKeyStratagem;
 
 public partial class InfoWindow : Window
 {
-    private readonly MainWindow _mainWindow;
-
     public InfoWindow()
     {
-        _mainWindow = null!;
-    }
-
-    public InfoWindow(MainWindow mainWindow)
-    {
-        _mainWindow = mainWindow;
-
         DataContext = MainViewModel.Instance;
 
         M.IsLoading = true;

@@ -99,7 +99,7 @@
                     <local:MyHorizontalBlock>
                         <Button Content="识别校准，通过念三次战略名字自动校准..."
                                 Command="{Binding CalibrateVoiceCommand}" />
-                        <Label Content="{Binding VoiceRecognizeResult}" />
+                        <Label Content="{Binding SpeechRecognizeResult}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
