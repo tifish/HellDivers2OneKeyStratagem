@@ -33,6 +33,8 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
+        <StyleInclude Source="/MainWindow/HotkeyStratagemPanel.axaml" />
+
     </Application.Styles>
 
 </Application>

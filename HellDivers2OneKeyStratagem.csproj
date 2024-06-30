@@ -30,4 +30,15 @@
     <PackageReference Include="System.Speech" Version="9.0.0-preview.5.24306.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="MainWindow\MainWindow.axaml.cs">
+      <DependentUpon>MainWindow.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MainWindow\HotkeyStratagemPanel.axaml.cs">
+      <DependentUpon>HotkeyStratagemPanel.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

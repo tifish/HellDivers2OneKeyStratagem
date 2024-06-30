@@ -163,20 +163,10 @@
 
             <StackPanel>
                 <local:MyHorizontalBlock Name="KeysStackPanel1">
-                    <Border BorderThickness="1" BorderBrush="Black">
-                        <StackPanel>
-                            <Label Content="F1" />
-                            <Label Content="飞鹰空袭" />
-                        </StackPanel>
-                    </Border>
+                    <local:HotkeyStratagemPanel HotkeyName="F1" StratagemName="飞鹰空袭" />
                 </local:MyHorizontalBlock>
                 <local:MyHorizontalBlock Name="KeysStackPanel2">
-                    <Border BorderThickness="1" BorderBrush="Black">
-                        <StackPanel>
-                            <Label Content="F1" />
-                            <Label Content="飞鹰空袭" />
-                        </StackPanel>
-                    </Border>
+                    <local:HotkeyStratagemPanel HotkeyName="F1" StratagemName="飞鹰空袭" />
                 </local:MyHorizontalBlock>
             </StackPanel>
 

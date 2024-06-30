@@ -6,7 +6,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EdgeTTS;
@@ -269,9 +268,8 @@ public partial class MainViewModel : ObservableObject
         Key.Insert, Key.Delete, Key.Home, Key.End, Key.PageUp, Key.PageDown,
     ];
 
-    private readonly Label[] _keyLabels = new Label[KeyCount];
+    private readonly HotkeyStratagemPanel[] _hotkeyPanels = new HotkeyStratagemPanel[KeyCount];
     private readonly Stratagem?[] _keyStratagems = new Stratagem?[KeyCount];
-    private readonly Border[] _keyBorders = new Border[KeyCount];
 
     private int _selectedKeyIndex = KeyCount - 1;
 
@@ -288,8 +286,8 @@ public partial class MainViewModel : ObservableObject
             try
             {
                 if (_selectedKeyIndex >= 0)
-                    _keyBorders[SelectedKeyIndex].BorderBrush = Brushes.Transparent;
-                _keyBorders[value].BorderBrush = Brushes.Gray;
+                    _hotkeyPanels[SelectedKeyIndex].IsBorderVisible = false;
+                _hotkeyPanels[value].IsBorderVisible = true;
                 _selectedKeyIndex = value;
             }
             finally
@@ -312,18 +310,15 @@ public partial class MainViewModel : ObservableObject
             if (i == 11)
                 keysStackPanel = _mainWindow.KeysStackPanel2;
 
-            var border = new Border { BorderThickness = new Thickness(1), Padding = new Thickness(5) };
-            keysStackPanel.Children.Add(border);
-            var stackPanel = new StackPanel { Orientation = Orientation.Vertical, MinWidth = 64, Background = Brushes.Transparent };
-            border.Child = stackPanel;
-
-            var keyLabel = new Label { Content = Enum.GetName(_keys[i]), HorizontalAlignment = HorizontalAlignment.Center };
-            var stratagemLabel = new Label { Content = NoStratagem, HorizontalAlignment = HorizontalAlignment.Center };
-            stackPanel.Children.Add(keyLabel);
-            stackPanel.Children.Add(stratagemLabel);
+            var hsPanel = new HotkeyStratagemPanel
+            {
+                HotkeyName = Enum.GetName(_keys[i]) ?? "Error",
+                StratagemName = NoStratagem,
+            };
+            keysStackPanel.Children.Add(hsPanel);
 
             var i1 = i;
-            stackPanel.PointerPressed += (_, e) =>
+            hsPanel.PointerPressed += (_, e) =>
             {
                 SelectedKeyIndex = i1;
 
@@ -338,12 +333,11 @@ public partial class MainViewModel : ObservableObject
                     PlayStratagemVoice(stratagem.Name);
             };
 
-            _keyLabels[i] = stratagemLabel;
-            _keyBorders[i] = border;
+            _hotkeyPanels[i] = hsPanel;
         }
 
-        SelectedKeyIndex = _keyBorders.Length - 1;
-        _keyBorders.Last().BorderBrush = Brushes.Gray;
+        SelectedKeyIndex = _hotkeyPanels.Length - 1;
+        _hotkeyPanels.Last().IsBorderVisible = true;
     }
 
     public async Task LoadByLanguage()
@@ -439,7 +433,7 @@ public partial class MainViewModel : ObservableObject
                         SetKeyStratagem(SelectedKeyIndex, stratagem);
 
                         if (SelectedKeyIndex > 0)
-                            if (_keyLabels[SelectedKeyIndex - 1].Content as string == NoStratagem)
+                            if (_hotkeyPanels[SelectedKeyIndex - 1].StratagemName == NoStratagem)
                                 SelectedKeyIndex--;
                     }
                     else
@@ -597,13 +591,13 @@ public partial class MainViewModel : ObservableObject
                 if (prevIndex > -1)
                 {
                     _keyStratagems[prevIndex] = null;
-                    _keyLabels[prevIndex].Content = NoStratagem;
+                    _hotkeyPanels[prevIndex].StratagemName = NoStratagem;
                 }
             }
 
             // Set the new hotkey
             _keyStratagems[index] = stratagem;
-            _keyLabels[index].Content = stratagem.Name;
+            _hotkeyPanels[index].StratagemName = stratagem.Name;
 
             _isSettingStratagemCheckBoxChecked = true;
             stratagem.CheckBox.IsChecked = true;
@@ -615,7 +609,7 @@ public partial class MainViewModel : ObservableObject
         else
         {
             _keyStratagems[index] = null;
-            _keyLabels[index].Content = NoStratagem;
+            _hotkeyPanels[index].StratagemName = NoStratagem;
         }
 
         if (!IsLoading)
