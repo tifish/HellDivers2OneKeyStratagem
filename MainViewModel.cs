@@ -40,96 +40,93 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    public bool SettingsChanged;
-    public bool KeySettingsChanged;
-    public bool SpeechSettingsChanged;
+    private bool _settingsChanged;
+    private bool _keySettingsChanged;
+    private bool _speechSettingsChanged;
 
     [ObservableProperty]
     private double _speechConfidence;
 
-    partial void OnSpeechConfidenceChanged(double oldValue, double newValue)
+    partial void OnSpeechConfidenceChanged(double value)
     {
         if (IsLoading)
             return;
 
-        Settings.VoiceConfidence = Math.Round(newValue, 3);
-        SettingsChanged = true;
+        Settings.VoiceConfidence = Math.Round(value, 3);
+        _settingsChanged = true;
     }
 
     [ObservableProperty]
     private ObservableCollection<string> _locales = [];
 
     [ObservableProperty]
-    private string? _currentLocale;
+    private string _currentLocale = "";
 
-    async partial void OnCurrentLocaleChanged(string? oldValue, string? newValue)
+    async partial void OnCurrentLocaleChanged(string value)
     {
         if (IsLoading)
             return;
 
-        if (CurrentLocale is { } locale)
-        {
-            Settings.Locale = locale;
-            if (Settings.PlayVoice)
-                KeySettingsChanged = true;
-            SpeechSettingsChanged = true;
+        Settings.Locale = value;
+        if (Settings.PlayVoice)
+            _keySettingsChanged = true;
+        _speechSettingsChanged = true;
 
-            await LoadByLanguage();
-        }
+        await LoadByLanguage();
     }
 
     [ObservableProperty]
     private string _triggerKey = "";
 
-    partial void OnTriggerKeyChanged(string? oldValue, string newValue)
+    partial void OnTriggerKeyChanged(string value)
     {
         if (IsLoading)
             return;
 
-        Settings.TriggerKey = newValue;
-        KeySettingsChanged = true;
+        Settings.TriggerKey = value;
+        _keySettingsChanged = true;
     }
 
     [ObservableProperty]
     private string _operateKeys = "";
 
-    partial void OnOperateKeysChanged(string? oldValue, string newValue)
+    partial void OnOperateKeysChanged(string value)
     {
         if (IsLoading)
             return;
 
-        Settings.OperateKeys = newValue;
-        KeySettingsChanged = true;
+        Settings.OperateKeys = value;
+        _keySettingsChanged = true;
     }
 
     [ObservableProperty]
     private bool _playVoiceWhenCall;
 
-    partial void OnPlayVoiceWhenCallChanged(bool oldValue, bool newValue)
+    partial void OnPlayVoiceWhenCallChanged(bool value)
     {
         if (IsLoading)
             return;
 
-        Settings.PlayVoice = newValue;
-        KeySettingsChanged = true;
+        Settings.PlayVoice = value;
+        _keySettingsChanged = true;
     }
 
     [ObservableProperty]
     private ObservableCollection<string> _voiceNames = [];
 
     [ObservableProperty]
-    private string? _currentVoiceName;
+    private string _currentVoiceName = "";
 
-    partial void OnCurrentVoiceNameChanged(string? oldValue, string? newValue)
+    partial void OnCurrentVoiceNameChanged(string value)
     {
         if (IsLoading)
             return;
 
-        Settings.VoiceName = newValue ?? "";
+        Settings.VoiceName = value;
         if (Settings.PlayVoice)
-            KeySettingsChanged = true;
+            _keySettingsChanged = true;
         else
-            SettingsChanged = true;
+            _settingsChanged = true;
 
         // The stratagem may be invalid after changing the language
         var stratagem = _keyStratagems[SelectedKeyIndex];
@@ -178,9 +175,9 @@ public partial class MainViewModel : ObservableObject
             if (Settings.EnableSpeechTrigger)
                 await StartSpeechTrigger();
         }
-        else if (newProcessIsActive && SpeechSettingsChanged)
+        else if (newProcessIsActive && _speechSettingsChanged)
         {
-            SpeechSettingsChanged = false;
+            _speechSettingsChanged = false;
             await ResetVoiceCommand();
         }
 
@@ -190,9 +187,9 @@ public partial class MainViewModel : ObservableObject
         }
         else if (e.NewWindowTitle == HellDivers2Title && Settings.EnableHotkeyTrigger)
         {
-            if (KeySettingsChanged)
+            if (_keySettingsChanged)
             {
-                KeySettingsChanged = false;
+                _keySettingsChanged = false;
                 SetHotkeyGroup();
             }
 
@@ -238,8 +235,8 @@ public partial class MainViewModel : ObservableObject
             else
                 Settings.Locale = speechLocales.First();
 
-            KeySettingsChanged = true;
-            SpeechSettingsChanged = true;
+            _keySettingsChanged = true;
+            _speechSettingsChanged = true;
         }
 
         CurrentLocale = Settings.Locale;
@@ -535,7 +532,7 @@ public partial class MainViewModel : ObservableObject
             CurrentVoiceName =
                 styles.Contains(Settings.VoiceName)
                     ? Settings.VoiceName
-                    : styles.FirstOrDefault();
+                    : styles.FirstOrDefault() ?? "";
         }
         finally
         {
@@ -603,7 +600,7 @@ public partial class MainViewModel : ObservableObject
         }
 
         if (!IsLoading)
-            KeySettingsChanged = true;
+            _keySettingsChanged = true;
     }
 
     private static readonly string VoiceRootPath = Path.Combine(AppSettings.ExeDirectory, "Voice");
@@ -640,7 +637,7 @@ public partial class MainViewModel : ObservableObject
         if (IsLoading)
             return;
 
-        if (!SettingsChanged)
+        if (!_settingsChanged)
             return;
 
         Settings.StratagemSets.Clear();
@@ -649,7 +646,7 @@ public partial class MainViewModel : ObservableObject
             Settings.StratagemSets.Add(item);
         await AppSettings.SaveSettings();
 
-        SettingsChanged = false;
+        _settingsChanged = false;
     }
 
     private async Task ResetVoiceCommand()
@@ -738,20 +735,20 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private void RefreshVoiceNames()
     {
-        Settings.VoiceName = CurrentVoiceName ?? "";
+        Settings.VoiceName = CurrentVoiceName;
         LoadVoiceNames();
     }
 
     [ObservableProperty]
-    private string? _updateUrl = "";
+    private string _updateUrl = "";
 
-    partial void OnUpdateUrlChanged(string? oldValue, string? newValue)
+    partial void OnUpdateUrlChanged(string value)
     {
         if (IsLoading)
             return;
 
-        Settings.UpdateUrl = newValue ?? "";
-        SettingsChanged = true;
+        Settings.UpdateUrl = value;
+        _settingsChanged = true;
     }
 
 
@@ -790,7 +787,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.EnableSpeechTrigger = value;
-        SettingsChanged = true;
+        _settingsChanged = true;
 
         if (Settings.EnableSpeechTrigger)
             await StartSpeechTrigger();
@@ -813,7 +810,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.WakeupWord = value.Trim();
-        SettingsChanged = true;
+        _settingsChanged = true;
         await ResetVoiceCommand();
     }
 
@@ -835,7 +832,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.EnableHotkeyTrigger = value;
-        SettingsChanged = true;
+        _settingsChanged = true;
 
         HotkeyGroupManager.Enabled = Settings.EnableHotkeyTrigger;
     }
@@ -849,7 +846,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.EnableSetKeyBySpeech = value;
-        SettingsChanged = true;
+        _settingsChanged = true;
     }
 
     [RelayCommand]
@@ -862,7 +859,7 @@ public partial class MainViewModel : ObservableObject
         StratagemSets.Add(keyStratagemString);
         CurrentStratagemSetIndex = StratagemSets.Count - 1;
 
-        SettingsChanged = true;
+        _settingsChanged = true;
     }
 
     [RelayCommand]
@@ -873,7 +870,7 @@ public partial class MainViewModel : ObservableObject
 
         StratagemSets.RemoveAt(CurrentStratagemSetIndex);
 
-        SettingsChanged = true;
+        _settingsChanged = true;
     }
 
     [ObservableProperty]
@@ -900,7 +897,7 @@ public partial class MainViewModel : ObservableObject
         {
             var count = 0;
             var total = StratagemManager.Count;
-            var voiceName = CurrentGenerateVoiceStyle!;
+            var voiceName = CurrentGenerateVoiceStyle;
 
             foreach (var stratagem in StratagemManager.Stratagems)
             {
@@ -946,7 +943,7 @@ public partial class MainViewModel : ObservableObject
         if (!Directory.Exists(voiceDir))
             Directory.CreateDirectory(voiceDir);
 
-        var communicate = new Communicate(text, CurrentGenerateVoiceStyle!,
+        var communicate = new Communicate(text, CurrentGenerateVoiceStyle,
             GenerateVoiceRate, GenerateVoiceVolume, GenerateVoicePitch);
         await communicate.Save(filePath);
     }
@@ -971,18 +968,18 @@ public partial class MainViewModel : ObservableObject
     private ObservableCollection<string> _generateVoiceStyles = [];
 
     [ObservableProperty]
-    private string? _currentGenerateVoiceStyle;
+    private string _currentGenerateVoiceStyle = "";
 
-    [ObservableProperty]
-    private int _currentGenerateVoiceStyleIndex;
-
-    async partial void OnCurrentGenerateVoiceStyleChanged(string? value)
+    async partial void OnCurrentGenerateVoiceStyleChanged(string value)
     {
         if (IsLoading)
             return;
 
         await TryVoice();
     }
+
+    [ObservableProperty]
+    private int _currentGenerateVoiceStyleIndex;
 
     [RelayCommand]
     private async Task CalibrateVoice()
@@ -1062,27 +1059,27 @@ public partial class MainViewModel : ObservableObject
             return;
 
         SetKeyStratagemString(StratagemSets[value]);
-        KeySettingsChanged = true;
+        _keySettingsChanged = true;
     }
 
     [ObservableProperty]
     private ObservableCollection<string> _mics = [];
 
     [ObservableProperty]
-    private string? _currentMic = "";
+    private string _currentMic = "";
 
-    partial void OnCurrentMicChanged(string? value)
+    partial void OnCurrentMicChanged(string value)
     {
         if (IsLoading)
             return;
 
-        _voiceCommand?.UseMic(value ?? "");
+        _voiceCommand?.UseMic(value);
     }
 
     [RelayCommand]
     private void LoadMics()
     {
-        LoadMicDevices(CurrentMic ?? "");
+        LoadMicDevices(CurrentMic);
     }
 
     [ObservableProperty]
