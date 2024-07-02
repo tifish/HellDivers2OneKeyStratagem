@@ -30,7 +30,7 @@ public static class StratagemManager
         if (!File.Exists(StratagemsFile))
             return;
 
-        var nameColumn = Settings.Language switch
+        var nameColumn = Settings.SpeechLanguage switch
         {
             "zh" => 1,
             "en" => 2,

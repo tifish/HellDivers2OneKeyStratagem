@@ -1,0 +1,34 @@
+﻿Key	en-US	zh-CN
+Close	Close	关闭
+MustSetSettingsOnce	Must set settings once...	第一次使用前一定要先设置...
+UILanguage	UI Language: 	界面语言：
+SpeechLanguage	Speech Language: 	语音语言：
+MakeSureTheKeysAreConsistentWithGame	Make sure the keys are consistent with the in-game settings, and note setting to "hold": 	与游戏内设置的按键保持一致，注意必须设置为“按住”：
+ArrowKeys	Arrow Keys	上下左右
+StronglyRecommendedArrowKeys	It's strongly recommended to use arrow keys so that you can call while running.	强烈建议使用“上下左右”，可以在跑动中呼叫战略。
+PlayNameWhenCalling	Play the stratagem name when calling	呼叫时播放战略名字，选择声优：
+Refresh	Refresh	刷新
+UpdateUrl	Update URL: 	更新地址，群友加速专用：
+CheckForUpdate	Check for update	检查更新
+UseMicrophoneToCallOut	Use microphone to call out	开启麦克风呼叫，君子动口不动手
+OpenSystemSpeechSettings	Open the system speech settings and select "Train your computer" to improve recognition accuracy…	打开系统语音设置，选择“训练你的计算机”可以提高识别率…
+WakeupWordExplain	Wakeup word (optional). This can reduce the false recognition rate: 	唤醒词（可选）。例如“好好学习”，就要用“好好学习飞鹰空袭”来呼叫“飞鹰空袭”。可以减少误识别率：
+RecognitionConfidenceExplain	Recognition confidence. If it's too high, it won't recognize; if it's too low, it will frequently misrecognize. Press "Calibrate recognition" for automatic calibration, or manually adjust based on recognition results: 	识别阈值。太大无法识别，太小经常误识别。按“识别校准”自动校准，或者根据识别结果手动调整：
+CalibrateRecognitionExplain	Calibrate recognition. Automatically calibrate by saying the strategy name three times…	识别校准，通过念三次战略名字自动校准…
+SelectMicrophoneExplain	If there are multiple microphones and it cannot recognize the voice, try manually selecting the microphone: 	如果有多个麦克风，且无法识别语音，可以尝试手动选择麦克风：
+UseHotkeyToCallOut	Use hotkey to call out	开启快捷键呼叫
+SettingHotkeyStratagemsViaMicrophone	Support for setting hotkey stratagems via microphone	支持通过语音设置快捷键战略
+ShowSpeechRecognitionInfoWindow	Show speech recognition info window	显示语音信息窗口
+SaveConfiguration	Save configuration	保存配置
+DeleteConfiguration	Delete configuration	删除配置
+ClickOnStratagemExplain	Left click to select strategy, right click to customize microphone call name	左键选择战略，右键自定义麦克风呼叫名字
+CalibrateRecognition	Calibrate recognition	校准语音识别
+EditCustomName	Edit custom name	编辑自定义名称
+PredefinedNames	Predefined names (separated by |):	预定义名称（用|分隔）：
+CustomNames	Custom names (separated by |):	自定义名称（用|分隔）：
+OK	OK	确定
+Cancel	Cancel	取消
+RecognitionConfidence	Recognition confidence: 	识别阈值：
+Yes	Yes	是
+No	No	否
+Error	Error	错误

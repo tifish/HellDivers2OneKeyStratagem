@@ -11,14 +11,14 @@
         CanResize="False"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner"
-        Title="校准语音识别">
+        Title="{local:Localize CalibrateRecognition}">
 
     <StackPanel Margin="20,10,20,10">
         <local:MyHorizontalStackPanel>
             <Label Name="MessageLabel" Content="飞鹰空袭" FontSize="32" />
         </local:MyHorizontalStackPanel>
         <local:MyHorizontalStackPanel HorizontalAlignment="Center">
-            <Button Content="关闭" Click="CloseButton_OnClick" />
+            <Button Content="{local:Localize Close}" Click="CloseButton_OnClick" />
         </local:MyHorizontalStackPanel>
     </StackPanel>
 </Window>

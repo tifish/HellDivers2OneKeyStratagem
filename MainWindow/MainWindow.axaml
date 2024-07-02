@@ -32,19 +32,22 @@
 
     <StackPanel Margin="20,0,20,20">
 
-        <Expander Header="第一次使用前一定要先设置...">
+        <Expander Header="{local:Localize MustSetSettingsOnce}">
             <StackPanel Margin="20,10,20,0">
 
                 <StackPanel>
 
                     <local:MyHorizontalBlock>
-                        <Label Content="语言：" />
+                        <Label Content="{local:Localize UILanguage}" />
                         <ComboBox ItemsSource="{Binding Locales}"
                                   SelectedItem="{Binding CurrentLocale}" />
+                        <Label Content="{local:Localize SpeechLanguage}" />
+                        <ComboBox ItemsSource="{Binding SpeechLocales}"
+                                  SelectedItem="{Binding CurrentSpeechLocale}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
-                        <Label Content="与游戏内设置的按键保持一致，注意必须设置为“按住”：" />
+                        <Label Content="{local:Localize MakeSureTheKeysAreConsistentWithGame}" />
                         <RadioButton Content="Ctrl" GroupName="CtrlAltGroup"
                                      IsChecked="{Binding TriggerKey, Converter={StaticResource RadioButtonToStringConverter}, ConverterParameter=Ctrl}" />
                         <RadioButton Content="Alt" GroupName="CtrlAltGroup"
@@ -52,23 +55,23 @@
                         <Label Content="+" />
                         <RadioButton Content="WASD" GroupName="WasdArrowGroup"
                                      IsChecked="{Binding OperateKeys, Converter={StaticResource RadioButtonToStringConverter}, ConverterParameter=WASD}" />
-                        <RadioButton Content="上下左右" GroupName="WasdArrowGroup"
+                        <RadioButton Content="{local:Localize ArrowKeys}" GroupName="WasdArrowGroup"
                                      IsChecked="{Binding OperateKeys, Converter={StaticResource RadioButtonToStringConverter}, ConverterParameter=Arrow}" />
-                        <Label Content="强烈建议使用“上下左右”，可以在跑动中呼叫战略。" />
+                        <Label Content="{local:Localize StronglyRecommendedArrowKeys}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
-                        <CheckBox Content="呼叫时播放战略名字，选择声优：" IsChecked="{Binding PlayVoiceWhenCall}" />
+                        <CheckBox Content="{local:Localize PlayNameWhenCalling}" IsChecked="{Binding PlayVoiceWhenCall}" />
                         <ComboBox ItemsSource="{Binding VoiceNames}"
                                   SelectedItem="{Binding CurrentVoiceName}" />
-                        <Button Content="刷新"
+                        <Button Content="{local:Localize Refresh}"
                                 Command="{Binding RefreshVoiceNamesCommand}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
-                        <Label Content="更新地址，群友加速专用：" />
+                        <Label Content="{local:Localize UpdateUrl}" />
                         <TextBox Text="{Binding UpdateUrl}" />
-                        <Button Content="检查更新"
+                        <Button Content="{local:Localize CheckForUpdate}"
                                 Command="{Binding CheckForUpdateCommand}"
                                 IsEnabled="{Binding !IsCheckingForUpdate}" />
                     </local:MyHorizontalBlock>
@@ -76,34 +79,34 @@
                 </StackPanel>
 
                 <local:MyHorizontalStackPanel>
-                    <CheckBox Content="开启麦克风呼叫，君子动口不动手" IsChecked="{Binding EnableSpeechTrigger}" />
+                    <CheckBox Content="{local:Localize UseMicrophoneToCallOut}" IsChecked="{Binding EnableSpeechTrigger}" />
                 </local:MyHorizontalStackPanel>
 
                 <StackPanel IsVisible="{Binding EnableSpeechTrigger}">
                     <local:MyHorizontalBlock>
-                        <Button Content="打开系统语音设置，选择“训练你的计算机”可以提高识别率..."
+                        <Button Content="{local:Localize OpenSystemSpeechSettings}"
                                 Command="{Binding OpenSpeechRecognitionControlPanelCommand}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
-                        <Label Content="唤醒词（可选）。例如“好好学习”，就要用“好好学习飞鹰空袭”来呼叫“飞鹰空袭”。可以减少误识别率：" />
+                        <Label Content="{local:Localize WakeupWordExplain}" />
                         <TextBox Text="{Binding WakeupWord}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
-                        <Label Content="识别阈值。太大无法识别，太小经常误识别。按“识别校准”自动校准，或者根据识别结果手动调整：" />
+                        <Label Content="{local:Localize RecognitionConfidenceExplain}" />
                         <NumericUpDown Value="{Binding SpeechConfidence, Mode=TwoWay}"
                                        Increment="0.01" Maximum="1" Minimum="0.3" FormatString="F3" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
-                        <Button Content="识别校准，通过念三次战略名字自动校准..."
+                        <Button Content="{local:Localize CalibrateRecognitionExplain}"
                                 Command="{Binding CalibrateVoiceCommand}" />
                         <Label Content="{Binding SpeechRecognizeResult}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
-                        <Label Content="如果有多个麦克风，且无法识别语音，可以尝试手动选择麦克风：">
+                        <Label Content="{local:Localize SelectMicrophoneExplain}">
                             <Interaction.Behaviors>
                                 <EventTriggerBehavior EventName="DoubleTapped">
                                     <InvokeCommandAction Command="{Binding ToggleGenerateVoicePanelCommand}" />
@@ -139,8 +142,8 @@
                 </local:MyHorizontalBlock>
 
                 <local:MyHorizontalStackPanel>
-                    <CheckBox Content="开启快捷键呼叫" IsChecked="{Binding EnableHotkeyTrigger}" />
-                    <CheckBox Content="支持通过语音设置快捷键战略"
+                    <CheckBox Content="Use hotkey to call out" IsChecked="{Binding EnableHotkeyTrigger}" />
+                    <CheckBox Content="{local:Localize SettingHotkeyStratagemsViaMicrophone}"
                               IsChecked="{Binding EnableSetKeyBySpeech}"
                               IsVisible="{Binding EnableHotkeyTrigger}"
                               IsEnabled="{Binding EnableSpeechTrigger}" />
@@ -149,7 +152,7 @@
         </Expander>
 
         <local:MyHorizontalBlock IsVisible="{Binding EnableSpeechTrigger}" Margin="0, 10, 0, 0">
-            <CheckBox Content="显示语音信息窗口" IsChecked="{Binding ShowSpeechInfoWindow}" />
+            <CheckBox Content="{local:Localize ShowSpeechRecognitionInfoWindow}" IsChecked="{Binding ShowSpeechInfoWindow}" />
         </local:MyHorizontalBlock>
 
         <StackPanel IsVisible="{Binding EnableHotkeyTrigger}" Margin="0, 10, 0, 0">
@@ -157,8 +160,8 @@
             <local:MyHorizontalStackPanel>
                 <ComboBox ItemsSource="{Binding StratagemSets}"
                           SelectedIndex="{Binding CurrentStratagemSetIndex}" />
-                <Button Content="保存配置(_S)" Command="{Binding SaveStratagemSetCommand}" />
-                <Button Content="删除配置(_D)" Command="{Binding DeleteStratagemSetCommand}" />
+                <Button Content="{local:Localize SaveConfiguration}" Command="{Binding SaveStratagemSetCommand}" />
+                <Button Content="{local:Localize DeleteConfiguration}" Command="{Binding DeleteStratagemSetCommand}" />
             </local:MyHorizontalStackPanel>
 
             <StackPanel>
@@ -181,7 +184,7 @@
             </StackPanel.IsVisible>
 
             <local:MyHorizontalStackPanel>
-                <Label Content="左键选择战略，右键自定义麦克风呼叫名字" />
+                <Label Content="{local:Localize ClickOnStratagemExplain}" />
             </local:MyHorizontalStackPanel>
 
             <StackPanel Name="StratagemGroupsContainer" Orientation="Horizontal">

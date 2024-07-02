@@ -15,8 +15,8 @@
             <Label Name="MessageLabel" />
         </local:MyHorizontalBlock>
         <local:MyHorizontalStackPanel HorizontalAlignment="Center">
-            <Button Name="YesButton" Content="是" Click="YesButton_OnClick" />
-            <Button Name="NoButton" Content="否" Click="NoButton_OnClick" />
+            <Button Name="YesButton" Content="{local:Localize Yes}" Click="YesButton_OnClick" />
+            <Button Name="NoButton" Content="{local:Localize No}" Click="NoButton_OnClick" />
         </local:MyHorizontalStackPanel>
     </StackPanel>
 </Window>

@@ -37,19 +37,21 @@ public class AppSettings
     public bool EnableSpeechTrigger { get; set; }
     public bool EnableSetKeyBySpeech { get; set; }
     public List<string> StratagemSets { get; set; } = [];
-    public string Locale { get; set; } = "";
+    public string SpeechLocale { get; set; } = "";
 
     [JsonIgnore]
-    public string Language
+    public string SpeechLanguage
     {
         get
         {
-            var sepPos = Locale.IndexOf('-');
+            var sepPos = SpeechLocale.IndexOf('-');
             return sepPos > 0
-                ? Locale[..sepPos]
-                : Locale;
+                ? SpeechLocale[..sepPos]
+                : SpeechLocale;
         }
     }
+
+    public string Locale { get; set; } = "";
 
     public double VoiceConfidence { get; set; } = 0.6f;
     public string WakeupWord { get; set; } = "";

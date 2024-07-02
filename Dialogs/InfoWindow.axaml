@@ -15,7 +15,6 @@
         SizeToContent="WidthAndHeight"
         Topmost="True"
         CanResize="False"
-        Title="HellDivers2 一键战略"
 
         PointerPressed="Window_OnPointerPressed"
         Closed="InfoWindow_OnClosed">
@@ -23,7 +22,7 @@
     <StackPanel Margin="20,10,20,10" Spacing="10">
         <Label Name="InfoLabel" Content="{Binding SpeechRecognizeResult}" />
         <StackPanel Orientation="Horizontal" Spacing="10">
-            <Label Content="识别阈值：" />
+            <Label Content="{local:Localize RecognitionConfidence}" />
             <NumericUpDown Value="{Binding SpeechConfidence}"
                            Increment="0.01" Maximum="1" Minimum="0.3" FormatString="F3" />
         </StackPanel>

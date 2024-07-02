@@ -39,9 +39,33 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    private bool _settingsChanged;
+    private bool SettingsChanged { get; set; }
+
     private bool _keySettingsChanged;
+
+    private bool KeySettingsChanged
+    {
+        get => _keySettingsChanged;
+        set
+        {
+            _keySettingsChanged = value;
+            if (value)
+                SettingsChanged = true;
+        }
+    }
+
     private bool _speechSettingsChanged;
+
+    private bool SpeechSettingsChanged
+    {
+        get => _speechSettingsChanged;
+        set
+        {
+            _speechSettingsChanged = value;
+            if (value)
+                SettingsChanged = true;
+        }
+    }
 
     [ObservableProperty]
     private double _speechConfidence;
@@ -52,26 +76,26 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.VoiceConfidence = Math.Round(value, 3);
-        _settingsChanged = true;
+        SettingsChanged = true;
     }
 
     [ObservableProperty]
-    private ObservableCollection<string> _locales = [];
+    private ObservableCollection<string> _speechLocales = [];
 
     [ObservableProperty]
-    private string _currentLocale = "";
+    private string _currentSpeechLocale = "";
 
-    async partial void OnCurrentLocaleChanged(string value)
+    async partial void OnCurrentSpeechLocaleChanged(string value)
     {
         if (IsLoading)
             return;
 
-        Settings.Locale = value;
+        Settings.SpeechLocale = value;
         if (Settings.PlayVoice)
-            _keySettingsChanged = true;
-        _speechSettingsChanged = true;
+            KeySettingsChanged = true;
+        SpeechSettingsChanged = true;
 
-        await LoadByLanguage();
+        await LoadBySpeechLanguage();
     }
 
     [ObservableProperty]
@@ -83,7 +107,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.TriggerKey = value;
-        _keySettingsChanged = true;
+        KeySettingsChanged = true;
     }
 
     [ObservableProperty]
@@ -95,7 +119,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.OperateKeys = value;
-        _keySettingsChanged = true;
+        KeySettingsChanged = true;
     }
 
     [ObservableProperty]
@@ -107,7 +131,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.PlayVoice = value;
-        _keySettingsChanged = true;
+        KeySettingsChanged = true;
     }
 
     [ObservableProperty]
@@ -123,9 +147,9 @@ public partial class MainViewModel : ObservableObject
 
         Settings.VoiceName = value;
         if (Settings.PlayVoice)
-            _keySettingsChanged = true;
+            KeySettingsChanged = true;
         else
-            _settingsChanged = true;
+            SettingsChanged = true;
 
         // The stratagem may be invalid after changing the language
         var stratagem = _keyStratagems[SelectedKeyIndex];
@@ -142,12 +166,11 @@ public partial class MainViewModel : ObservableObject
 
         try
         {
-            await AppSettings.LoadSettings();
-
-            InitLanguages();
+            InitUILanguages();
+            InitSpeechLanguages();
             InitHotkeysUI();
 
-            await LoadByLanguage();
+            await LoadBySpeechLanguage();
 
             CenterWindow();
         }
@@ -193,9 +216,9 @@ public partial class MainViewModel : ObservableObject
             if (Settings.EnableSpeechTrigger)
                 await StartSpeechTrigger();
         }
-        else if (newProcessIsActive && _speechSettingsChanged)
+        else if (newProcessIsActive && SpeechSettingsChanged)
         {
-            _speechSettingsChanged = false;
+            SpeechSettingsChanged = false;
             await ResetVoiceCommand();
         }
 
@@ -205,9 +228,9 @@ public partial class MainViewModel : ObservableObject
         }
         else if (e.NewWindowTitle == HellDivers2Title && Settings.EnableHotkeyTrigger)
         {
-            if (_keySettingsChanged)
+            if (KeySettingsChanged)
             {
-                _keySettingsChanged = false;
+                KeySettingsChanged = false;
                 SetHotkeyGroup();
             }
 
@@ -224,7 +247,7 @@ public partial class MainViewModel : ObservableObject
             if (stratagem == null)
                 continue;
 
-            hotkeys[_keys[i]] = (_, e) =>
+            hotkeys[_keys[i]] = (_, _) =>
             {
                 if (Settings.PlayVoice)
                     PlayStratagemVoice(stratagem.Name);
@@ -236,28 +259,57 @@ public partial class MainViewModel : ObservableObject
         HotkeyGroupManager.SetHotkeyGroup(hotkeys);
     }
 
-    private void InitLanguages()
+    [ObservableProperty]
+    private ObservableCollection<string> _locales = [];
+
+    [ObservableProperty]
+    private string _currentLocale = "";
+
+    partial void OnCurrentLocaleChanged(string value)
+    {
+        if (IsLoading)
+            return;
+
+        Settings.Locale = value;
+        SettingsChanged = true;
+
+        Localizer.Instance.SetLanguage(value);
+    }
+
+    private void InitUILanguages()
+    {
+        Locales.Clear();
+        foreach (var locale in Localizer.Instance.Languages)
+            Locales.Add(locale);
+
+        if (!Locales.Contains(Settings.Locale))
+            Settings.Locale = Locales.First();
+
+        CurrentLocale = Settings.Locale;
+    }
+
+    private void InitSpeechLanguages()
     {
         var speechLocales = VoiceCommand.GetInstalledRecognizers();
         if (speechLocales.Count == 0)
             return;
 
-        Locales.Clear();
-        foreach (var locale in speechLocales)
-            Locales.Add(locale);
+        SpeechLocales.Clear();
+        foreach (var speechLocale in speechLocales)
+            SpeechLocales.Add(speechLocale);
 
-        if (!speechLocales.Contains(Settings.Locale))
+        if (!speechLocales.Contains(Settings.SpeechLocale))
         {
             if (speechLocales.Contains(CultureInfo.CurrentCulture.Name))
-                Settings.Locale = CultureInfo.CurrentCulture.Name;
+                Settings.SpeechLocale = CultureInfo.CurrentCulture.Name;
             else
-                Settings.Locale = speechLocales.First();
+                Settings.SpeechLocale = speechLocales.First();
 
-            _keySettingsChanged = true;
-            _speechSettingsChanged = true;
+            KeySettingsChanged = true;
+            SpeechSettingsChanged = true;
         }
 
-        CurrentLocale = Settings.Locale;
+        CurrentSpeechLocale = Settings.SpeechLocale;
     }
 
     private const int KeyCount = 17;
@@ -318,7 +370,7 @@ public partial class MainViewModel : ObservableObject
             keysStackPanel.Children.Add(hsPanel);
 
             var i1 = i;
-            hsPanel.PointerPressed += (_, e) =>
+            hsPanel.PointerPressed += (_, _) =>
             {
                 SelectedKeyIndex = i1;
 
@@ -340,7 +392,7 @@ public partial class MainViewModel : ObservableObject
         _hotkeyPanels.Last().IsBorderVisible = true;
     }
 
-    public async Task LoadByLanguage()
+    public async Task LoadBySpeechLanguage()
     {
         StratagemManager.Load();
         InitStratagemGroupsUI();
@@ -503,7 +555,7 @@ public partial class MainViewModel : ObservableObject
 
     private async Task LoadGeneratingVoiceStyles()
     {
-        if (Settings.Locale == "")
+        if (Settings.SpeechLocale == "")
             return;
 
         IsLoading = true;
@@ -511,7 +563,7 @@ public partial class MainViewModel : ObservableObject
         try
         {
             var manager = await VoicesManager.Create();
-            _voices = manager.Find(language: Settings.Language);
+            _voices = manager.Find(language: Settings.SpeechLanguage);
 
             GenerateVoiceStyles.Clear();
             foreach (var voice in _voices)
@@ -531,7 +583,7 @@ public partial class MainViewModel : ObservableObject
 
         try
         {
-            var languageVoicePath = Path.Combine(VoiceRootPath, Settings.Language);
+            var languageVoicePath = Path.Combine(VoiceRootPath, Settings.SpeechLanguage);
 
             var styles = Directory.GetDirectories(languageVoicePath)
                 .Select(Path.GetFileName)
@@ -613,14 +665,14 @@ public partial class MainViewModel : ObservableObject
         }
 
         if (!IsLoading)
-            _keySettingsChanged = true;
+            KeySettingsChanged = true;
     }
 
     private static readonly string VoiceRootPath = Path.Combine(AppSettings.ExeDirectory, "Voice");
 
     private void PlayStratagemVoice(string stratagemName)
     {
-        PlayVoice(Path.Combine(VoiceRootPath, Settings.Language, Settings.VoiceName, stratagemName + ".mp3"));
+        PlayVoice(Path.Combine(VoiceRootPath, Settings.SpeechLanguage, Settings.VoiceName, stratagemName + ".mp3"));
     }
 
     private void PlayVoice(string filePath, bool deleteAfterPlay = false)
@@ -650,7 +702,7 @@ public partial class MainViewModel : ObservableObject
         if (IsLoading)
             return;
 
-        if (!_settingsChanged)
+        if (!SettingsChanged)
             return;
 
         Settings.StratagemSets.Clear();
@@ -659,7 +711,7 @@ public partial class MainViewModel : ObservableObject
             Settings.StratagemSets.Add(item);
         await AppSettings.SaveSettings();
 
-        _settingsChanged = false;
+        SettingsChanged = false;
     }
 
     private async Task ResetVoiceCommand()
@@ -671,7 +723,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _speechRecognizeResult = "暂无识别结果";
+    private string _speechRecognizeResult = "";
 
     private VoiceCommand? _voiceCommand;
 
@@ -685,19 +737,19 @@ public partial class MainViewModel : ObservableObject
             var languages = VoiceCommand.GetInstalledRecognizers();
             if (languages.Count == 0)
             {
-                await new MessageDialog("错误", "没有安装语音识别引擎").ShowDialog(_mainWindow);
+                await new MessageDialog(Localizer.Instance["Error"], "没有安装语音识别引擎").ShowDialog(_mainWindow);
                 return;
             }
 
-            if (!languages.Contains(Settings.Locale))
+            if (!languages.Contains(Settings.SpeechLocale))
             {
-                await new MessageDialog("错误", $"没有安装 {Settings.Locale} 的语音识别引擎").ShowDialog(_mainWindow);
+                await new MessageDialog("错误", $"没有安装 {Settings.SpeechLocale} 的语音识别引擎").ShowDialog(_mainWindow);
                 return;
             }
 
             try
             {
-                _voiceCommand = new VoiceCommand(Settings.Locale, Settings.WakeupWord, [.. StratagemManager.StratagemAlias]);
+                _voiceCommand = new VoiceCommand(Settings.SpeechLocale, Settings.WakeupWord, [.. StratagemManager.StratagemAlias]);
             }
             catch (Exception)
             {
@@ -763,7 +815,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.UpdateUrl = value;
-        _settingsChanged = true;
+        SettingsChanged = true;
     }
 
 
@@ -802,7 +854,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.EnableSpeechTrigger = value;
-        _settingsChanged = true;
+        SettingsChanged = true;
 
         if (Settings.EnableSpeechTrigger)
             await StartSpeechTrigger();
@@ -825,7 +877,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.WakeupWord = value.Trim();
-        _settingsChanged = true;
+        SettingsChanged = true;
         await ResetVoiceCommand();
     }
 
@@ -847,7 +899,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.EnableHotkeyTrigger = value;
-        _settingsChanged = true;
+        SettingsChanged = true;
 
         HotkeyGroupManager.Enabled = Settings.EnableHotkeyTrigger;
     }
@@ -861,7 +913,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         Settings.EnableSetKeyBySpeech = value;
-        _settingsChanged = true;
+        SettingsChanged = true;
     }
 
     [RelayCommand]
@@ -874,7 +926,7 @@ public partial class MainViewModel : ObservableObject
         StratagemSets.Add(keyStratagemString);
         CurrentStratagemSetIndex = StratagemSets.Count - 1;
 
-        _settingsChanged = true;
+        SettingsChanged = true;
     }
 
     [RelayCommand]
@@ -885,7 +937,7 @@ public partial class MainViewModel : ObservableObject
 
         StratagemSets.RemoveAt(CurrentStratagemSetIndex);
 
-        _settingsChanged = true;
+        SettingsChanged = true;
     }
 
     [ObservableProperty]
@@ -922,7 +974,7 @@ public partial class MainViewModel : ObservableObject
                 count++;
 
                 await GenerateVoiceFile(stratagem.Name,
-                    Path.Combine(VoiceRootPath, Settings.Language, voiceName, stratagem.Name + ".mp3"));
+                    Path.Combine(VoiceRootPath, Settings.SpeechLanguage, voiceName, stratagem.Name + ".mp3"));
                 GenerateVoiceMessage = $"正在生成民主语音（{count}/{total}）：{stratagem.Name}";
             }
         }
@@ -1074,7 +1126,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         SetKeyStratagemString(StratagemSets[value]);
-        _keySettingsChanged = true;
+        KeySettingsChanged = true;
     }
 
     [ObservableProperty]

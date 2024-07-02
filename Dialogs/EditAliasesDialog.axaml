@@ -10,20 +10,20 @@
         CanResize="False"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner"
-        Title="编辑自定义名称">
+        Title="{local:Localize EditCustomName}">
 
     <StackPanel Margin="20,10,20,10">
         <local:MyHorizontalBlock>
-            <Label Content="预定义名称（用|分隔）：" />
+            <Label Content="{local:Localize PredefinedNames}" />
             <TextBox Name="SystemAliasesTextBox" Width="400" />
         </local:MyHorizontalBlock>
         <local:MyHorizontalBlock>
-            <Label Content="自定义名称（用|分隔）：" />
+            <Label Content="{local:Localize CustomNames}" />
             <TextBox Name="UserAliasesTextBox" Width="400" />
         </local:MyHorizontalBlock>
         <local:MyHorizontalStackPanel HorizontalAlignment="Center">
-            <Button Name="OkButton" Content="确定" Click="OkButton_OnClick" />
-            <Button Name="CancelButton" Content="取消" Click="CancelButton_OnClick" />
+            <Button Name="OkButton" Content="{local:Localize OK}" Click="OkButton_OnClick" />
+            <Button Name="CancelButton" Content="{local:Localize Cancel}" Click="CancelButton_OnClick" />
         </local:MyHorizontalStackPanel>
     </StackPanel>
 
