@@ -15,19 +15,34 @@ public class AppSettings
 
     private static readonly JsonFile<AppSettings> _settingsFile = new(SettingsFile);
 
-    public static async Task LoadSettings()
+    public static void Load()
     {
-        var settings = await _settingsFile.Load();
+        var settings = _settingsFile.Load();
         if (settings != null)
             Settings = settings;
     }
 
-    public static async Task SaveSettings()
+    public static async Task LoadAsync()
+    {
+        var settings = await _settingsFile.LoadAsync();
+        if (settings != null)
+            Settings = settings;
+    }
+
+    public static void Save()
     {
         if (Design.IsDesignMode)
             return;
 
-        await _settingsFile.Save(Settings);
+        _settingsFile.Save(Settings);
+    }
+
+    public static async Task SaveAsync()
+    {
+        if (Design.IsDesignMode)
+            return;
+
+        await _settingsFile.SaveAsync(Settings);
     }
 
     public string TriggerKey { get; set; } = "Ctrl";

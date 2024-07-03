@@ -12,9 +12,9 @@ public class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    public override async void OnFrameworkInitializationCompleted()
+    public override void OnFrameworkInitializationCompleted()
     {
-        await AppSettings.LoadSettings();
+        AppSettings.Load();
         if (Settings.Locale == "")
             Settings.Locale = CultureInfo.CurrentCulture.Name;
 

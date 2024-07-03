@@ -709,7 +709,7 @@ public partial class MainViewModel : ObservableObject
         Settings.StratagemSets.Add(GetKeyStratagemString());
         foreach (var item in StratagemSets)
             Settings.StratagemSets.Add(item);
-        await AppSettings.SaveSettings();
+        await AppSettings.SaveAsync();
 
         SettingsChanged = false;
     }

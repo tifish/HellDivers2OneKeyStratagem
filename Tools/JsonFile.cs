@@ -19,7 +19,16 @@ public class JsonFile<T> where T : class
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
     };
 
-    public async Task<T?> Load()
+    public T? Load()
+    {
+        if (!File.Exists(FilePath))
+            return null;
+
+        using var fileStream = File.OpenRead(FilePath);
+        return JsonSerializer.Deserialize<T>(fileStream, JsonSerializerOptions);
+    }
+
+    public async Task<T?> LoadAsync()
     {
         if (!File.Exists(FilePath))
             return null;
@@ -28,7 +37,17 @@ public class JsonFile<T> where T : class
         return await JsonSerializer.DeserializeAsync<T>(fileStream, JsonSerializerOptions);
     }
 
-    public async Task Save(T obj)
+    public void Save(T obj)
+    {
+        var dir = Path.GetDirectoryName(FilePath);
+        if (dir != null && !Directory.Exists(dir))
+            Directory.CreateDirectory(dir);
+
+        using var fileStream = File.Create(FilePath);
+        JsonSerializer.Serialize(fileStream, obj, JsonSerializerOptions);
+    }
+
+    public async Task SaveAsync(T obj)
     {
         var dir = Path.GetDirectoryName(FilePath);
         if (dir != null && !Directory.Exists(dir))
