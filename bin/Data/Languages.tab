@@ -32,3 +32,15 @@ RecognitionConfidence	Recognition confidence: 	识别阈值：
 Yes	Yes	是
 No	No	否
 Error	Error	错误
+SpeechRecognitionEngineNotInstalled	The speech recognition engine has not been installed.	没有安装语音识别引擎
+SpeechRecognitionEngineOfLanguageNotInstalled	The speech recognition engine of {0} has not been installed.	没有安装 {0} 的语音识别引擎
+CreatingSpeechRecognitionFailed	Creating speech recognition failed.	创建语音识别失败
+Failed	Failed	失败
+Success	Success	成功
+RecognitionResult	[{0}] Recognition Confidence: {1:F3} Text: {2}	【{0}】识别阈值：{1:F3} 识别文字：{2}
+Info	Info	信息
+NewVersionDetectedWantUpdate	A new version has been detected. Do you want to update?	发现新版本，是否更新？
+YouHaveTheLatestVersion	You have the latest version.	已经是最新版本
+PleaseTurnOnMicrophoneCallOut	Please turn on the microphone calling out first.	请先开启麦克风呼叫功能
+PleaseReadThis	Please read "{0}{1}"	请朗读 “{0}{1}”
+StratagemToolTip	{0}\n    Custom name: {1}\n    Edit the custom name by right-clicking.	{0}\n    自定义名称：{1}\n    按右键编辑自定义名称。

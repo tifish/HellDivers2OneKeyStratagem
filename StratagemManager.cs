@@ -9,7 +9,7 @@ public static class StratagemManager
 
     private static readonly Dictionary<string, Stratagem> _stratagemDictionary = [];
     private static readonly List<Stratagem> _stratagems = [];
-    public static IEnumerable<Stratagem> Stratagems => _stratagems;
+    public static List<Stratagem> Stratagems => _stratagems;
     private static readonly Dictionary<string, string> _systemAliasesDictionary = [];
     public static IEnumerable<string> StratagemAlias => _stratagemDictionary.Keys.Concat(_userAliasStratagemDictionary.Keys);
     public static int Count => _stratagems.Count;

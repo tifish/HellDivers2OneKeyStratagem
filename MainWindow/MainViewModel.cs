@@ -443,11 +443,11 @@ public partial class MainViewModel : ObservableObject
                 stratagem.CheckBox = stratagemCheckBox;
                 groupContainer.Children.Add(stratagemCheckBox);
 
-                ToolTip.SetTip(stratagemCheckBox, $"""
-                                                   {StratagemManager.GetSystemAlias(stratagem.Name)}
-                                                       自定义名称：{StratagemManager.GetUserAlias(stratagem.Name)}
-                                                       按右键编辑自定义名称。
-                                                   """);
+                ToolTip.SetTip(stratagemCheckBox,
+                    string.Format(
+                        Localizer.Instance["StratagemToolTip"],
+                        StratagemManager.GetSystemAlias(stratagem.Name),
+                        StratagemManager.GetUserAlias(stratagem.Name)));
 
                 stratagemCheckBox.IsCheckedChanged += StratagemCheckBoxOnIsCheckedChanged;
 
@@ -737,13 +737,19 @@ public partial class MainViewModel : ObservableObject
             var languages = VoiceCommand.GetInstalledRecognizers();
             if (languages.Count == 0)
             {
-                await new MessageDialog(Localizer.Instance["Error"], "没有安装语音识别引擎").ShowDialog(_mainWindow);
+                await new MessageDialog(
+                        Localizer.Instance["Error"],
+                        Localizer.Instance["SpeechRecognitionEngineNotInstalled"])
+                    .ShowDialog(_mainWindow);
                 return;
             }
 
             if (!languages.Contains(Settings.SpeechLocale))
             {
-                await new MessageDialog("错误", $"没有安装 {Settings.SpeechLocale} 的语音识别引擎").ShowDialog(_mainWindow);
+                await new MessageDialog(
+                        Localizer.Instance["Error"],
+                        string.Format(Localizer.Instance["SpeechRecognitionEngineOfLanguageNotInstalled"], Settings.SpeechLocale))
+                    .ShowDialog(_mainWindow);
                 return;
             }
 
@@ -753,14 +759,18 @@ public partial class MainViewModel : ObservableObject
             }
             catch (Exception)
             {
-                await new MessageDialog("错误", "创建语音识别失败").ShowDialog(_mainWindow);
+                await new MessageDialog(
+                        Localizer.Instance["Error"],
+                        Localizer.Instance["CreatingSpeechRecognitionFailed"])
+                    .ShowDialog(_mainWindow);
                 return;
             }
 
             _voiceCommand.CommandRecognized += (_, command) =>
             {
                 var failed = command.Score < Settings.VoiceConfidence;
-                var info = $"【{(failed ? "失败" : "成功")}】识别阈值：{command.Score:F3} 识别文字：{command.Text}";
+                var result = failed ? Localizer.Instance["Failed"] : Localizer.Instance["Success"];
+                var info = string.Format(Localizer.Instance["RecognitionResult"], result, command.Score, command.Text);
                 SpeechRecognizeResult = info;
 
                 if (failed)
@@ -831,12 +841,18 @@ public partial class MainViewModel : ObservableObject
         {
             if (await AutoUpdate.HasUpdate())
             {
-                if (await new YesNoDialog("提示", "发现新版本，是否更新？").ShowDialog<bool>(_mainWindow))
+                if (await new YesNoDialog(
+                            Localizer.Instance["Info"],
+                            Localizer.Instance["NewVersionDetectedWantUpdate"])
+                        .ShowDialog<bool>(_mainWindow))
                     AutoUpdate.Update();
             }
             else
             {
-                await new MessageDialog("提示", "已经是最新版本").ShowDialog<bool>(_mainWindow);
+                await new MessageDialog(
+                        Localizer.Instance["Info"],
+                        Localizer.Instance["YouHaveTheLatestVersion"])
+                    .ShowDialog<bool>(_mainWindow);
             }
         }
         finally
@@ -1053,16 +1069,19 @@ public partial class MainViewModel : ObservableObject
     {
         if (_voiceCommand == null)
         {
-            await new MessageDialog("提示", "请先开启语音触发功能").ShowDialog(_mainWindow);
+            await new MessageDialog(
+                    Localizer.Instance["Info"],
+                    Localizer.Instance["PleaseTurnOnMicrophoneCallOut"])
+                .ShowDialog(_mainWindow);
             return;
         }
 
         var scores = new float[3];
-        var messages = new[]
+        var stratagemNames = new[]
         {
-            $"请朗读 “{Settings.WakeupWord}飞鹰空袭”",
-            $"请朗读 “{Settings.WakeupWord}轨道炮攻击”",
-            $"请朗读 “{Settings.WakeupWord}消耗性反坦克武器”",
+            StratagemManager.Stratagems[Random.Shared.Next(StratagemManager.Stratagems.Count)].Name,
+            StratagemManager.Stratagems[Random.Shared.Next(StratagemManager.Stratagems.Count)].Name,
+            StratagemManager.Stratagems[Random.Shared.Next(StratagemManager.Stratagems.Count)].Name,
         };
         var times = 0;
         var dialog = new CalibrateVoiceDialog();
@@ -1076,7 +1095,9 @@ public partial class MainViewModel : ObservableObject
 
             while (dialog.IsVisible)
             {
-                dialog.SetMessage(messages[currentTime]);
+                var message = string.Format(
+                    Localizer.Instance["PleaseReadThis"], Settings.WakeupWord, stratagemNames[currentTime]);
+                dialog.SetMessage(message);
 
                 while (times == currentTime && dialog.IsVisible)
                     await Task.Delay(100);
@@ -1102,14 +1123,12 @@ public partial class MainViewModel : ObservableObject
 
         void TestEvent(object? _, VoiceCommand.RecognitionResult command)
         {
-            switch (command.Text)
+            if ((command.Text == stratagemNames[0] && times == 0)
+                || (command.Text == stratagemNames[1] && times == 1)
+                || (command.Text == stratagemNames[2] && times == 2))
             {
-                case "飞鹰空袭" when times == 0:
-                case "轨道炮攻击" when times == 1:
-                case "消耗性反坦克武器" when times == 2:
-                    scores[times] = command.Score;
-                    times++;
-                    break;
+                scores[times] = command.Score;
+                times++;
             }
         }
     }
