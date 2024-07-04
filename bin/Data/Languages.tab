@@ -44,3 +44,4 @@ YouHaveTheLatestVersion	You have the latest version.	已经是最新版本
 PleaseTurnOnMicrophoneCallOut	Please turn on the microphone calling out first.	请先开启麦克风呼叫功能
 PleaseReadThis	Please read "{0}{1}"	请朗读 “{0}{1}”
 StratagemToolTip	{0}\n    Custom name: {1}\n    Edit the custom name by right-clicking.	{0}\n    自定义名称：{1}\n    按右键编辑自定义名称。
+None	None	无

@@ -273,13 +273,13 @@ public partial class MainViewModel : ObservableObject
         Settings.Locale = value;
         SettingsChanged = true;
 
-        Localizer.Instance.SetLanguage(value);
+        Localizer.SetLanguage(value);
     }
 
     private void InitUILanguages()
     {
         Locales.Clear();
-        foreach (var locale in Localizer.Instance.Languages)
+        foreach (var locale in Localizer.Languages)
             Locales.Add(locale);
 
         if (!Locales.Contains(Settings.Locale))
@@ -349,8 +349,6 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    private const string NoStratagem = "无";
-
     private void InitHotkeysUI()
     {
         _mainWindow.KeysStackPanel1.Children.Clear();
@@ -365,8 +363,8 @@ public partial class MainViewModel : ObservableObject
             var hsPanel = new HotkeyStratagemPanel
             {
                 HotkeyName = Enum.GetName(_keys[i]) ?? "Error",
-                StratagemName = NoStratagem,
             };
+            hsPanel.ClearStratagem();
             keysStackPanel.Children.Add(hsPanel);
 
             var i1 = i;
@@ -445,7 +443,7 @@ public partial class MainViewModel : ObservableObject
 
                 ToolTip.SetTip(stratagemCheckBox,
                     string.Format(
-                        Localizer.Instance["StratagemToolTip"],
+                        Localizer.Get("StratagemToolTip"),
                         StratagemManager.GetSystemAlias(stratagem.Name),
                         StratagemManager.GetUserAlias(stratagem.Name)));
 
@@ -485,7 +483,7 @@ public partial class MainViewModel : ObservableObject
                         SetKeyStratagem(SelectedKeyIndex, stratagem);
 
                         if (SelectedKeyIndex > 0)
-                            if (_hotkeyPanels[SelectedKeyIndex - 1].StratagemName == NoStratagem)
+                            if (!_hotkeyPanels[SelectedKeyIndex - 1].HasStratagem)
                                 SelectedKeyIndex--;
                     }
                     else
@@ -643,7 +641,7 @@ public partial class MainViewModel : ObservableObject
                 if (prevIndex > -1)
                 {
                     _keyStratagems[prevIndex] = null;
-                    _hotkeyPanels[prevIndex].StratagemName = NoStratagem;
+                    _hotkeyPanels[prevIndex].ClearStratagem();
                 }
             }
 
@@ -661,7 +659,7 @@ public partial class MainViewModel : ObservableObject
         else
         {
             _keyStratagems[index] = null;
-            _hotkeyPanels[index].StratagemName = NoStratagem;
+            _hotkeyPanels[index].ClearStratagem();
         }
 
         if (!IsLoading)
@@ -738,8 +736,8 @@ public partial class MainViewModel : ObservableObject
             if (languages.Count == 0)
             {
                 await new MessageDialog(
-                        Localizer.Instance["Error"],
-                        Localizer.Instance["SpeechRecognitionEngineNotInstalled"])
+                        Localizer.Get("Error"),
+                        Localizer.Get("SpeechRecognitionEngineNotInstalled"))
                     .ShowDialog(_mainWindow);
                 return;
             }
@@ -747,8 +745,8 @@ public partial class MainViewModel : ObservableObject
             if (!languages.Contains(Settings.SpeechLocale))
             {
                 await new MessageDialog(
-                        Localizer.Instance["Error"],
-                        string.Format(Localizer.Instance["SpeechRecognitionEngineOfLanguageNotInstalled"], Settings.SpeechLocale))
+                        Localizer.Get("Error"),
+                        string.Format(Localizer.Get("SpeechRecognitionEngineOfLanguageNotInstalled"), Settings.SpeechLocale))
                     .ShowDialog(_mainWindow);
                 return;
             }
@@ -760,8 +758,8 @@ public partial class MainViewModel : ObservableObject
             catch (Exception)
             {
                 await new MessageDialog(
-                        Localizer.Instance["Error"],
-                        Localizer.Instance["CreatingSpeechRecognitionFailed"])
+                        Localizer.Get("Error"),
+                        Localizer.Get("CreatingSpeechRecognitionFailed"))
                     .ShowDialog(_mainWindow);
                 return;
             }
@@ -769,8 +767,8 @@ public partial class MainViewModel : ObservableObject
             _voiceCommand.CommandRecognized += (_, command) =>
             {
                 var failed = command.Score < Settings.VoiceConfidence;
-                var result = failed ? Localizer.Instance["Failed"] : Localizer.Instance["Success"];
-                var info = string.Format(Localizer.Instance["RecognitionResult"], result, command.Score, command.Text);
+                var result = failed ? Localizer.Get("Failed") : Localizer.Get("Success");
+                var info = string.Format(Localizer.Get("RecognitionResult"), result, command.Score, command.Text);
                 SpeechRecognizeResult = info;
 
                 if (failed)
@@ -842,16 +840,16 @@ public partial class MainViewModel : ObservableObject
             if (await AutoUpdate.HasUpdate())
             {
                 if (await new YesNoDialog(
-                            Localizer.Instance["Info"],
-                            Localizer.Instance["NewVersionDetectedWantUpdate"])
+                            Localizer.Get("Info"),
+                            Localizer.Get("NewVersionDetectedWantUpdate"))
                         .ShowDialog<bool>(_mainWindow))
                     AutoUpdate.Update();
             }
             else
             {
                 await new MessageDialog(
-                        Localizer.Instance["Info"],
-                        Localizer.Instance["YouHaveTheLatestVersion"])
+                        Localizer.Get("Info"),
+                        Localizer.Get("YouHaveTheLatestVersion"))
                     .ShowDialog<bool>(_mainWindow);
             }
         }
@@ -1070,8 +1068,8 @@ public partial class MainViewModel : ObservableObject
         if (_voiceCommand == null)
         {
             await new MessageDialog(
-                    Localizer.Instance["Info"],
-                    Localizer.Instance["PleaseTurnOnMicrophoneCallOut"])
+                    Localizer.Get("Info"),
+                    Localizer.Get("PleaseTurnOnMicrophoneCallOut"))
                 .ShowDialog(_mainWindow);
             return;
         }
@@ -1096,7 +1094,7 @@ public partial class MainViewModel : ObservableObject
             while (dialog.IsVisible)
             {
                 var message = string.Format(
-                    Localizer.Instance["PleaseReadThis"], Settings.WakeupWord, stratagemNames[currentTime]);
+                    Localizer.Get("PleaseReadThis"), Settings.WakeupWord, stratagemNames[currentTime]);
                 dialog.SetMessage(message);
 
                 while (times == currentTime && dialog.IsVisible)

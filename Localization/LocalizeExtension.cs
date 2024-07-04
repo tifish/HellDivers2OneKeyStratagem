@@ -1,32 +1,36 @@
-﻿using Avalonia.Data;
+﻿using Avalonia;
 using Avalonia.Markup.Xaml;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 
 namespace HellDivers2OneKeyStratagem;
 
-public class LocalizeExtension : MarkupExtension
+public class LocalizeExtension(string Key) : MarkupExtension, IObservable<string>, IDisposable
 {
-    public LocalizeExtension(string key)
-    {
-        Key = key;
-    }
-
-    public string Key { get; set; }
-
-    public string Context { get; set; } = "";
-
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
-        var keyToUse = Key;
-        if (!string.IsNullOrWhiteSpace(Context))
-            keyToUse = $"{Context}/{Key}";
+        return this.ToBinding();
+    }
 
-        var binding = new ReflectionBindingExtension($"[{keyToUse}]")
-        {
-            Mode = BindingMode.OneWay,
-            Source = Localizer.Instance,
-        };
+    private IObserver<string>? _observer;
 
-        return binding.ProvideValue(serviceProvider);
+    public IDisposable Subscribe(IObserver<string> observer)
+    {
+        _observer = observer;
+        _observer.OnNext(Localizer.Get(Key));
+        Localizer.LanguageChanged += OnLanguageChanged;
+
+        return this;
+    }
+
+    private void OnLanguageChanged(object? sender, EventArgs e)
+    {
+        _observer?.OnNext(Localizer.Get(Key));
+    }
+
+    public void Dispose()
+    {
+        _observer = null;
+        Localizer.LanguageChanged -= OnLanguageChanged;
+
+        GC.SuppressFinalize(this);
     }
 }

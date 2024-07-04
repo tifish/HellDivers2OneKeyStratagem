@@ -1,22 +1,18 @@
-﻿using System.ComponentModel;
-using System.Text;
-using Newtonsoft.Json;
+﻿using System.Text;
 
 namespace HellDivers2OneKeyStratagem;
 
-public class Localizer : INotifyPropertyChanged
+public static class Localizer
 {
-    private const string IndexerName = "Item";
-    private const string IndexerArrayName = "Item[]";
-    private Dictionary<string, string[]> _languageStrings = [];
+    private static readonly Dictionary<string, string[]> _languageStrings = [];
 
     private static readonly string LanguagesTabFile = Path.Combine(AppSettings.DataDirectory, "Languages.tab");
 
-    private bool _hasLoaded;
+    private static bool _hasLoaded;
 
-    public List<string> Languages { get; } = [];
+    public static List<string> Languages { get; } = [];
 
-    public bool Load()
+    public static bool Load()
     {
         _languageStrings.Clear();
 
@@ -45,9 +41,9 @@ public class Localizer : INotifyPropertyChanged
         return true;
     }
 
-    private int _currentLanguageIndex = -1;
+    private static int _currentLanguageIndex = -1;
 
-    public bool SetLanguage(string language)
+    public static bool SetLanguage(string language)
     {
         if (_hasLoaded)
             Load();
@@ -63,25 +59,20 @@ public class Localizer : INotifyPropertyChanged
         return true;
     }
 
-    public string Language { get; private set; } = "";
+    public static string Language { get; private set; } = "";
 
-    public string this[string key]
+    public static string Get(string key)
     {
-        get
-        {
-            if (_languageStrings.TryGetValue(key, out var res))
-                return res[_currentLanguageIndex].Replace("\\n", "\n");
+        if (_languageStrings.TryGetValue(key, out var res))
+            return res[_currentLanguageIndex].Replace("\\n", "\n");
 
-            return $"{Language}:{key}";
-        }
+        return $"{Language}:{key}";
     }
 
-    public static Localizer Instance { get; set; } = new();
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public static event EventHandler? LanguageChanged;
 
-    public void Invalidate()
+    public static void Invalidate()
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(IndexerName));
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(IndexerArrayName));
+        LanguageChanged?.Invoke(null, EventArgs.Empty);
     }
 }

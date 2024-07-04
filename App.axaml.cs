@@ -18,8 +18,8 @@ public class App : Application
         if (Settings.Locale == "")
             Settings.Locale = CultureInfo.CurrentCulture.Name;
 
-        Localizer.Instance.Load();
-        Localizer.Instance.SetLanguage(Settings.Locale);
+        Localizer.Load();
+        Localizer.SetLanguage(Settings.Locale);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             desktop.MainWindow = new MainWindow();

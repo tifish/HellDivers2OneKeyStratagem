@@ -35,6 +35,13 @@ public class HotkeyStratagemPanel : TemplatedControl
     public static readonly StyledProperty<string> StratagemNameProperty =
         AvaloniaProperty.Register<HotkeyStratagemPanel, string>(nameof(StratagemName));
 
+    public bool HasStratagem => StratagemName != Localizer.Get("None");
+
+    public void ClearStratagem()
+    {
+        Bind(StratagemNameProperty, new LocalizeExtension("None"));
+    }
+
     public bool IsBorderVisible
     {
         get => GetValue(IsBorderVisibleProperty);
