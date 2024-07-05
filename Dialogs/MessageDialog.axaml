@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
+        xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="HellDivers2OneKeyStratagem.MessageDialog"
         TransparencyLevelHint="AcrylicBlur"
@@ -15,7 +16,7 @@
             <Label Name="MessageLabel" Content="Message" />
         </local:MyHorizontalStackPanel>
         <local:MyHorizontalStackPanel HorizontalAlignment="Center">
-            <Button Name="OkButton" Content="{local:Localize OK}" Click="OkButton_OnClick" />
+            <Button Name="OkButton" Content="{l:Localize OK}" Click="OkButton_OnClick" />
         </local:MyHorizontalStackPanel>
     </StackPanel>
 </Window>

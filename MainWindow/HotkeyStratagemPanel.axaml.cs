@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
+using Jeek.Avalonia.Localization;
 
 namespace HellDivers2OneKeyStratagem;
 

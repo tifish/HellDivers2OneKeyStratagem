@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
+        xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="HellDivers2OneKeyStratagem.YesNoDialog"
         TransparencyLevelHint="AcrylicBlur"
@@ -15,8 +16,8 @@
             <Label Name="MessageLabel" />
         </local:MyHorizontalBlock>
         <local:MyHorizontalStackPanel HorizontalAlignment="Center">
-            <Button Name="YesButton" Content="{local:Localize Yes}" Click="YesButton_OnClick" />
-            <Button Name="NoButton" Content="{local:Localize No}" Click="NoButton_OnClick" />
+            <Button Name="YesButton" Content="{l:Localize Yes}" Click="YesButton_OnClick" />
+            <Button Name="NoButton" Content="{l:Localize No}" Click="NoButton_OnClick" />
         </local:MyHorizontalStackPanel>
     </StackPanel>
 </Window>

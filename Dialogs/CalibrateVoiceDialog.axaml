@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
+        xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
         mc:Ignorable="d"
         x:DataType="local:CalibrateVoiceDialog"
 
@@ -11,14 +12,14 @@
         CanResize="False"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner"
-        Title="{local:Localize CalibrateRecognition}">
+        Title="{l:Localize CalibrateRecognition}">
 
     <StackPanel Margin="20,10,20,10">
         <local:MyHorizontalStackPanel>
             <Label Name="MessageLabel" Content="飞鹰空袭" FontSize="32" />
         </local:MyHorizontalStackPanel>
         <local:MyHorizontalStackPanel HorizontalAlignment="Center">
-            <Button Content="{local:Localize Close}" Click="CloseButton_OnClick" />
+            <Button Content="{l:Localize Close}" Click="CloseButton_OnClick" />
         </local:MyHorizontalStackPanel>
     </StackPanel>
 </Window>

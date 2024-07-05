@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EdgeTTS;
 using GlobalHotKeys;
+using Jeek.Avalonia.Localization;
 using NAudio.Wave;
 
 namespace HellDivers2OneKeyStratagem;
@@ -273,7 +274,7 @@ public partial class MainViewModel : ObservableObject
         Settings.Locale = value;
         SettingsChanged = true;
 
-        Localizer.SetLanguage(value);
+        Localizer.Language = value;
     }
 
     private void InitUILanguages()

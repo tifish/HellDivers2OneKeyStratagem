@@ -4,26 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
+        xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
         mc:Ignorable="d"
         d:DesignHeight="300" d:DesignWidth="300"
         TransparencyLevelHint="AcrylicBlur"
         CanResize="False"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner"
-        Title="{local:Localize EditCustomName}">
+        Title="{l:Localize EditCustomName}">
 
     <StackPanel Margin="20,10,20,10">
         <local:MyHorizontalBlock>
-            <Label Content="{local:Localize PredefinedNames}" />
+            <Label Content="{l:Localize PredefinedNames}" />
             <TextBox Name="SystemAliasesTextBox" Width="400" />
         </local:MyHorizontalBlock>
         <local:MyHorizontalBlock>
-            <Label Content="{local:Localize CustomNames}" />
+            <Label Content="{l:Localize CustomNames}" />
             <TextBox Name="UserAliasesTextBox" Width="400" />
         </local:MyHorizontalBlock>
         <local:MyHorizontalStackPanel HorizontalAlignment="Center">
-            <Button Name="OkButton" Content="{local:Localize OK}" Click="OkButton_OnClick" />
-            <Button Name="CancelButton" Content="{local:Localize Cancel}" Click="CancelButton_OnClick" />
+            <Button Name="OkButton" Content="{l:Localize OK}" Click="OkButton_OnClick" />
+            <Button Name="CancelButton" Content="{l:Localize Cancel}" Click="CancelButton_OnClick" />
         </local:MyHorizontalStackPanel>
     </StackPanel>
 
