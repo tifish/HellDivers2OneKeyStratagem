@@ -6,3 +6,4 @@
 /bin/*.dll
 /bin/Settings
 /bin/runtimes
+/global.json

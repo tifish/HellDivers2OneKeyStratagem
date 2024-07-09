@@ -25,13 +25,10 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="EdgeTTS" Version="1.0.3" />
     <PackageReference Include="GlobalHotKeys.Windows" Version="0.1.0" />
+    <PackageReference Include="Jeek.Avalonia.Localization" Version="1.0.0" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="System.IO.Pipelines" Version="9.0.0-preview.5.24306.7" />
     <PackageReference Include="System.Speech" Version="9.0.0-preview.5.24306.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Jeek.Avalonia.Localization\Jeek.Avalonia.Localization.csproj" />
   </ItemGroup>
   
 </Project>
