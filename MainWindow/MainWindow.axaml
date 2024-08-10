@@ -143,7 +143,7 @@
                 </local:MyHorizontalBlock>
 
                 <local:MyHorizontalStackPanel>
-                    <CheckBox Content="Use hotkey to call out" IsChecked="{Binding EnableHotkeyTrigger}" />
+                    <CheckBox Content="{l:Localize UseHotkeyToCallOut}" IsChecked="{Binding EnableHotkeyTrigger}" />
                     <CheckBox Content="{l:Localize SettingHotkeyStratagemsViaMicrophone}"
                               IsChecked="{Binding EnableSetKeyBySpeech}"
                               IsVisible="{Binding EnableHotkeyTrigger}"
