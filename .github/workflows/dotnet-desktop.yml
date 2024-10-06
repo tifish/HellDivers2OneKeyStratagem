@@ -28,9 +28,6 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release HellDivers2OneKeyStratagem.sln
 
-    - name: Remove unnecessary files
-      run: .\TrimRuntimes.cmd
-
     - name: Pack files
       run: |
         cd bin
