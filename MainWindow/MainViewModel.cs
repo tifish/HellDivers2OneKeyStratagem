@@ -11,13 +11,17 @@ using CommunityToolkit.Mvvm.Input;
 using EdgeTTS;
 using GlobalHotKeys;
 using Jeek.Avalonia.Localization;
+using Microsoft.Extensions.Logging;
 using NAudio.Wave;
+using ZLogger;
 
 namespace HellDivers2OneKeyStratagem;
 
 public partial class MainViewModel : ObservableObject
 {
     public static MainViewModel Instance { get; } = new();
+
+    private static ILogger _logger = LogFactory.CreateLogger<MainViewModel>();
 
     private MainWindow _mainWindow = null!;
 
@@ -86,7 +90,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string _currentSpeechLocale = "";
 
-    async partial void OnCurrentSpeechLocaleChanged(string value)
+    partial void OnCurrentSpeechLocaleChanged(string value)
     {
         if (IsLoading)
             return;
@@ -96,7 +100,7 @@ public partial class MainViewModel : ObservableObject
             KeySettingsChanged = true;
         SpeechSettingsChanged = true;
 
-        await LoadBySpeechLanguage();
+        LoadBySpeechLanguage();
     }
 
     [ObservableProperty]
@@ -161,7 +165,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task Load()
+    private void WindowOpened()
     {
         IsLoading = true;
 
@@ -171,9 +175,7 @@ public partial class MainViewModel : ObservableObject
             InitSpeechLanguages();
             InitHotkeysUI();
 
-            await LoadBySpeechLanguage();
-
-            CenterWindow();
+            LoadBySpeechLanguage();
         }
         finally
         {
@@ -182,23 +184,6 @@ public partial class MainViewModel : ObservableObject
 
         ActiveWindowMonitor.WindowTitleChanged += OnWindowTitleChanged;
         ActiveWindowMonitor.Start(TimeSpan.FromSeconds(1));
-    }
-
-    private void CenterWindow()
-    {
-        // Get the current screen size
-        var screen = _mainWindow.Screens.Primary!;
-        var screenBounds = screen.Bounds;
-
-        // Get the window size
-        var windowSize = _mainWindow.Bounds;
-
-        // Calculate the centered position
-        var centerX = (screenBounds.Width - windowSize.Width) / 2;
-        var centerY = (screenBounds.Height - windowSize.Height) / 2;
-
-        // Set the window position
-        _mainWindow.Position = new PixelPoint((int)centerX, (int)centerY);
     }
 
     private const string HellDivers2Title = "HELLDIVERS™ 2";
@@ -391,18 +376,20 @@ public partial class MainViewModel : ObservableObject
         _hotkeyPanels.Last().IsBorderVisible = true;
     }
 
-    public async Task LoadBySpeechLanguage()
+    public bool HasResized { get; set; }
+
+    public void LoadBySpeechLanguage()
     {
         StratagemManager.Load();
         InitStratagemGroupsUI();
         InitSettingsToUI();
         SetHotkeyGroup();
-
-        await ResetVoiceCommand();
-
-        await LoadGeneratingVoiceStyles();
-
         LoadVoiceNames();
+
+        HasResized = true;
+
+        ResetVoiceCommand().ConfigureAwait(false);
+        LoadGeneratingVoiceStyles().ConfigureAwait(false);
     }
 
     private void InitStratagemGroupsUI()
@@ -563,11 +550,9 @@ public partial class MainViewModel : ObservableObject
         {
             var manager = await VoicesManager.Create();
             _voices = manager.Find(language: Settings.SpeechLanguage);
-
             GenerateVoiceStyles.Clear();
             foreach (var voice in _voices)
                 GenerateVoiceStyles.Add(voice.ShortName);
-
             CurrentGenerateVoiceStyleIndex = GenerateVoiceStyles.Count - 1;
         }
         finally

@@ -5,6 +5,6 @@
 /bin/HellDivers2OneKeyStratagem.*
 /bin/*.dll
 /bin/Settings
-/bin/runtimes
 /bin/libs
+/bin/Logs
 /global.json

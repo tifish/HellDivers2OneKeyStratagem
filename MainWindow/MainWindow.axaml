@@ -7,17 +7,16 @@
         xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
         xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
         d:DesignWidth="800" d:DesignHeight="450"
-
+        
         x:DataType="local:MainViewModel"
-
+        
         Title="HellDivers 2 一键战略"
-        WindowStartupLocation="CenterScreen"
         SizeToContent="WidthAndHeight"
         CanResize="False">
 
     <Interaction.Behaviors>
-        <EventTriggerBehavior EventName="Loaded">
-            <InvokeCommandAction Command="{Binding LoadCommand}" />
+        <EventTriggerBehavior EventName="Opened">
+            <InvokeCommandAction Command="{Binding WindowOpenedCommand}" />
         </EventTriggerBehavior>
         <EventTriggerBehavior EventName="Deactivated">
             <InvokeCommandAction Command="{Binding CheckAndSaveSettingsCommand}" />
