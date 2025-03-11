@@ -104,6 +104,9 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
+    private ObservableCollection<string> _triggerKeys = ["LeftCtrl", "LeftAlt", "Q"];
+
+    [ObservableProperty]
     private string _triggerKey = "";
 
     partial void OnTriggerKeyChanged(string value)
@@ -490,7 +493,11 @@ public partial class MainViewModel : ObservableObject
 
     private void InitSettingsToUI()
     {
-        TriggerKey = Settings.TriggerKey;
+        if (TriggerKeys.Contains(Settings.TriggerKey))
+            TriggerKey = Settings.TriggerKey;
+        else
+            TriggerKey = Settings.TriggerKey = TriggerKeys.First();
+
         OperateKeys = Settings.OperateKeys;
 
         PlayVoiceWhenCall = Settings.PlayVoice;

@@ -11,7 +11,8 @@ public class Stratagem
 
     public void PressKeys()
     {
-        SendKey.Down(Settings.TriggerKey == "Ctrl" ? Key.LeftCtrl : Key.LeftAlt);
+        var triggerKey = Enum.Parse<Key>(Settings.TriggerKey);
+        SendKey.Down(triggerKey);
 
         foreach (var key in KeySequence)
         {
@@ -32,6 +33,6 @@ public class Stratagem
             }
         }
 
-        SendKey.Up(Settings.TriggerKey == "Ctrl" ? Key.LeftCtrl : Key.LeftAlt);
+        SendKey.Up(triggerKey);
     }
 }

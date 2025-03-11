@@ -48,10 +48,8 @@
 
                     <local:MyHorizontalBlock>
                         <Label Content="{l:Localize MakeSureTheKeysAreConsistentWithGame}" />
-                        <RadioButton Content="Ctrl" GroupName="CtrlAltGroup"
-                                     IsChecked="{Binding TriggerKey, Converter={StaticResource RadioButtonToStringConverter}, ConverterParameter=Ctrl}" />
-                        <RadioButton Content="Alt" GroupName="CtrlAltGroup"
-                                     IsChecked="{Binding TriggerKey, Converter={StaticResource RadioButtonToStringConverter}, ConverterParameter=Alt}" />
+                        <ComboBox ItemsSource="{Binding TriggerKeys}"
+                                  SelectedItem="{Binding TriggerKey}" />
                         <Label Content="+" />
                         <RadioButton Content="WASD" GroupName="WasdArrowGroup"
                                      IsChecked="{Binding OperateKeys, Converter={StaticResource RadioButtonToStringConverter}, ConverterParameter=WASD}" />

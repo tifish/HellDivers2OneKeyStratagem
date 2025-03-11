@@ -45,7 +45,7 @@ public class AppSettings
         await _settingsFile.SaveAsync(Settings);
     }
 
-    public string TriggerKey { get; set; } = "Ctrl";
+    public string TriggerKey { get; set; } = "LeftCtrl";
     public string OperateKeys { get; set; } = "WASD";
     public bool PlayVoice { get; set; } = true;
     public string VoiceName { get; set; } = "晓妮";
