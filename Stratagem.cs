@@ -11,7 +11,12 @@ public class Stratagem
 
     public void PressKeys()
     {
-        var triggerKey = Enum.Parse<Key>(Settings.TriggerKey);
+        if (!Enum.TryParse<Key>(Settings.TriggerKey, out var triggerKey))
+        {
+            Settings.TriggerKey = "LeftCtrl";
+            triggerKey = Key.LeftCtrl;
+        }
+
         SendKey.Down(triggerKey);
 
         foreach (var key in KeySequence)
