@@ -66,7 +66,7 @@
 	辅助	Assist
 ↑ ↑ ← ↑ →	飞鹰重新武装|飞鹰武装|重新武装	Eagle Rearm
 ↑ ↓ → ← ↑	增援|救人|救队友|救援	Reinforce|Rescue|Help
-↑ ↓ → ↑	SOS信标	SOS Beacon
+↑ ↓ → ↑	SOS信标|信标|求救	SOS Beacon
 ↓ ↓ ↑ →	重新补给|补给	Resupply|Supply
 	任务	Mission
 ↓ ↑ ← ↓ ↑ → ↓ ↑	地狱火炸弹|地狱火	Hellbomb
@@ -74,13 +74,13 @@
 ↑ ↑ ← → ↓ ↓	地震探测仪	Seismic Probe
 ← → ↑ ↑ ↑	上传重要数据|上传数据	Upload Data
 → → ← ←	照明弹	Flare
-→ ↑ ↑ ↓	超级地球大炮|超级大炮	SEAF Artillery
-↓ ↑ ↓ ↑	超级地球旗帜|超级旗帜	Super Earth Flag
+→ ↑ ↑ ↓	超级地球大炮|超级大炮|地球大炮	SEAF Artillery
+↓ ↑ ↓ ↑	超级地球旗帜|超级旗帜|地球旗帜	Super Earth Flag
 ← ↑ ↓ → ↓ ↓	虫窝破裂者钻机|虫窝破裂者|破裂者钻机	Hive Breaker Drill
 	化学专家/都市传奇/自由公仆	Chemical Agents/Urban Legends/Servants of Freedom
 ↓ ← ↑ ↓ ←	灭菌器	Sterilizer
-↓ ↑ ← ↑ → ↑	护卫犬腐息	Guard Dog Dog Breath
+↓ ↑ ← ↑ → ↑	护卫犬腐息|毒气狗	Guard Dog Dog Breath
 ↓ ↑ ← → ↑ ↑	定向护盾	Directional Shield
 ↓ ↑ → ↓ ↑ ↑	火焰喷射哨戒炮|火焰哨戒炮|火焰炮	Flame Sentry
-↓ ↑ ← → → →	反坦克炮台	Anti-Tank Emplacement
-↓ → ↑ ↑ ↑	便携式地狱火炸弹	Portable Hellbomb
+↓ ↑ ← → → →	反坦克炮台|反坦克炮	Anti-Tank Emplacement
+↓ → ↑ ↑ ↑	便携式地狱火炸弹|便携式地狱火|便携地狱火	Portable Hellbomb
