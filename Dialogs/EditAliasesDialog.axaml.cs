@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 
@@ -28,11 +29,27 @@ public partial class EditAliasesDialog : Window
             UserAliasesTextBox.Focus();
         };
         timer.Start();
+
+        UserAliasesTextBox.KeyDown += UserAliasesTextBox_OnKeyDown;
+    }
+
+    private void UserAliasesTextBox_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            e.Handled = true;
+            Close(true);
+        }
     }
 
     public void Commit()
     {
         StratagemManager.SetUserAlias(_stratagemName, UserAliasesTextBox.Text?.Trim() ?? "");
+
+        if (StratagemManager.TryGet(_stratagemName, out var stratagem))
+        {
+            MainViewModel.Instance.UpdateToolTip(stratagem);
+        }
     }
 
     private void OkButton_OnClick(object? sender, RoutedEventArgs e)

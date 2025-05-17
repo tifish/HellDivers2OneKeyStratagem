@@ -395,6 +395,15 @@ public partial class MainViewModel : ObservableObject
         LoadGeneratingVoiceStyles().ConfigureAwait(false);
     }
 
+    public void UpdateToolTip(Stratagem stratagem)
+    {
+        ToolTip.SetTip(stratagem.CheckBox,
+            string.Format(
+                Localizer.Get("StratagemToolTip"),
+                StratagemManager.GetSystemAlias(stratagem.Name),
+                StratagemManager.GetUserAlias(stratagem.Name)));
+    }
+
     private void InitStratagemGroupsUI()
     {
         _mainWindow.StratagemGroupsContainer.Children.Clear();
@@ -432,11 +441,7 @@ public partial class MainViewModel : ObservableObject
                 stratagem.CheckBox = stratagemCheckBox;
                 groupContainer.Children.Add(stratagemCheckBox);
 
-                ToolTip.SetTip(stratagemCheckBox,
-                    string.Format(
-                        Localizer.Get("StratagemToolTip"),
-                        StratagemManager.GetSystemAlias(stratagem.Name),
-                        StratagemManager.GetUserAlias(stratagem.Name)));
+                UpdateToolTip(stratagem);
 
                 stratagemCheckBox.IsCheckedChanged += StratagemCheckBoxOnIsCheckedChanged;
 
