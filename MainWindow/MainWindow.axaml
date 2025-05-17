@@ -1,18 +1,18 @@
-﻿<Window x:Class="HellDivers2OneKeyStratagem.MainWindow"
-        xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
-        xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
-        d:DesignWidth="800" d:DesignHeight="450"
-        
-        x:DataType="local:MainViewModel"
-        
-        Title="HellDivers 2 一键战略"
-        SizeToContent="WidthAndHeight"
-        CanResize="False">
+﻿<Window
+    x:Class="HellDivers2OneKeyStratagem.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="HellDivers 2 一键战略"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="local:MainViewModel"
+    CanResize="False"
+    SizeToContent="WidthAndHeight"
+    mc:Ignorable="d">
 
     <Interaction.Behaviors>
         <EventTriggerBehavior EventName="Opened">
@@ -39,39 +39,39 @@
 
                     <local:MyHorizontalBlock>
                         <Label Content="{l:Localize UILanguage}" />
-                        <ComboBox ItemsSource="{Binding Locales}"
-                                  SelectedItem="{Binding CurrentLocale}" />
+                        <ComboBox ItemsSource="{Binding Locales}" SelectedItem="{Binding CurrentLocale}" />
                         <Label Content="{l:Localize SpeechLanguage}" />
-                        <ComboBox ItemsSource="{Binding SpeechLocales}"
-                                  SelectedItem="{Binding CurrentSpeechLocale}" />
+                        <ComboBox ItemsSource="{Binding SpeechLocales}" SelectedItem="{Binding CurrentSpeechLocale}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
                         <Label Content="{l:Localize MakeSureTheKeysAreConsistentWithGame}" />
-                        <ComboBox ItemsSource="{Binding TriggerKeys}"
-                                  SelectedItem="{Binding TriggerKey}" />
+                        <ComboBox ItemsSource="{Binding TriggerKeys}" SelectedItem="{Binding TriggerKey}" />
                         <Label Content="+" />
-                        <RadioButton Content="WASD" GroupName="WasdArrowGroup"
-                                     IsChecked="{Binding OperateKeys, Converter={StaticResource RadioButtonToStringConverter}, ConverterParameter=WASD}" />
-                        <RadioButton Content="{l:Localize ArrowKeys}" GroupName="WasdArrowGroup"
-                                     IsChecked="{Binding OperateKeys, Converter={StaticResource RadioButtonToStringConverter}, ConverterParameter=Arrow}" />
+                        <RadioButton
+                            Content="WASD"
+                            GroupName="WasdArrowGroup"
+                            IsChecked="{Binding OperateKeys, Converter={StaticResource RadioButtonToStringConverter}, ConverterParameter=WASD}" />
+                        <RadioButton
+                            Content="{l:Localize ArrowKeys}"
+                            GroupName="WasdArrowGroup"
+                            IsChecked="{Binding OperateKeys, Converter={StaticResource RadioButtonToStringConverter}, ConverterParameter=Arrow}" />
                         <Label Content="{l:Localize StronglyRecommendedArrowKeys}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
                         <CheckBox Content="{l:Localize PlayNameWhenCalling}" IsChecked="{Binding PlayVoiceWhenCall}" />
-                        <ComboBox ItemsSource="{Binding VoiceNames}"
-                                  SelectedItem="{Binding CurrentVoiceName}" />
-                        <Button Content="{l:Localize Refresh}"
-                                Command="{Binding RefreshVoiceNamesCommand}" />
+                        <ComboBox ItemsSource="{Binding VoiceNames}" SelectedItem="{Binding CurrentVoiceName}" />
+                        <Button Command="{Binding RefreshVoiceNamesCommand}" Content="{l:Localize Refresh}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
                         <Label Content="{l:Localize UpdateUrl}" />
                         <TextBox Text="{Binding UpdateUrl}" />
-                        <Button Content="{l:Localize CheckForUpdate}"
-                                Command="{Binding CheckForUpdateCommand}"
-                                IsEnabled="{Binding !IsCheckingForUpdate}" />
+                        <Button
+                            Command="{Binding CheckForUpdateCommand}"
+                            Content="{l:Localize CheckForUpdate}"
+                            IsEnabled="{Binding !IsCheckingForUpdate}" />
                     </local:MyHorizontalBlock>
 
                 </StackPanel>
@@ -82,8 +82,7 @@
 
                 <StackPanel IsVisible="{Binding EnableSpeechTrigger}">
                     <local:MyHorizontalBlock>
-                        <Button Content="{l:Localize OpenSystemSpeechSettings}"
-                                Command="{Binding OpenSpeechRecognitionControlPanelCommand}" />
+                        <Button Command="{Binding OpenSpeechRecognitionControlPanelCommand}" Content="{l:Localize OpenSystemSpeechSettings}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
@@ -93,13 +92,16 @@
 
                     <local:MyHorizontalBlock>
                         <Label Content="{l:Localize RecognitionConfidenceExplain}" />
-                        <NumericUpDown Value="{Binding SpeechConfidence, Mode=TwoWay}"
-                                       Increment="0.01" Maximum="1" Minimum="0.3" FormatString="F3" />
+                        <NumericUpDown
+                            FormatString="F3"
+                            Increment="0.01"
+                            Maximum="1"
+                            Minimum="0.3"
+                            Value="{Binding SpeechConfidence, Mode=TwoWay}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
-                        <Button Content="{l:Localize CalibrateRecognitionExplain}"
-                                Command="{Binding CalibrateVoiceCommand}" />
+                        <Button Command="{Binding CalibrateVoiceCommand}" Content="{l:Localize CalibrateRecognitionExplain}" />
                         <Label Content="{Binding SpeechRecognizeResult}" />
                     </local:MyHorizontalBlock>
 
@@ -111,8 +113,7 @@
                                 </EventTriggerBehavior>
                             </Interaction.Behaviors>
                         </Label>
-                        <ComboBox ItemsSource="{Binding Mics}"
-                                  SelectedItem="{Binding CurrentMic}">
+                        <ComboBox ItemsSource="{Binding Mics}" SelectedItem="{Binding CurrentMic}">
                             <Interaction.Behaviors>
                                 <EventTriggerBehavior EventName="DropDownOpened">
                                     <InvokeCommandAction Command="{Binding LoadMicsCommand}" />
@@ -123,43 +124,43 @@
                 </StackPanel>
 
                 <local:MyHorizontalBlock IsVisible="{Binding IsGenerateVoicePanelVisible}">
-                    <ComboBox ItemsSource="{Binding GenerateVoiceStyles}"
-                              SelectedItem="{Binding CurrentGenerateVoiceStyle}"
-                              SelectedIndex="{Binding CurrentGenerateVoiceStyleIndex}" />
-                    <Button Content="试听" Command="{Binding TryVoiceCommand}" />
+                    <ComboBox
+                        ItemsSource="{Binding GenerateVoiceStyles}"
+                        SelectedIndex="{Binding CurrentGenerateVoiceStyleIndex}"
+                        SelectedItem="{Binding CurrentGenerateVoiceStyle}" />
+                    <Button Command="{Binding TryVoiceCommand}" Content="试听" />
                     <Label Content="速率：" />
                     <TextBox Text="{Binding GenerateVoiceRate}" />
                     <Label Content="音量：" />
                     <TextBox Text="{Binding GenerateVoiceVolume}" />
                     <Label Content="音调：" />
                     <TextBox Text="{Binding GenerateVoicePitch}" />
-                    <Button Content="{Binding GenerateVoiceButtonContent}"
-                            Command="{Binding GenerateVoiceCommand}" />
-                    <Button Content="生成 txt" Command="{Binding GenerateTxtCommand}" />
+                    <Button Command="{Binding GenerateVoiceCommand}" Content="{Binding GenerateVoiceButtonContent}" />
+                    <Button Command="{Binding GenerateTxtCommand}" Content="生成 txt" />
                     <Label Content="{Binding GenerateVoiceMessage}" />
                 </local:MyHorizontalBlock>
 
                 <local:MyHorizontalStackPanel>
                     <CheckBox Content="{l:Localize UseHotkeyToCallOut}" IsChecked="{Binding EnableHotkeyTrigger}" />
-                    <CheckBox Content="{l:Localize SettingHotkeyStratagemsViaMicrophone}"
-                              IsChecked="{Binding EnableSetKeyBySpeech}"
-                              IsVisible="{Binding EnableHotkeyTrigger}"
-                              IsEnabled="{Binding EnableSpeechTrigger}" />
+                    <CheckBox
+                        Content="{l:Localize SettingHotkeyStratagemsViaMicrophone}"
+                        IsChecked="{Binding EnableSetKeyBySpeech}"
+                        IsEnabled="{Binding EnableSpeechTrigger}"
+                        IsVisible="{Binding EnableHotkeyTrigger}" />
                 </local:MyHorizontalStackPanel>
             </StackPanel>
         </Expander>
 
-        <local:MyHorizontalBlock IsVisible="{Binding EnableSpeechTrigger}" Margin="0, 10, 0, 0">
+        <local:MyHorizontalBlock Margin="0,10,0,0" IsVisible="{Binding EnableSpeechTrigger}">
             <CheckBox Content="{l:Localize ShowSpeechRecognitionInfoWindow}" IsChecked="{Binding ShowSpeechInfoWindow}" />
         </local:MyHorizontalBlock>
 
-        <StackPanel IsVisible="{Binding EnableHotkeyTrigger}" Margin="0, 10, 0, 0">
+        <StackPanel Margin="0,10,0,0" IsVisible="{Binding EnableHotkeyTrigger}">
 
             <local:MyHorizontalStackPanel>
-                <ComboBox ItemsSource="{Binding StratagemSets}"
-                          SelectedIndex="{Binding CurrentStratagemSetIndex}" />
-                <Button Content="{l:Localize SaveConfiguration}" Command="{Binding SaveStratagemSetCommand}" />
-                <Button Content="{l:Localize DeleteConfiguration}" Command="{Binding DeleteStratagemSetCommand}" />
+                <ComboBox ItemsSource="{Binding StratagemSets}" SelectedIndex="{Binding CurrentStratagemSetIndex}" />
+                <Button Command="{Binding SaveStratagemSetCommand}" Content="{l:Localize SaveConfiguration}" />
+                <Button Command="{Binding DeleteStratagemSetCommand}" Content="{l:Localize DeleteConfiguration}" />
             </local:MyHorizontalStackPanel>
 
             <StackPanel>
@@ -186,16 +187,22 @@
             </local:MyHorizontalStackPanel>
 
             <StackPanel Name="StratagemGroupsContainer" Orientation="Horizontal">
-                <Border Background="{DynamicResource SystemControlBackgroundListLowBrush}" Padding="20,10,20,10"
-                        Margin="0,1,0,1" VerticalAlignment="Stretch">
+                <Border
+                    Margin="0,1,0,1"
+                    Padding="20,10,20,10"
+                    VerticalAlignment="Stretch"
+                    Background="{DynamicResource SystemControlBackgroundListLowBrush}">
                     <StackPanel Orientation="Vertical">
                         <Label Content="飞鹰" />
                         <CheckBox Content="飞鹰空袭" />
                         <CheckBox Content="飞鹰500KG炸弹" />
                     </StackPanel>
                 </Border>
-                <Border Background="{DynamicResource SystemControlBackgroundListLowBrush}" Padding="20,10,20,10"
-                        Margin="0,1,0,1" VerticalAlignment="Stretch">
+                <Border
+                    Margin="0,1,0,1"
+                    Padding="20,10,20,10"
+                    VerticalAlignment="Stretch"
+                    Background="{DynamicResource SystemControlBackgroundListLowBrush}">
                     <StackPanel Orientation="Vertical">
                         <Label Content="轨道" />
                         <CheckBox Content="轨道毒气攻击" />

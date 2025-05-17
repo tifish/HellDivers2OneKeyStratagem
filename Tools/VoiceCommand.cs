@@ -20,7 +20,7 @@ public class VoiceCommand : IDisposable
         return SpeechRecognitionEngine.InstalledRecognizers().Select(r => r.Culture.Name).ToList();
     }
 
-    public VoiceCommand(string cultureName, string wakeupWord, string[] commands)
+    public VoiceCommand(string cultureName, string wakeUpWord, string[] commands)
     {
         var culture = new CultureInfo(cultureName);
         _recognizer = new SpeechRecognitionEngine(culture);
@@ -29,22 +29,23 @@ public class VoiceCommand : IDisposable
         choices.Add(commands);
 
         var grammarBuilder = new GrammarBuilder();
-        if (wakeupWord.Length > 0)
-            grammarBuilder.Append(wakeupWord);
+        if (wakeUpWord.Length > 0)
+            grammarBuilder.Append(wakeUpWord);
         grammarBuilder.Culture = culture;
         grammarBuilder.Append(choices);
 
         _recognizer.RequestRecognizerUpdate();
         _recognizer.LoadGrammar(new Grammar(grammarBuilder));
 
-        var wakeupWordLength = wakeupWord.Length;
+        var wakeUpWordLength = wakeUpWord.Length;
 
         // Attach event handlers.
         _recognizer.SpeechRecognized += (_, e) =>
         {
             CommandRecognized?.Invoke(this, new RecognitionResult
             {
-                Text = e.Result.Text[wakeupWordLength..], Score = e.Result.Confidence,
+                Text = e.Result.Text[wakeUpWordLength..],
+                Score = e.Result.Confidence,
             });
         };
 
@@ -213,7 +214,7 @@ public class VoiceCommand : IDisposable
 
     public async Task<bool> UseMic(int deviceIndex)
     {
-        //settings
+        // settings
         var device = WaveInEvent.GetCapabilities(deviceIndex);
         SupportedWaveFormat supportFormat = 0;
         foreach (SupportedWaveFormat format in Enum.GetValues(typeof(SupportedWaveFormat)))
@@ -227,7 +228,7 @@ public class VoiceCommand : IDisposable
         if (_isRecognizing)
             await Stop();
 
-        //cleanup
+        // cleanup
         _waveInEvent?.Dispose();
 
         if (_audioStreamer != null)
@@ -237,7 +238,7 @@ public class VoiceCommand : IDisposable
         }
 
         _waveInEvent = new WaveInEvent();
-        _waveInEvent.DeviceNumber = deviceIndex; //device.ID;
+        _waveInEvent.DeviceNumber = deviceIndex; // device.ID;
         _waveInEvent.WaveFormat = GetWaveFormat(
             supportFormat, out var samplesRate, out var nChannel, out _,
             out var eBitsPerSample, out var eChannel);
@@ -246,7 +247,7 @@ public class VoiceCommand : IDisposable
         _waveInEvent.DataAvailable += (_, args) =>
         {
             if (audioStreamer.CanWrite)
-                audioStreamer.Write(args.Buffer); //闭包获取。不访问_audioStreamer，防止写入错误streamer
+                audioStreamer.Write(args.Buffer); // 闭包获取。不访问_audioStreamer，防止写入错误streamer
         };
 
         var audioFormat = new SpeechAudioFormatInfo(nChannel * samplesRate, eBitsPerSample, eChannel);
@@ -254,7 +255,7 @@ public class VoiceCommand : IDisposable
         _waveInEvent.StartRecording();
         _recognizer.SetInputToAudioStream(_audioStreamer, audioFormat);
 
-        //restart _recognizer
+        // restart _recognizer
         if (isRecognizingBeforeChangingMic)
             Start();
 
