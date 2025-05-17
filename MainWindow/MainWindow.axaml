@@ -79,12 +79,8 @@
 
                 <StackPanel IsVisible="{Binding EnableSpeechTrigger}">
                     <local:MyHorizontalBlock>
-                        <Button Command="{Binding OpenSpeechRecognitionControlPanelCommand}" Content="{l:Localize OpenSystemSpeechSettings}" />
-                    </local:MyHorizontalBlock>
-
-                    <local:MyHorizontalBlock>
-                        <Label Content="{l:Localize WakeupWordExplain}" />
-                        <TextBox Text="{Binding WakeupWord}" />
+                        <Label Content="{l:Localize WakeUpWordExplain}" />
+                        <TextBox Text="{Binding WakeUpWord}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>

@@ -13,7 +13,6 @@ using GlobalHotKeys;
 using Jeek.Avalonia.Localization;
 using Microsoft.Extensions.Logging;
 using NAudio.Wave;
-using ZLogger;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -21,7 +20,7 @@ public partial class MainViewModel : ObservableObject
 {
     public static MainViewModel Instance { get; } = new();
 
-    private static ILogger _logger = LogFactory.CreateLogger<MainViewModel>();
+    private static readonly ILogger _logger = LogFactory.CreateLogger<MainViewModel>();
 
     private MainWindow _mainWindow = null!;
 
@@ -204,7 +203,7 @@ public partial class MainViewModel : ObservableObject
         try
         {
             string currentProcessName = Process.GetCurrentProcess().ProcessName;
-            int currentPid = Process.GetCurrentProcess().Id;
+            int currentPid = Environment.ProcessId;
 
             foreach (var process in Process.GetProcessesByName(currentProcessName))
             {
@@ -561,7 +560,7 @@ public partial class MainViewModel : ObservableObject
         }
 
         SpeechConfidence = Math.Round(Settings.VoiceConfidence, 3);
-        WakeupWord = Settings.WakeupWord;
+        WakeUpWord = Settings.WakeUpWord;
 
         EnableSpeechTrigger = Settings.EnableSpeechTrigger;
 
@@ -795,7 +794,7 @@ public partial class MainViewModel : ObservableObject
 
             try
             {
-                _voiceCommand = new VoiceCommand(Settings.SpeechLocale, Settings.WakeupWord, [.. StratagemManager.StratagemAlias]);
+                _voiceCommand = new VoiceCommand(Settings.SpeechLocale, Settings.WakeUpWord, [.. StratagemManager.StratagemAlias]);
             }
             catch (Exception)
             {
@@ -918,21 +917,15 @@ public partial class MainViewModel : ObservableObject
             await StopSpeechTrigger();
     }
 
-    [RelayCommand]
-    private void OpenSpeechRecognitionControlPanel()
-    {
-        Process.Start("control.exe", "/name Microsoft.SpeechRecognition");
-    }
-
     [ObservableProperty]
-    private string _wakeupWord = "";
+    private string _wakeUpWord = "";
 
-    async partial void OnWakeupWordChanged(string value)
+    async partial void OnWakeUpWordChanged(string value)
     {
         if (IsLoading)
             return;
 
-        Settings.WakeupWord = value.Trim();
+        Settings.WakeUpWord = value.Trim();
         SettingsChanged = true;
         await ResetVoiceCommand();
     }
@@ -1136,7 +1129,7 @@ public partial class MainViewModel : ObservableObject
             while (dialog.IsVisible)
             {
                 var message = string.Format(
-                    Localizer.Get("PleaseReadThis"), Settings.WakeupWord, stratagemNames[currentTime]);
+                    Localizer.Get("PleaseReadThis"), Settings.WakeUpWord, stratagemNames[currentTime]);
                 dialog.SetMessage(message);
 
                 while (times == currentTime && dialog.IsVisible)

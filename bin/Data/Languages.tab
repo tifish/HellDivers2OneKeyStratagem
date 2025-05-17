@@ -11,8 +11,7 @@ Refresh	Refresh	刷新
 UpdateUrl	Update URL: 	更新地址，群友加速专用：
 CheckForUpdate	Check for update	检查更新
 UseMicrophoneToCallOut	Use microphone to call out	开启麦克风呼叫，君子动口不动手
-OpenSystemSpeechSettings	Open the system speech settings and select "Train your computer" to improve recognition accuracy…	打开系统语音设置，选择“训练你的计算机”可以提高识别率…
-WakeupWordExplain	Wakeup word (optional). This can reduce the false recognition rate: 	唤醒词（可选）。例如“好好学习”，就要用“好好学习飞鹰空袭”来呼叫“飞鹰空袭”。可以减少误识别率：
+WakeUpWordExplain	Wakeup word (optional). This can reduce the false recognition rate: 	唤醒词（可选）。例如“好好学习”，就要用“好好学习飞鹰空袭”来呼叫“飞鹰空袭”。可以减少误识别率：
 RecognitionConfidenceExplain	Recognition confidence. If it's too high, it won't recognize; if it's too low, it will frequently misrecognize. Press "Calibrate recognition" for automatic calibration, or manually adjust based on recognition results: 	识别阈值。太大无法识别，太小经常误识别。按“识别校准”自动校准，或者根据识别结果手动调整：
 CalibrateRecognitionExplain	Calibrate recognition. Automatically calibrate by saying the strategy name three times…	识别校准，通过念三次战略名字自动校准…
 SelectMicrophoneExplain	If there are multiple microphones and it cannot recognize the voice, try manually selecting the microphone: 	如果有多个麦克风，且无法识别语音，可以尝试手动选择麦克风：
