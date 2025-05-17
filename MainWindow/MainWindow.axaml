@@ -99,7 +99,6 @@
 
                     <local:MyHorizontalBlock>
                         <Button Command="{Binding CalibrateVoiceCommand}" Content="{l:Localize CalibrateRecognitionExplain}" />
-                        <Label Content="{Binding SpeechRecognizeResult}" />
                     </local:MyHorizontalBlock>
 
                     <local:MyHorizontalBlock>
@@ -150,6 +149,7 @@
 
         <local:MyHorizontalBlock Margin="0,10,0,0" IsVisible="{Binding EnableSpeechTrigger}">
             <CheckBox Content="{l:Localize ShowSpeechRecognitionInfoWindow}" IsChecked="{Binding ShowSpeechInfoWindow}" />
+            <Label Content="{Binding SpeechRecognizeResult}" />
         </local:MyHorizontalBlock>
 
         <StackPanel Margin="0,10,0,0" IsVisible="{Binding EnableHotkeyTrigger}">
