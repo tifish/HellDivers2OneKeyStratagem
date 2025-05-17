@@ -168,12 +168,22 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void WindowOpened()
+    private async Task WindowOpened()
     {
         IsLoading = true;
 
         try
         {
+            if (!KillOtherInstances())
+            {
+                await new MessageDialog(
+                         Localizer.Get("Error"),
+                         Localizer.Get("FailedToKillOtherInstances"))
+                     .ShowDialog(_mainWindow);
+                _mainWindow.Close();
+                return;
+            }
+
             InitUILanguages();
             InitSpeechLanguages();
             InitHotkeysUI();
@@ -187,6 +197,40 @@ public partial class MainViewModel : ObservableObject
 
         ActiveWindowMonitor.WindowTitleChanged += OnWindowTitleChanged;
         ActiveWindowMonitor.Start(TimeSpan.FromSeconds(1));
+    }
+
+    private static bool KillOtherInstances()
+    {
+        try
+        {
+            string currentProcessName = Process.GetCurrentProcess().ProcessName;
+            int currentPid = Process.GetCurrentProcess().Id;
+
+            foreach (var process in Process.GetProcessesByName(currentProcessName))
+            {
+                if (process.Id != currentPid)
+                {
+                    try
+                    {
+                        process.Kill();
+                    }
+                    catch (Exception ex)
+                    {
+                        // 记录错误但继续执行
+                        _logger.LogError("Kill process {ProcessId} error: {Message}", process.Id, ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // 如果进程检查过程出错，记录错误但允许程序继续运行
+            _logger.LogError("Check other instances error: {Message}", ex.Message);
+            return false;
+        }
+
+        return true;
     }
 
     private const string HellDivers2Title = "HELLDIVERS™ 2";

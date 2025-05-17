@@ -45,3 +45,4 @@ PleaseTurnOnMicrophoneCallOut	Please turn on the microphone calling out first.	�
 PleaseReadThis	Please read "{0}{1}"	请朗读 “{0}{1}”
 StratagemToolTip	{0}\n    Custom name: {1}\n    Edit the custom name by right-clicking.	{0}\n    自定义名称：{1}\n    按右键编辑自定义名称。
 None	None	无
+FailedToKillOtherInstances	Unable to exit the previously running program. Functionality may be abnormal. Please clean it up manually before starting again.	无法退出之前运行的程序，功能可能会不正常，请手工清理后再启动。
