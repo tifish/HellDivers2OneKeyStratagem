@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -196,6 +197,21 @@ public partial class MainViewModel : ObservableObject
 
         ActiveWindowMonitor.WindowTitleChanged += OnWindowTitleChanged;
         ActiveWindowMonitor.Start(TimeSpan.FromSeconds(1));
+    }
+
+    private bool _isClosing;
+
+    [RelayCommand]
+    private void WindowClosing()
+    {
+        if (_isClosing)
+            return;
+        _isClosing = true;
+
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.Shutdown();
+        }
     }
 
     private static bool KillOtherInstances()

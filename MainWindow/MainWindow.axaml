@@ -21,6 +21,9 @@
         <EventTriggerBehavior EventName="Deactivated">
             <InvokeCommandAction Command="{Binding CheckAndSaveSettingsCommand}" />
         </EventTriggerBehavior>
+        <EventTriggerBehavior EventName="Closing">
+            <InvokeCommandAction Command="{Binding WindowClosingCommand}" />
+        </EventTriggerBehavior>
     </Interaction.Behaviors>
 
     <Window.Resources>
