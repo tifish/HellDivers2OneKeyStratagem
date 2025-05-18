@@ -46,3 +46,4 @@ StratagemToolTip	{0}\n    Custom name: {1}\n    Edit the custom name by right-cl
 None	None	无
 FailedToKillOtherInstances	Unable to exit the previously running program. Functionality may be abnormal. Please clean it up manually before starting again.	无法退出之前运行的程序，功能可能会不正常，请手工清理后再启动。
 SpeechRecognitionInfoWindowClickThrough	Click through	点击穿透
+SpeechSettings	Speech settings	语音设置
