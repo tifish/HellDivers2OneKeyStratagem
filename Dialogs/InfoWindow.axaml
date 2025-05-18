@@ -1,31 +1,35 @@
-<Window x:Class="HellDivers2OneKeyStratagem.InfoWindow"
-        xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
-        xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
-
-        x:DataType="local:MainViewModel"
-
-        TransparencyLevelHint="AcrylicBlur"
-        ExtendClientAreaChromeHints="NoChrome"
-        ExtendClientAreaToDecorationsHint="True"
-        WindowStartupLocation="CenterScreen"
-        SizeToContent="WidthAndHeight"
-        Topmost="True"
-        CanResize="False"
-
-        PointerPressed="Window_OnPointerPressed"
-        Closed="InfoWindow_OnClosed">
+<Window
+    x:Class="HellDivers2OneKeyStratagem.InfoWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:local="clr-namespace:HellDivers2OneKeyStratagem"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:DataType="local:MainViewModel"
+    Background="Transparent"
+    CanResize="False"
+    Closed="InfoWindow_OnClosed"
+    ExtendClientAreaChromeHints="NoChrome"
+    ExtendClientAreaToDecorationsHint="True"
+    PointerPressed="Window_OnPointerPressed"
+    SizeToContent="WidthAndHeight"
+    SystemDecorations="None"
+    Topmost="True"
+    TransparencyLevelHint="AcrylicBlur"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
 
     <StackPanel Margin="20,10,20,10" Spacing="10">
         <Label Name="InfoLabel" Content="{Binding SpeechRecognizeResult}" />
         <StackPanel Orientation="Horizontal" Spacing="10">
             <Label Content="{l:Localize RecognitionConfidence}" />
-            <NumericUpDown Value="{Binding SpeechConfidence}"
-                           Increment="0.01" Maximum="1" Minimum="0.3" FormatString="F3" />
+            <NumericUpDown
+                FormatString="F3"
+                Increment="0.01"
+                Maximum="1"
+                Minimum="0.3"
+                Value="{Binding SpeechConfidence}" />
         </StackPanel>
     </StackPanel>
 

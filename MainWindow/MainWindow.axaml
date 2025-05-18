@@ -145,6 +145,10 @@
 
         <local:MyHorizontalBlock Margin="0,10,0,0" IsVisible="{Binding EnableSpeechTrigger}">
             <CheckBox Content="{l:Localize ShowSpeechRecognitionInfoWindow}" IsChecked="{Binding ShowSpeechInfoWindow}" />
+            <CheckBox
+                Content="{l:Localize SpeechRecognitionInfoWindowClickThrough}"
+                IsChecked="{Binding IsSpeechRecognitionInfoWindowClickThrough}"
+                IsEnabled="{Binding ShowSpeechInfoWindow}" />
             <Label Content="{Binding SpeechRecognizeResult}" />
         </local:MyHorizontalBlock>
 

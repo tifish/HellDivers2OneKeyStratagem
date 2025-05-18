@@ -5,20 +5,48 @@ namespace HellDivers2OneKeyStratagem;
 
 public partial class InfoWindow : Window
 {
+    private bool _isClickThrough;
+    public bool IsClickThrough
+    {
+        get => _isClickThrough;
+        set
+        {
+            if (_isClickThrough != value)
+            {
+                _isClickThrough = value;
+                UpdateClickThrough(value);
+            }
+        }
+    }
+
     public InfoWindow()
     {
         DataContext = MainViewModel.Instance;
+        InitializeComponent();
+    }
 
-        M.IsLoading = true;
+    private void UpdateClickThrough(bool isClickThrough)
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
 
-        try
+        var platformHandle = TryGetPlatformHandle();
+        if (platformHandle == null)
+            return;
+
+        var hwnd = platformHandle.Handle;
+        var extendedStyle = Win32.GetWindowLong(hwnd, Win32.GWL_EXSTYLE);
+
+        if (isClickThrough)
         {
-            InitializeComponent();
+            extendedStyle |= Win32.WS_EX_LAYERED | Win32.WS_EX_TRANSPARENT;
         }
-        finally
+        else
         {
-            M.IsLoading = false;
+            extendedStyle &= ~(Win32.WS_EX_LAYERED | Win32.WS_EX_TRANSPARENT);
         }
+
+        Win32.SetWindowLong(hwnd, Win32.GWL_EXSTYLE, extendedStyle);
     }
 
     private MainViewModel M => (MainViewModel)DataContext!;
@@ -30,6 +58,9 @@ public partial class InfoWindow : Window
 
     private void Window_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        BeginMoveDrag(e);
+        if (!IsClickThrough)
+        {
+            BeginMoveDrag(e);
+        }
     }
 }

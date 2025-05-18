@@ -48,6 +48,9 @@ public static class HotkeyGroupManager
         get => _enabled;
         set
         {
+            if (Design.IsDesignMode)
+                return;
+
             if (_enabled == value)
                 return;
 

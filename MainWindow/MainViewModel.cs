@@ -509,31 +509,36 @@ public partial class MainViewModel : ObservableObject
                     if (_isSettingStratagemCheckBoxChecked)
                         return;
 
-                    if (!Settings.EnableHotkeyTrigger)
+                    if (Settings.EnableHotkeyTrigger)
+                    {
+                        if (stratagemCheckBox.IsChecked == true)
+                        {
+                            SetKeyStratagem(SelectedKeyIndex, stratagem);
+
+                            if (SelectedKeyIndex > 0)
+                                if (!_hotkeyPanels[SelectedKeyIndex - 1].HasStratagem)
+                                    SelectedKeyIndex--;
+                        }
+                        else
+                        {
+                            var keyIndex = Array.IndexOf(_keyStratagems, stratagem);
+                            if (keyIndex > -1)
+                            {
+                                SetKeyStratagem(keyIndex, null);
+                                SelectedKeyIndex = keyIndex;
+                            }
+                        }
+                    }
+                    else
                     {
                         _isSettingStratagemCheckBoxChecked = true;
                         stratagemCheckBox.IsChecked = !stratagemCheckBox.IsChecked;
                         _isSettingStratagemCheckBoxChecked = false;
-                        return;
                     }
 
-                    if (stratagemCheckBox.IsChecked == true)
-                    {
-                        SetKeyStratagem(SelectedKeyIndex, stratagem);
+                    if (Settings.PlayVoice)
+                        PlayStratagemVoice(stratagem.Name);
 
-                        if (SelectedKeyIndex > 0)
-                            if (!_hotkeyPanels[SelectedKeyIndex - 1].HasStratagem)
-                                SelectedKeyIndex--;
-                    }
-                    else
-                    {
-                        var keyIndex = Array.IndexOf(_keyStratagems, stratagem);
-                        if (keyIndex > -1)
-                        {
-                            SetKeyStratagem(keyIndex, null);
-                            SelectedKeyIndex = keyIndex;
-                        }
-                    }
                 }
             }
         }
@@ -584,9 +589,9 @@ public partial class MainViewModel : ObservableObject
         {
             var name = names[i];
             if (string.IsNullOrWhiteSpace(name) || !StratagemManager.TryGet(name, out var stratagem))
-                SetKeyStratagem(i, null, false);
+                SetKeyStratagem(i, null);
             else
-                SetKeyStratagem(i, stratagem, false);
+                SetKeyStratagem(i, stratagem);
         }
     }
 
@@ -659,7 +664,7 @@ public partial class MainViewModel : ObservableObject
             : "";
     }
 
-    private void SetKeyStratagem(int index, Stratagem? stratagem, bool playVoice = true)
+    private void SetKeyStratagem(int index, Stratagem? stratagem)
     {
         if (index is < 0 or > KeyCount - 1)
             return;
@@ -693,9 +698,6 @@ public partial class MainViewModel : ObservableObject
             _isSettingStratagemCheckBoxChecked = true;
             stratagem.CheckBox.IsChecked = true;
             _isSettingStratagemCheckBoxChecked = false;
-
-            if (Settings.PlayVoice && playVoice)
-                PlayStratagemVoice(stratagem.Name);
         }
         else
         {
@@ -1109,13 +1111,10 @@ public partial class MainViewModel : ObservableObject
             return;
         }
 
-        var scores = new float[3];
-        var stratagemNames = new[]
-        {
-            StratagemManager.Stratagems[Random.Shared.Next(StratagemManager.Stratagems.Count)].Name,
-            StratagemManager.Stratagems[Random.Shared.Next(StratagemManager.Stratagems.Count)].Name,
-            StratagemManager.Stratagems[Random.Shared.Next(StratagemManager.Stratagems.Count)].Name,
-        };
+        var scores = new float[5];
+        var stratagemNames = Enumerable.Range(0, 5)
+            .Select(_ => StratagemManager.Stratagems[Random.Shared.Next(StratagemManager.Stratagems.Count)].Name)
+            .ToArray();
         var times = 0;
         var dialog = new CalibrateVoiceDialog();
 
@@ -1135,7 +1134,7 @@ public partial class MainViewModel : ObservableObject
                 while (times == currentTime && dialog.IsVisible)
                     await Task.Delay(100);
                 currentTime = times;
-                if (currentTime < 3)
+                if (currentTime < scores.Length)
                     continue;
 
                 dialog.Hide();
@@ -1156,9 +1155,7 @@ public partial class MainViewModel : ObservableObject
 
         void TestEvent(object? _, VoiceCommand.RecognitionResult command)
         {
-            if ((command.Text == stratagemNames[0] && times == 0)
-                || (command.Text == stratagemNames[1] && times == 1)
-                || (command.Text == stratagemNames[2] && times == 2))
+            if (command.Text == stratagemNames[times] && times < scores.Length)
             {
                 scores[times] = command.Score;
                 times++;
@@ -1240,6 +1237,15 @@ public partial class MainViewModel : ObservableObject
             ShowInfoWindow();
         else
             HideInfoWindow();
+    }
+
+    [ObservableProperty]
+    private bool _isSpeechRecognitionInfoWindowClickThrough;
+
+    partial void OnIsSpeechRecognitionInfoWindowClickThroughChanged(bool value)
+    {
+        if (_infoWindow != null)
+            _infoWindow.IsClickThrough = value;
     }
 
     [RelayCommand]
