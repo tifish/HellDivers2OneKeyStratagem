@@ -20,9 +20,10 @@ public static class LogFactory
 
         logging.AddZLoggerRollingFile(options =>
         {
+            var logsDir = Path.Join(AppDomain.CurrentDomain.SetupInformation.ApplicationBase ?? string.Empty, "Logs");
             // File name determined by parameters to be rotated
             options.FilePathSelector = (timestamp, sequenceNumber)
-                => $"Logs/{timestamp.ToLocalTime():yyyy-MM-dd}_{sequenceNumber:000}.log";
+                => Path.Join(logsDir, $"{timestamp.ToLocalTime():yyyy-MM-dd}_{sequenceNumber:000}.log");
             // The period of time for which you want to rotate files at time intervals.
             options.RollingInterval = RollingInterval.Day;
         });
