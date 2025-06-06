@@ -1,0 +1,8 @@
+{
+    "profiles": {
+        "Debug": {
+            "commandName": "Project",
+            "workingDirectory": "bin"
+        }
+    }
+}
