@@ -1,13 +1,24 @@
-﻿using Avalonia.Controls;
-using Avalonia.Input;
+﻿using Avalonia.Input;
 
 namespace HellDivers2OneKeyStratagem;
+
+public enum StratagemType
+{
+    Unknown,
+    R,
+    B,
+    G,
+    Y,
+}
 
 public class Stratagem
 {
     public string Name = "";
     public string KeySequence = "";
-    public CheckBox CheckBox = null!;
+    public string IconName = "";
+    public StratagemType Type = StratagemType.Unknown;
+
+    public StratagemControl Control = null!;
 
     public void PressKeys()
     {

@@ -12,6 +12,8 @@ public class AppSettings
     public static readonly string SettingsDirectory = Path.Combine(ExeDirectory, "Settings");
     public static readonly string SettingsFile = Path.Combine(SettingsDirectory, "Settings.json");
     public static readonly string DataDirectory = Path.Combine(ExeDirectory, "Data");
+    public static readonly string IconsDirectory = Path.Combine(ExeDirectory, "Icons");
+    public static readonly string RawIconsDirectory = Path.Combine(ExeDirectory, "RawIcons");
 
     private static readonly JsonFile<AppSettings> _settingsFile = new(SettingsFile);
 

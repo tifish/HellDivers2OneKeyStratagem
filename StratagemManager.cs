@@ -46,7 +46,7 @@ public static class StratagemManager
         foreach (var line in File.ReadLines(StratagemsFile).Skip(1))
         {
             var items = line.Split('\t');
-            if (items.Length != 3)
+            if (items.Length != 5)
                 throw new InvalidOperationException($"Invalid line: {line}");
 
             if (items[0] != "")
@@ -54,7 +54,15 @@ public static class StratagemManager
                 if (currentGroup == null)
                     throw new InvalidOperationException($"No group found for stratagem {items[nameColumn]}");
 
-                var stratagem = new Stratagem { Name = items[nameColumn], KeySequence = items[0] };
+                var stratagem = new Stratagem
+                {
+                    Name = items[nameColumn],
+                    KeySequence = items[0],
+                    IconName = items[3],
+                };
+                if (Enum.TryParse<StratagemType>(items[4], out var type))
+                    stratagem.Type = type;
+
                 var names = stratagem.Name.Split('|');
                 stratagem.Name = names[0];
 

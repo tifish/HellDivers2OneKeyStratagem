@@ -193,30 +193,7 @@
                 <Label Content="{l:Localize ClickOnStratagemExplain}" />
             </local:MyHorizontalStackPanel>
 
-            <StackPanel Name="StratagemGroupsContainer" Orientation="Horizontal">
-                <Border
-                    Margin="0,1,0,1"
-                    Padding="20,10,20,10"
-                    VerticalAlignment="Stretch"
-                    Background="{DynamicResource SystemControlBackgroundListLowBrush}">
-                    <StackPanel Orientation="Vertical">
-                        <Label Content="飞鹰" />
-                        <CheckBox Content="飞鹰空袭" />
-                        <CheckBox Content="飞鹰500KG炸弹" />
-                    </StackPanel>
-                </Border>
-                <Border
-                    Margin="0,1,0,1"
-                    Padding="20,10,20,10"
-                    VerticalAlignment="Stretch"
-                    Background="{DynamicResource SystemControlBackgroundListLowBrush}">
-                    <StackPanel Orientation="Vertical">
-                        <Label Content="轨道" />
-                        <CheckBox Content="轨道毒气攻击" />
-                        <CheckBox Content="轨道炮攻击" />
-                    </StackPanel>
-                </Border>
-            </StackPanel>
+            <StackPanel Name="StratagemGroupsContainer" Orientation="Vertical" />
         </StackPanel>
 
     </StackPanel>

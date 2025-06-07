@@ -5,7 +5,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Layout;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -456,11 +455,17 @@ public partial class MainViewModel : ObservableObject
 
     public void UpdateToolTip(Stratagem stratagem)
     {
-        ToolTip.SetTip(stratagem.CheckBox,
-            string.Format(
+        var text = string.Format(
                 Localizer.Get("StratagemToolTip"),
                 StratagemManager.GetSystemAlias(stratagem.Name),
-                StratagemManager.GetUserAlias(stratagem.Name)));
+                StratagemManager.GetUserAlias(stratagem.Name));
+
+        ToolTip.SetTip(stratagem.Control, new TextBlock
+        {
+            Text = text,
+            FontFamily = stratagem.Control.FontFamily,
+            FontSize = stratagem.Control.FontSize,
+        });
     }
 
     private void InitStratagemGroupsUI()
@@ -483,7 +488,7 @@ public partial class MainViewModel : ObservableObject
             {
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
-                Orientation = Orientation.Vertical,
+                Orientation = Orientation.Horizontal,
             };
             border.Child = groupContainer;
 
@@ -492,70 +497,47 @@ public partial class MainViewModel : ObservableObject
 
             foreach (var stratagem in stratagems)
             {
-                var stratagemCheckBox = new CheckBox
-                {
-                    Content = stratagem.Name,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                };
-                stratagem.CheckBox = stratagemCheckBox;
-                groupContainer.Children.Add(stratagemCheckBox);
+                var stratagemControl = new StratagemControl(stratagem);
+                groupContainer.Children.Add(stratagemControl);
 
                 UpdateToolTip(stratagem);
 
-                stratagemCheckBox.IsCheckedChanged += StratagemCheckBoxOnIsCheckedChanged;
-
-                stratagemCheckBox.PointerPressed += async (_, args) =>
+                stratagemControl.PointerPressed += async (_, args) =>
                 {
-                    if (args.GetCurrentPoint(null).Properties.PointerUpdateKind != PointerUpdateKind.RightButtonPressed)
-                        return;
-
-                    var dialog = new EditAliasesDialog((string)stratagemCheckBox.Content);
-
-                    if (await dialog.ShowDialog<bool>(_mainWindow))
+                    switch (args.GetCurrentPoint(null).Properties.PointerUpdateKind)
                     {
-                        dialog.Commit();
-                        await ResetVoiceCommand();
+                        case PointerUpdateKind.LeftButtonPressed:
+                            {
+                                // Set the stratagem to the selected key
+                                if (Settings.EnableHotkeyTrigger)
+                                {
+                                    SetKeyStratagem(SelectedKeyIndex, stratagem);
+
+                                    if (SelectedKeyIndex > 0)
+                                        if (!_hotkeyPanels[SelectedKeyIndex - 1].HasStratagem)
+                                            SelectedKeyIndex--;
+                                }
+
+                                // Play the voice of the stratagem
+                                if (Settings.PlayVoice)
+                                    PlayStratagemVoice(stratagem.Name);
+                            }
+                            break;
+
+                        case PointerUpdateKind.RightButtonPressed:
+                            {
+                                // Edit the aliases of the stratagem
+                                var dialog = new EditAliasesDialog(stratagem.Name);
+
+                                if (await dialog.ShowDialog<bool>(_mainWindow))
+                                {
+                                    dialog.Commit();
+                                    await ResetVoiceCommand();
+                                }
+                            }
+                            break;
                     }
                 };
-
-                continue;
-
-                void StratagemCheckBoxOnIsCheckedChanged(object? o, RoutedEventArgs routedEventArgs)
-                {
-                    if (_isSettingStratagemCheckBoxChecked)
-                        return;
-
-                    if (Settings.EnableHotkeyTrigger)
-                    {
-                        if (stratagemCheckBox.IsChecked == true)
-                        {
-                            SetKeyStratagem(SelectedKeyIndex, stratagem);
-
-                            if (SelectedKeyIndex > 0)
-                                if (!_hotkeyPanels[SelectedKeyIndex - 1].HasStratagem)
-                                    SelectedKeyIndex--;
-                        }
-                        else
-                        {
-                            var keyIndex = Array.IndexOf(_keyStratagems, stratagem);
-                            if (keyIndex > -1)
-                            {
-                                SetKeyStratagem(keyIndex, null);
-                                SelectedKeyIndex = keyIndex;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        _isSettingStratagemCheckBoxChecked = true;
-                        stratagemCheckBox.IsChecked = !stratagemCheckBox.IsChecked;
-                        _isSettingStratagemCheckBoxChecked = false;
-                    }
-
-                    if (Settings.PlayVoice)
-                        PlayStratagemVoice(stratagem.Name);
-
-                }
             }
         }
     }
@@ -610,8 +592,6 @@ public partial class MainViewModel : ObservableObject
                 SetKeyStratagem(i, stratagem);
         }
     }
-
-    private bool _isSettingStratagemCheckBoxChecked;
 
     private List<Voice> _voices = null!;
 
@@ -685,35 +665,11 @@ public partial class MainViewModel : ObservableObject
         if (index is < 0 or > KeyCount - 1)
             return;
 
-        // Uncheck the previous stratagem
-        var currentStratagem = _keyStratagems[index];
-        if (currentStratagem != null)
-        {
-            _isSettingStratagemCheckBoxChecked = true;
-            currentStratagem.CheckBox.IsChecked = false;
-            _isSettingStratagemCheckBoxChecked = false;
-        }
-
         if (stratagem != null)
         {
-            // Remove the previous hotkey
-            if (stratagem.CheckBox.IsChecked == true)
-            {
-                var prevIndex = Array.IndexOf(_keyStratagems, stratagem);
-                if (prevIndex > -1)
-                {
-                    _keyStratagems[prevIndex] = null;
-                    _hotkeyPanels[prevIndex].ClearStratagem();
-                }
-            }
-
-            // Set the new hotkey
+            // Set the stratagem to the key
             _keyStratagems[index] = stratagem;
             _hotkeyPanels[index].StratagemName = stratagem.Name;
-
-            _isSettingStratagemCheckBoxChecked = true;
-            stratagem.CheckBox.IsChecked = true;
-            _isSettingStratagemCheckBoxChecked = false;
         }
         else
         {
