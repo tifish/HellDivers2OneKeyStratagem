@@ -56,14 +56,13 @@ public static class StratagemManager
 
                 var stratagem = new Stratagem
                 {
-                    Name = items[nameColumn],
                     KeySequence = items[0],
                     IconName = items[3],
                 };
                 if (Enum.TryParse<StratagemType>(items[4], out var type))
                     stratagem.Type = type;
 
-                var names = stratagem.Name.Split('|');
+                var names = items[nameColumn].Split('|');
                 stratagem.Name = names[0];
 
                 _stratagems.Add(stratagem);

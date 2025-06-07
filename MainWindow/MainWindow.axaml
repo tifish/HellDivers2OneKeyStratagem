@@ -10,8 +10,8 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="local:MainViewModel"
-    CanResize="False"
-    SizeToContent="WidthAndHeight"
+    CanResize="True"
+    SizeToContent="Width"
     mc:Ignorable="d">
 
     <Interaction.Behaviors>
@@ -30,9 +30,15 @@
         <local:RadioButtonToStringConverter x:Key="RadioButtonToStringConverter" />
     </Window.Resources>
 
-    <StackPanel Margin="20,0,20,20">
+    <Grid
+        Margin="20,0,20,20"
+        ColumnDefinitions="Auto"
+        RowDefinitions="Auto,Auto,Auto,Auto,*">
 
-        <Expander Header="{l:Localize MustSetSettingsOnce}">
+        <Expander
+            Grid.Row="0"
+            Grid.Column="0"
+            Header="{l:Localize MustSetSettingsOnce}">
             <StackPanel Margin="20,10,20,0">
 
                 <StackPanel>
@@ -137,7 +143,10 @@
             </StackPanel>
         </Expander>
 
-        <local:MyHorizontalBlock Margin="0,10,0,0">
+        <local:MyHorizontalBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="0,10,0,0">
             <CheckBox Content="{l:Localize UseHotkeyToCallOut}" IsChecked="{Binding EnableHotkeyTrigger}" />
             <CheckBox Content="{l:Localize SettingHotkeyStratagemsViaMicrophone}" IsChecked="{Binding EnableSetKeyBySpeech}">
                 <CheckBox.IsEnabled>
@@ -149,7 +158,10 @@
             </CheckBox>
         </local:MyHorizontalBlock>
 
-        <local:MyHorizontalBlock Margin="0,10,0,0">
+        <local:MyHorizontalBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="0,10,0,0">
             <CheckBox Content="{l:Localize UseMicrophoneToCallOut}" IsChecked="{Binding EnableSpeechTrigger}" />
             <CheckBox
                 Content="{l:Localize ShowSpeechRecognitionInfoWindow}"
@@ -162,7 +174,11 @@
             <Label Content="{Binding SpeechRecognizeResult}" />
         </local:MyHorizontalBlock>
 
-        <StackPanel Margin="0,10,0,0" IsVisible="{Binding EnableHotkeyTrigger}">
+        <StackPanel
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="0,10,0,0"
+            IsVisible="{Binding EnableHotkeyTrigger}">
 
             <local:MyHorizontalStackPanel>
                 <ComboBox ItemsSource="{Binding StratagemSets}" SelectedIndex="{Binding CurrentStratagemSetIndex}" />
@@ -181,20 +197,28 @@
 
         </StackPanel>
 
-        <StackPanel>
-            <StackPanel.IsVisible>
-                <MultiBinding Converter="{x:Static BoolConverters.Or}">
-                    <Binding Path="EnableHotkeyTrigger" />
-                    <Binding Path="EnableSpeechTrigger" />
-                </MultiBinding>
-            </StackPanel.IsVisible>
+        <ScrollViewer
+            Name="StratagemsScrollViewer"
+            Grid.Row="4"
+            Grid.Column="1"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto">
 
-            <local:MyHorizontalStackPanel>
-                <Label Content="{l:Localize ClickOnStratagemExplain}" />
-            </local:MyHorizontalStackPanel>
+            <StackPanel Name="StratagemsStackPanel">
+                <StackPanel.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="EnableHotkeyTrigger" />
+                        <Binding Path="EnableSpeechTrigger" />
+                    </MultiBinding>
+                </StackPanel.IsVisible>
 
-            <StackPanel Name="StratagemGroupsContainer" Orientation="Vertical" />
-        </StackPanel>
+                <local:MyHorizontalStackPanel>
+                    <Label Content="{l:Localize ClickOnStratagemExplain}" />
+                </local:MyHorizontalStackPanel>
 
-    </StackPanel>
+                <StackPanel Name="StratagemGroupsContainer" Orientation="Vertical" />
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
 </Window>

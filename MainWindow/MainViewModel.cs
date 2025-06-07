@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Layout;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EdgeTTS;
@@ -437,7 +438,7 @@ public partial class MainViewModel : ObservableObject
         _hotkeyPanels.Last().IsBorderVisible = true;
     }
 
-    public bool HasResized { get; set; }
+    public bool HasContentSizeChanged { get; set; }
 
     public void LoadBySpeechLanguage()
     {
@@ -447,7 +448,7 @@ public partial class MainViewModel : ObservableObject
         SetHotkeyGroup();
         LoadVoiceNames();
 
-        HasResized = true;
+        HasContentSizeChanged = true;
 
         ResetVoiceCommand().ConfigureAwait(false);
         LoadGeneratingVoiceStyles().ConfigureAwait(false);
@@ -455,17 +456,30 @@ public partial class MainViewModel : ObservableObject
 
     public void UpdateToolTip(Stratagem stratagem)
     {
-        var text = string.Format(
+        var desc = string.Format(
                 Localizer.Get("StratagemToolTip"),
                 StratagemManager.GetSystemAlias(stratagem.Name),
                 StratagemManager.GetUserAlias(stratagem.Name));
 
-        ToolTip.SetTip(stratagem.Control, new TextBlock
+        var stackPanel = new StackPanel
         {
-            Text = text,
+            Orientation = Orientation.Vertical,
+        };
+        stackPanel.Children.Add(new TextBlock
+        {
+            Text = stratagem.Name,
+            FontFamily = stratagem.Control.FontFamily,
+            FontSize = stratagem.Control.FontSize + 3,
+            FontWeight = FontWeight.Bold,
+        });
+        stackPanel.Children.Add(new TextBlock
+        {
+            Text = desc,
             FontFamily = stratagem.Control.FontFamily,
             FontSize = stratagem.Control.FontSize,
         });
+
+        ToolTip.SetTip(stratagem.Control, stackPanel);
     }
 
     private void InitStratagemGroupsUI()
