@@ -18,7 +18,7 @@ public class Stratagem
     public string IconName = "";
     public StratagemType Type = StratagemType.Unknown;
 
-    public StratagemControl Control = null!;
+    public StratagemControl? Control;
 
     public void PressKeys()
     {

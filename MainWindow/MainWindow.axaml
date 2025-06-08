@@ -187,12 +187,8 @@
             </local:MyHorizontalStackPanel>
 
             <StackPanel>
-                <local:MyHorizontalBlock Name="KeysStackPanel1">
-                    <local:HotkeyStratagemPanel HotkeyName="F1" StratagemName="飞鹰空袭" />
-                </local:MyHorizontalBlock>
-                <local:MyHorizontalBlock Name="KeysStackPanel2">
-                    <local:HotkeyStratagemPanel HotkeyName="F1" StratagemName="飞鹰空袭" />
-                </local:MyHorizontalBlock>
+                <local:MyHorizontalBlock Name="KeysStackPanel1" />
+                <local:MyHorizontalBlock Name="KeysStackPanel2" />
             </StackPanel>
 
         </StackPanel>

@@ -408,30 +408,41 @@ public partial class MainViewModel : ObservableObject
             if (i == 11)
                 keysStackPanel = _mainWindow.KeysStackPanel2;
 
-            var hsPanel = new HotkeyStratagemPanel
+            var hotkeyPanel = new HotkeyStratagemPanel
             {
                 HotkeyName = Enum.GetName(_keys[i]) ?? "Error",
             };
-            hsPanel.ClearStratagem();
-            keysStackPanel.Children.Add(hsPanel);
+            keysStackPanel.Children.Add(hotkeyPanel);
+            hotkeyPanel.ApplyTemplate();
 
             var i1 = i;
-            hsPanel.PointerPressed += (_, _) =>
+            hotkeyPanel.PointerPressed += (_, args) =>
             {
-                SelectedKeyIndex = i1;
+                switch (args.GetCurrentPoint(null).Properties.PointerUpdateKind)
+                {
+                    // Select the key
+                    case PointerUpdateKind.LeftButtonPressed:
+                        SelectedKeyIndex = i1;
 
-                if (!Settings.PlayVoice)
-                    return;
+                        if (!Settings.PlayVoice)
+                            return;
 
-                if (Settings.EnableSetKeyBySpeech)
-                    return;
+                        if (Settings.EnableSetKeyBySpeech)
+                            return;
 
-                var stratagem = _keyStratagems[SelectedKeyIndex];
-                if (stratagem != null)
-                    PlayStratagemVoice(stratagem.Name);
+                        var stratagem = _keyStratagems[SelectedKeyIndex];
+                        if (stratagem != null)
+                            PlayStratagemVoice(stratagem.Name);
+                        break;
+
+                    // Remove the stratagem from the key
+                    case PointerUpdateKind.RightButtonPressed:
+                        SetKeyStratagem(i1, null);
+                        break;
+                }
             };
 
-            _hotkeyPanels[i] = hsPanel;
+            _hotkeyPanels[i] = hotkeyPanel;
         }
 
         SelectedKeyIndex = _hotkeyPanels.Length - 1;
@@ -452,34 +463,6 @@ public partial class MainViewModel : ObservableObject
 
         ResetVoiceCommand().ConfigureAwait(false);
         LoadGeneratingVoiceStyles().ConfigureAwait(false);
-    }
-
-    public void UpdateToolTip(Stratagem stratagem)
-    {
-        var desc = string.Format(
-                Localizer.Get("StratagemToolTip"),
-                StratagemManager.GetSystemAlias(stratagem.Name),
-                StratagemManager.GetUserAlias(stratagem.Name));
-
-        var stackPanel = new StackPanel
-        {
-            Orientation = Orientation.Vertical,
-        };
-        stackPanel.Children.Add(new TextBlock
-        {
-            Text = stratagem.Name,
-            FontFamily = stratagem.Control.FontFamily,
-            FontSize = stratagem.Control.FontSize + 3,
-            FontWeight = FontWeight.Bold,
-        });
-        stackPanel.Children.Add(new TextBlock
-        {
-            Text = desc,
-            FontFamily = stratagem.Control.FontFamily,
-            FontSize = stratagem.Control.FontSize,
-        });
-
-        ToolTip.SetTip(stratagem.Control, stackPanel);
     }
 
     private void InitStratagemGroupsUI()
@@ -511,10 +494,11 @@ public partial class MainViewModel : ObservableObject
 
             foreach (var stratagem in stratagems)
             {
-                var stratagemControl = new StratagemControl(stratagem);
+                var stratagemControl = new StratagemControl();
                 groupContainer.Children.Add(stratagemControl);
-
-                UpdateToolTip(stratagem);
+                stratagemControl.ApplyTemplate();
+                stratagemControl.Stratagem = stratagem;
+                stratagem.Control = stratagemControl;
 
                 stratagemControl.PointerPressed += async (_, args) =>
                 {
@@ -526,10 +510,6 @@ public partial class MainViewModel : ObservableObject
                                 if (Settings.EnableHotkeyTrigger)
                                 {
                                     SetKeyStratagem(SelectedKeyIndex, stratagem);
-
-                                    if (SelectedKeyIndex > 0)
-                                        if (!_hotkeyPanels[SelectedKeyIndex - 1].HasStratagem)
-                                            SelectedKeyIndex--;
                                 }
 
                                 // Play the voice of the stratagem
@@ -683,12 +663,12 @@ public partial class MainViewModel : ObservableObject
         {
             // Set the stratagem to the key
             _keyStratagems[index] = stratagem;
-            _hotkeyPanels[index].StratagemName = stratagem.Name;
+            _hotkeyPanels[index].Stratagem = stratagem;
         }
         else
         {
             _keyStratagems[index] = null;
-            _hotkeyPanels[index].ClearStratagem();
+            _hotkeyPanels[index].Stratagem = null;
         }
 
         if (!IsLoading)

@@ -48,7 +48,7 @@ public partial class EditAliasesDialog : Window
 
         if (StratagemManager.TryGet(_stratagemName, out var stratagem))
         {
-            MainViewModel.Instance.UpdateToolTip(stratagem);
+            stratagem.Control?.UpdateToolTip();
         }
     }
 

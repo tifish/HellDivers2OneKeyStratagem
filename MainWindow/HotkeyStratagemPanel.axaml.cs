@@ -2,13 +2,13 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
-using Jeek.Avalonia.Localization;
 
 namespace HellDivers2OneKeyStratagem;
 
 public class HotkeyStratagemPanel : TemplatedControl
 {
     private Border? _border;
+    private StratagemControl? _stratagemControl;
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -16,6 +16,8 @@ public class HotkeyStratagemPanel : TemplatedControl
 
         _border = e.NameScope.Get<Border>("Border");
         UpdateIsBorderVisible();
+
+        _stratagemControl = e.NameScope.Get<StratagemControl>("StratagemControl");
     }
 
     public string HotkeyName
@@ -27,20 +29,10 @@ public class HotkeyStratagemPanel : TemplatedControl
     public static readonly StyledProperty<string> HotkeyNameProperty =
         AvaloniaProperty.Register<HotkeyStratagemPanel, string>(nameof(HotkeyName));
 
-    public string StratagemName
+    public Stratagem? Stratagem
     {
-        get => GetValue(StratagemNameProperty);
-        set => SetValue(StratagemNameProperty, value);
-    }
-
-    public static readonly StyledProperty<string> StratagemNameProperty =
-        AvaloniaProperty.Register<HotkeyStratagemPanel, string>(nameof(StratagemName));
-
-    public bool HasStratagem => StratagemName != Localizer.Get("None");
-
-    public void ClearStratagem()
-    {
-        Bind(StratagemNameProperty, new LocalizeExtension("None"));
+        get => _stratagemControl?.Stratagem;
+        set => _stratagemControl!.Stratagem = value;
     }
 
     public bool IsBorderVisible
