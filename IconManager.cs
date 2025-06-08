@@ -37,10 +37,10 @@ public static class IconManager
 
         foreach (var stratagem in StratagemManager.Stratagems)
         {
-            if (stratagem.IconName == "")
+            if (stratagem.RawIconName == "")
                 continue;
 
-            ConvertIcon(stratagem.Type, stratagem.IconName, stratagem.Id);
+            ConvertIcon(stratagem.Type, stratagem.RawIconName, stratagem.Id);
         }
 
         ConvertIcon(StratagemType.Y, "0x28da0bb825911c9a", "None");

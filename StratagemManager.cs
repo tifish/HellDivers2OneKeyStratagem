@@ -57,7 +57,7 @@ public static class StratagemManager
                 var stratagem = new Stratagem
                 {
                     KeySequence = items[0],
-                    IconName = items[3],
+                    RawIconName = items[3],
                 };
                 if (Enum.TryParse<StratagemType>(items[4], out var type))
                     stratagem.Type = type;

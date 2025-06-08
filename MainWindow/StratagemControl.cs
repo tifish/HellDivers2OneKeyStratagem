@@ -8,7 +8,9 @@ namespace HellDivers2OneKeyStratagem;
 
 public class StratagemControl : UserControl
 {
+    private readonly StackPanel _stackPanel;
     private readonly Image _image;
+    private readonly Label _label;
 
     public Stratagem? Stratagem
     {
@@ -22,11 +24,29 @@ public class StratagemControl : UserControl
 
             if (field == null)
             {
+                _image.Source = null;
+                _image.IsVisible = true;
                 _image.Source = IconManager.GetNoneIcon();
+                _label.IsVisible = false;
+                _label.Content = Localizer.Get("None");
             }
             else
             {
-                _image.Source = IconManager.GetIcon(field.Id) ?? IconManager.GetNoneIcon();
+                _label.Content = field.Name;
+
+                var icon = IconManager.GetIcon(field.Id);
+                if (icon == null)
+                {
+                    _image.Source = null;
+                    _image.IsVisible = false;
+                    _label.IsVisible = true;
+                }
+                else
+                {
+                    _image.Source = icon;
+                    _image.IsVisible = true;
+                    _label.IsVisible = false;
+                }
             }
 
             UpdateToolTip();
@@ -35,14 +55,33 @@ public class StratagemControl : UserControl
 
     public StratagemControl()
     {
-        Content = _image = new Image
+        Content = _stackPanel = new StackPanel
+        {
+            Orientation = Orientation.Vertical,
+        };
+
+        _image = new Image
         {
             Width = 64,
             Height = 64,
             Stretch = Avalonia.Media.Stretch.Uniform,
+            IsVisible = true,
             Source = IconManager.GetNoneIcon(),
         };
+        _stackPanel.Children.Add(_image);
+
+        _label = new Label
+        {
+            Content = Localizer.Get("None"),
+            IsVisible = false,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        _stackPanel.Children.Add(_label);
     }
+
+    [Content]
+    public Controls Children => _stackPanel.Children;
 
     public void UpdateToolTip()
     {
