@@ -17,6 +17,7 @@ public class Stratagem
     public string KeySequence = "";
     public string IconName = "";
     public StratagemType Type = StratagemType.Unknown;
+    public string Id = "";
 
     public StratagemControl? Control;
 

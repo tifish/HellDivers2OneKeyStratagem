@@ -197,6 +197,9 @@ public partial class MainViewModel : ObservableObject
 
         ActiveWindowMonitor.WindowTitleChanged += OnWindowTitleChanged;
         ActiveWindowMonitor.Start(TimeSpan.FromSeconds(1));
+
+        if (!Directory.Exists(AppSettings.IconsDirectory))
+            IconManager.ConvertAllIcons();
     }
 
     private bool _isClosing;

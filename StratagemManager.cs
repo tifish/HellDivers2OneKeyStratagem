@@ -65,6 +65,9 @@ public static class StratagemManager
                 var names = items[nameColumn].Split('|');
                 stratagem.Name = names[0];
 
+                var enNames = items[2].Split('|');
+                stratagem.Id = enNames[0];
+
                 _stratagems.Add(stratagem);
                 _systemAliasesDictionary[stratagem.Name] = items[nameColumn];
 
