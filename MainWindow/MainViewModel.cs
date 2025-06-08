@@ -199,7 +199,10 @@ public partial class MainViewModel : ObservableObject
         ActiveWindowMonitor.Start(TimeSpan.FromSeconds(1));
 
         if (!Directory.Exists(AppSettings.IconsDirectory))
+        {
             IconManager.ConvertAllIcons();
+            _mainWindow.Close();
+        }
     }
 
     private bool _isClosing;
