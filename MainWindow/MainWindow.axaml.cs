@@ -41,7 +41,7 @@ public partial class MainWindow : Window
 
     private void AddWindowHeightAndCenterWindow()
     {
-        if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
+        if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime)
             return;
 
         if (Screens.Primary == null)
