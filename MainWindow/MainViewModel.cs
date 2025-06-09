@@ -1,19 +1,20 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Layout;
-using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using EdgeTTS;
+using EdgeTtsSharp;
+using EdgeTtsSharp.Structures;
 using GlobalHotKeys;
 using Jeek.Avalonia.Localization;
 using Microsoft.Extensions.Logging;
 using NAudio.Wave;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Globalization;
+using ZLogger;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -593,8 +594,6 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    private List<Voice> _voices = null!;
-
     private async Task LoadGeneratingVoiceStyles()
     {
         if (Settings.SpeechLocale == "")
@@ -604,10 +603,11 @@ public partial class MainViewModel : ObservableObject
 
         try
         {
-            var manager = await VoicesManager.Create();
-            _voices = manager.Find(language: Settings.SpeechLanguage);
+            var voices = await EdgeTts.GetVoices();
+            voices = [.. voices.Where(v => v.Locale.StartsWith(Settings.SpeechLanguage))];
+
             GenerateVoiceStyles.Clear();
-            foreach (var voice in _voices)
+            foreach (var voice in voices)
                 GenerateVoiceStyles.Add(voice.ShortName);
             CurrentGenerateVoiceStyleIndex = GenerateVoiceStyles.Count - 1;
         }
@@ -964,42 +964,39 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _generateVoiceButtonContent = "生成语音";
-
     private bool _isGeneratingVoice;
 
+    private static readonly Dictionary<string, string> _voiceNameMap = new()
+    {
+        ["zh-CN-liaoning-XiaobeiNeural"] = "晓北（东北）",
+        ["zh-HK-HiuMaanNeural"] = "晓曼（香港）",
+        ["zh-CN-shaanxi-XiaoniNeural"] = "晓妮（陕西）",
+        ["zh-CN-XiaoxiaoNeural"] = "晓晓",
+        ["zh-CN-XiaoyiNeural"] = "晓伊",
+        ["zh-TW-HsiaoChenNeural"] = "晓臻（台湾）",
+        ["en-US-AnaNeural"] = "Ana",
+        ["en-IE-EmilyNeural"] = "Emily",
+        ["en-US-GuyNeural"] = "Guy",
+    };
+
     [RelayCommand]
-    private async Task GenerateVoice()
+    private async Task GenerateSelectedVoice()
     {
         if (CurrentGenerateVoiceStyleIndex == -1)
             return;
 
-        if (_isGeneratingVoice)
-        {
-            _isGeneratingVoice = false;
-            return;
-        }
-
-        _isGeneratingVoice = true;
-        GenerateVoiceButtonContent = "停止生成";
+        IsGeneratingVoice = true;
 
         try
         {
             var count = 0;
             var total = StratagemManager.Count;
-            var voiceName = CurrentGenerateVoiceStyle;
 
-            foreach (var stratagem in StratagemManager.Stratagems)
-            {
-                if (!_isGeneratingVoice)
-                    break;
-
-                count++;
-
-                await GenerateVoiceFile(stratagem.Name,
-                    Path.Combine(VoiceRootPath, Settings.SpeechLanguage, voiceName, stratagem.Name + ".mp3"));
-                GenerateVoiceMessage = $"正在生成民主语音（{count}/{total}）：{stratagem.Name}";
-            }
+            count = await GenerateVoice(CurrentGenerateVoiceStyle, count, total);
+        }
+        catch (OperationCanceledException)
+        {
+            // Has been logged, do nothing here
         }
         catch (Exception)
         {
@@ -1007,35 +1004,125 @@ public partial class MainViewModel : ObservableObject
         }
         finally
         {
-            GenerateVoiceMessage = _isGeneratingVoice
+            GenerateVoiceMessage = IsGeneratingVoice
                 ? "民主语音生成完毕！"
                 : "民主语音进程中断...";
 
-            _isGeneratingVoice = false;
-            GenerateVoiceButtonContent = "生成语音";
+            IsGeneratingVoice = false;
         }
     }
 
-    [ObservableProperty]
-    private string _generateVoiceRate = "+0%";
+    [RelayCommand]
+    private async Task GenerateDefaultVoices()
+    {
+        IsGeneratingVoice = true;
 
-    [ObservableProperty]
-    private string _generateVoiceVolume = "+0%";
+        try
+        {
+            var count = 0;
+            var total = _voiceNameMap.Count * StratagemManager.Count;
 
-    [ObservableProperty]
-    private string _generateVoicePitch = "+0Hz";
+            foreach (var voiceStyle in _voiceNameMap.Keys)
+                count = await GenerateVoice(voiceStyle, count, total);
+        }
+        catch (OperationCanceledException)
+        {
+            // Has been logged, do nothing here
+        }
+        catch (Exception)
+        {
+            GenerateVoiceMessage = "民主语音生成失败...";
+        }
+        finally
+        {
+            GenerateVoiceMessage = IsGeneratingVoice
+                ? "民主语音生成完毕！"
+                : "民主语音进程中断...";
 
-    private async Task GenerateVoiceFile(string text, string filePath)
+            IsGeneratingVoice = false;
+        }
+    }
+
+    [RelayCommand]
+    private void StopGeneratingVoice()
+    {
+        IsGeneratingVoice = false;
+    }
+
+    private async Task<int> GenerateVoice(string voiceStyle, int count, int total)
+    {
+        var voice = await EdgeTts.GetVoice(voiceStyle);
+
+        foreach (var stratagem in StratagemManager.Stratagems)
+        {
+            if (!IsGeneratingVoice)
+                break;
+
+            count++;
+
+            var voiceLanguage = voiceStyle[..2];
+
+            if (!_voiceNameMap.TryGetValue(voiceStyle, out var voiceFolderName))
+                voiceFolderName = voiceStyle;
+
+            var stratagemName = stratagem.Name;
+            if (voiceLanguage == "en")
+                stratagemName = stratagem.Id;
+
+            var filePath = Path.Combine(VoiceRootPath, voiceLanguage, voiceFolderName, stratagemName + ".mp3");
+
+            if (File.Exists(filePath))
+                continue;
+
+            await GenerateVoiceFile(stratagem.Name, filePath, voice);
+
+            GenerateVoiceMessage = $"正在生成民主语音（{count}/{total}）：{stratagem.Name}";
+        }
+
+        return count;
+    }
+
+    private async Task GenerateVoiceFile(string text, string filePath, Voice? voice = null)
     {
         var voiceDir = Path.GetDirectoryName(filePath);
         if (voiceDir == null)
-            return;
+            throw new Exception("Failed to extract voice directory");
+
         if (!Directory.Exists(voiceDir))
             Directory.CreateDirectory(voiceDir);
 
-        var communicate = new Communicate(text, CurrentGenerateVoiceStyle,
-            GenerateVoiceRate, GenerateVoiceVolume, GenerateVoicePitch);
-        await communicate.Save(filePath);
+        voice ??= await EdgeTts.GetVoice(CurrentGenerateVoiceStyle);
+        if (voice == null)
+            throw new Exception($"Failed to get voice: {CurrentGenerateVoiceStyle}");
+
+        int retryCount = 0;
+        const int maxRetries = 3;
+
+        while (retryCount < maxRetries)
+        {
+            try
+            {
+                var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+                await voice.SaveAudioToFile(text, filePath, null, cts.Token);
+                return;
+            }
+            catch (OperationCanceledException ex)
+            {
+                retryCount++;
+                GenerateVoiceMessage = $"生成民主语音超时（第{retryCount}次重试）：{filePath}";
+                _logger.ZLogError(ex, $"生成民主语音超时（第{retryCount}次重试）：{filePath}");
+
+                if (retryCount < maxRetries)
+                {
+                    // Wait for 1 minute
+                    await Task.Delay(TimeSpan.FromMinutes(1));
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
     }
 
     [RelayCommand]
@@ -1048,9 +1135,14 @@ public partial class MainViewModel : ObservableObject
             await GenerateVoiceFile(text, tmpMp3);
             PlayVoice(tmpMp3, true);
         }
-        catch (Exception)
+        catch (OperationCanceledException)
+        {
+            // Has been logged, do nothing here
+        }
+        catch (Exception ex)
         {
             GenerateVoiceMessage = "民主语音生成失败...";
+            _logger.ZLogError(ex, $"民主语音生成失败");
         }
     }
 

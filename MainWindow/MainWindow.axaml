@@ -130,13 +130,18 @@
                         SelectedIndex="{Binding CurrentGenerateVoiceStyleIndex}"
                         SelectedItem="{Binding CurrentGenerateVoiceStyle}" />
                     <Button Command="{Binding TryVoiceCommand}" Content="试听" />
-                    <Label Content="速率：" />
-                    <TextBox Text="{Binding GenerateVoiceRate}" />
-                    <Label Content="音量：" />
-                    <TextBox Text="{Binding GenerateVoiceVolume}" />
-                    <Label Content="音调：" />
-                    <TextBox Text="{Binding GenerateVoicePitch}" />
-                    <Button Command="{Binding GenerateVoiceCommand}" Content="{Binding GenerateVoiceButtonContent}" />
+                    <Button
+                        Command="{Binding GenerateSelectedVoiceCommand}"
+                        Content="生成选中语音"
+                        IsEnabled="{Binding !IsGeneratingVoice}" />
+                    <Button
+                        Command="{Binding GenerateDefaultVoicesCommand}"
+                        Content="生成所有默认语音"
+                        IsEnabled="{Binding !IsGeneratingVoice}" />
+                    <Button
+                        Command="{Binding StopGeneratingVoiceCommand}"
+                        Content="停止生成"
+                        IsEnabled="{Binding IsGeneratingVoice}" />
                     <Button Command="{Binding GenerateTxtCommand}" Content="生成 txt" />
                     <Label Content="{Binding GenerateVoiceMessage}" />
                 </local:MyHorizontalBlock>
