@@ -456,8 +456,6 @@ public partial class MainViewModel : ObservableObject
         _hotkeyPanels.Last().IsBorderVisible = true;
     }
 
-    public bool HasContentSizeChanged { get; set; }
-
     public void LoadBySpeechLanguage()
     {
         StratagemManager.Load();
@@ -465,8 +463,6 @@ public partial class MainViewModel : ObservableObject
         InitSettingsToUI();
         SetHotkeyGroup();
         LoadVoiceNames();
-
-        HasContentSizeChanged = true;
 
         ResetVoiceCommand().ConfigureAwait(false);
         LoadGeneratingVoiceStyles().ConfigureAwait(false);
