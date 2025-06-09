@@ -464,6 +464,8 @@ public partial class MainViewModel : ObservableObject
         SetHotkeyGroup();
         LoadVoiceNames();
 
+        _mainWindow.HasContentSizeChanged = true;
+
         ResetVoiceCommand().ConfigureAwait(false);
         LoadGeneratingVoiceStyles().ConfigureAwait(false);
     }

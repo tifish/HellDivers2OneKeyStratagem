@@ -26,14 +26,13 @@ public partial class MainWindow : Window
         }
     }
 
-    private bool _hasCenteredWindow = false;
+    public bool HasContentSizeChanged { get; set; }
 
     private void ClientSizeChanged(AvaloniaPropertyChangedEventArgs<Size> args)
     {
-        if (_hasCenteredWindow)
+        if (!HasContentSizeChanged)
             return;
-
-        _hasCenteredWindow = true;
+        HasContentSizeChanged = false;
 
         // Delay execution to get the correct StratagemsStackPanel size
         Dispatcher.UIThread.Post(AddWindowHeightAndCenterWindow);
