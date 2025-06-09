@@ -74,7 +74,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private double _speechConfidence;
+    public partial double SpeechConfidence { get; set; }
 
     partial void OnSpeechConfidenceChanged(double value)
     {
@@ -86,10 +86,10 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ObservableCollection<string> _speechLocales = [];
+    public partial ObservableCollection<string> SpeechLocales { get; set; } = [];
 
     [ObservableProperty]
-    private string _currentSpeechLocale = "";
+    public partial string CurrentSpeechLocale { get; set; } = "";
 
     partial void OnCurrentSpeechLocaleChanged(string value)
     {
@@ -105,10 +105,10 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ObservableCollection<string> _triggerKeys = ["LeftCtrl", "LeftAlt", "Q"];
+    public partial ObservableCollection<string> TriggerKeys { get; set; } = ["LeftCtrl", "LeftAlt", "Q"];
 
     [ObservableProperty]
-    private string _triggerKey = "";
+    public partial string TriggerKey { get; set; } = "";
 
     partial void OnTriggerKeyChanged(string value)
     {
@@ -120,7 +120,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _operateKeys = "";
+    public partial string OperateKeys { get; set; } = "";
 
     partial void OnOperateKeysChanged(string value)
     {
@@ -132,7 +132,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _playVoiceWhenCall;
+    public partial bool PlayVoiceWhenCall { get; set; }
 
     partial void OnPlayVoiceWhenCallChanged(bool value)
     {
@@ -144,10 +144,10 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ObservableCollection<string> _voiceNames = [];
+    public partial ObservableCollection<string> VoiceNames { get; set; } = [];
 
     [ObservableProperty]
-    private string _currentVoiceName = "";
+    public partial string CurrentVoiceName { get; set; } = "";
 
     partial void OnCurrentVoiceNameChanged(string value)
     {
@@ -315,10 +315,10 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ObservableCollection<string> _locales = [];
+    public partial ObservableCollection<string> Locales { get; set; } = [];
 
     [ObservableProperty]
-    private string _currentLocale = "";
+    public partial string CurrentLocale { get; set; } = "";
 
     partial void OnCurrentLocaleChanged(string value)
     {
@@ -732,7 +732,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _speechRecognizeResult = "";
+    public partial string SpeechRecognizeResult { get; set; } = "";
 
     private VoiceCommand? _voiceCommand;
 
@@ -826,7 +826,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _updateUrl = "";
+    public partial string UpdateUrl { get; set; } = "";
 
     partial void OnUpdateUrlChanged(string value)
     {
@@ -839,7 +839,7 @@ public partial class MainViewModel : ObservableObject
 
 
     [ObservableProperty]
-    private bool _isCheckingForUpdate;
+    public partial bool IsCheckingForUpdate { get; set; }
 
     [RelayCommand]
     private async Task CheckForUpdate()
@@ -871,7 +871,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _enableSpeechTrigger;
+    public partial bool EnableSpeechTrigger { get; set; }
 
     async partial void OnEnableSpeechTriggerChanged(bool value)
     {
@@ -888,7 +888,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _wakeUpWord = "";
+    public partial string WakeUpWord { get; set; } = "";
 
     async partial void OnWakeUpWordChanged(string value)
     {
@@ -901,7 +901,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _isGenerateVoicePanelVisible;
+    public partial bool IsGenerateVoicePanelVisible { get; set; }
 
     [RelayCommand]
     private void ToggleGenerateVoicePanel()
@@ -910,7 +910,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _enableHotkeyTrigger;
+    public partial bool EnableHotkeyTrigger { get; set; }
 
     partial void OnEnableHotkeyTriggerChanged(bool value)
     {
@@ -924,7 +924,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _enableSetKeyBySpeech;
+    public partial bool EnableSetKeyBySpeech { get; set; }
 
     partial void OnEnableSetKeyBySpeechChanged(bool value)
     {
@@ -960,7 +960,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _isGeneratingVoice;
+    public partial bool IsGeneratingVoice { get; set; }
 
     private static readonly Dictionary<string, string> _voiceNameMap = new()
     {
@@ -1080,10 +1080,7 @@ public partial class MainViewModel : ObservableObject
 
     private async Task GenerateVoiceFile(string text, string filePath, Voice? voice = null)
     {
-        var voiceDir = Path.GetDirectoryName(filePath);
-        if (voiceDir == null)
-            throw new Exception("Failed to extract voice directory");
-
+        var voiceDir = Path.GetDirectoryName(filePath) ?? throw new Exception("Failed to extract voice directory");
         if (!Directory.Exists(voiceDir))
             Directory.CreateDirectory(voiceDir);
 
@@ -1143,10 +1140,10 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ObservableCollection<string> _generateVoiceStyles = [];
+    public partial ObservableCollection<string> GenerateVoiceStyles { get; set; } = [];
 
     [ObservableProperty]
-    private string _currentGenerateVoiceStyle = "";
+    public partial string CurrentGenerateVoiceStyle { get; set; } = "";
 
     async partial void OnCurrentGenerateVoiceStyleChanged(string value)
     {
@@ -1157,7 +1154,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private int _currentGenerateVoiceStyleIndex;
+    public partial int CurrentGenerateVoiceStyleIndex { get; set; }
 
     [RelayCommand]
     private async Task CalibrateVoice()
@@ -1224,10 +1221,10 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ObservableCollection<string> _stratagemSets = [];
+    public partial ObservableCollection<string> StratagemSets { get; set; } = [];
 
     [ObservableProperty]
-    private int _currentStratagemSetIndex;
+    public partial int CurrentStratagemSetIndex { get; set; }
 
     partial void OnCurrentStratagemSetIndexChanged(int value)
     {
@@ -1239,10 +1236,10 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ObservableCollection<string> _mics = [];
+    public partial ObservableCollection<string> Mics { get; set; } = [];
 
     [ObservableProperty]
-    private string _currentMic = "";
+    public partial string CurrentMic { get; set; } = "";
 
     partial void OnCurrentMicChanged(string value)
     {
@@ -1259,7 +1256,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _generateVoiceMessage = "未生成";
+    public partial string GenerateVoiceMessage { get; set; } = "未生成";
 
     [RelayCommand]
     private void GenerateTxt()
@@ -1289,7 +1286,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _showSpeechInfoWindow;
+    public partial bool ShowSpeechInfoWindow { get; set; }
 
     partial void OnShowSpeechInfoWindowChanged(bool value)
     {
@@ -1300,7 +1297,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _isSpeechRecognitionInfoWindowClickThrough;
+    public partial bool IsSpeechRecognitionInfoWindowClickThrough { get; set; }
 
     partial void OnIsSpeechRecognitionInfoWindowClickThroughChanged(bool value)
     {
