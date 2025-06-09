@@ -63,12 +63,11 @@
 ↓ ↑ → ↓ →	电磁冲击波迫击哨戒炮|电磁炮	EMS Mortar Sentry	0xf33c816df715686a	G
 ← ↓ → ↑ ← ↓ ↓	爱国者外骨骼装甲|爱国者	Patriot Exosuit|Patriot	0x396eca60a6e80e17	B
 ← ↓ → ↑ ← ↓ ↑	解放者外骨骼装甲|解放者	Emancipator Exosuit|Emancipator	0xcca47e13fc4682e8	B
-	辅助	Assist		
+	任务	Mission		
 ↑ ↑ ← ↑ →	飞鹰重新武装|飞鹰武装|重新武装	Eagle Rearm	0x6389c0bd365cb3a1	Y
 ↑ ↓ → ← ↑	增援|救人|救队友|救援	Reinforce|Rescue|Help	0x908edccc198159e6	Y
 ↑ ↓ → ↑	SOS信标|信标|求救	SOS Beacon	0x1af3051a292e5d7d	Y
 ↓ ↓ ↑ →	重新补给|补给	Resupply|Supply	0x89fb769b9cf03e58	Y
-	任务	Mission		
 ↓ ↑ ← ↓ ↑ → ↓ ↑	地狱火炸弹|地狱火	Hellbomb	0x6a5f72ebc8c9737f	Y
 ↓ ↓ ↓ ↑ ↑	运送超级固态硬盘|固态硬盘	SSSD Delivery	0xcc4ad13bc7a30912	Y
 ↑ ↑ ← → ↓ ↓	地震探测仪	Seismic Probe	0x2689ffb6c960ecfb	Y
