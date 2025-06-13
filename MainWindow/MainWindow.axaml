@@ -30,15 +30,9 @@
         <local:RadioButtonToStringConverter x:Key="RadioButtonToStringConverter" />
     </Window.Resources>
 
-    <Grid
-        Margin="20,0,20,20"
-        ColumnDefinitions="Auto"
-        RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+    <StackPanel Margin="20,20,20,20" Orientation="Vertical">
 
-        <Expander
-            Grid.Row="0"
-            Grid.Column="0"
-            Header="{l:Localize MustSetSettingsOnce}">
+        <Expander Header="{l:Localize MustSetSettingsOnce}">
             <StackPanel Margin="20,10,20,0">
 
                 <StackPanel>
@@ -148,10 +142,7 @@
             </StackPanel>
         </Expander>
 
-        <local:MyHorizontalBlock
-            Grid.Row="1"
-            Grid.Column="0"
-            Margin="0,10,0,0">
+        <local:MyHorizontalBlock Margin="0,10,0,0">
             <CheckBox Content="{l:Localize UseHotkeyToCallOut}" IsChecked="{Binding EnableHotkeyTrigger}" />
             <CheckBox Content="{l:Localize SettingHotkeyStratagemsViaMicrophone}" IsChecked="{Binding EnableSetKeyBySpeech}">
                 <CheckBox.IsEnabled>
@@ -163,10 +154,7 @@
             </CheckBox>
         </local:MyHorizontalBlock>
 
-        <local:MyHorizontalBlock
-            Grid.Row="2"
-            Grid.Column="0"
-            Margin="0,10,0,0">
+        <local:MyHorizontalBlock Margin="0,10,0,0">
             <CheckBox Content="{l:Localize UseMicrophoneToCallOut}" IsChecked="{Binding EnableSpeechTrigger}" />
             <CheckBox
                 Content="{l:Localize ShowSpeechRecognitionInfoWindow}"
@@ -179,11 +167,7 @@
             <Label Content="{Binding SpeechRecognizeResult}" />
         </local:MyHorizontalBlock>
 
-        <StackPanel
-            Grid.Row="3"
-            Grid.Column="0"
-            Margin="0,10,0,0"
-            IsVisible="{Binding EnableHotkeyTrigger}">
+        <StackPanel Margin="0,10,0,0" IsVisible="{Binding EnableHotkeyTrigger}">
 
             <local:MyHorizontalStackPanel>
                 <ComboBox ItemsSource="{Binding StratagemSets}" SelectedIndex="{Binding CurrentStratagemSetIndex}" />
@@ -200,8 +184,7 @@
 
         <ScrollViewer
             Name="StratagemsScrollViewer"
-            Grid.Row="4"
-            Grid.Column="1"
+            Height="600"
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Auto">
 
@@ -221,5 +204,5 @@
             </StackPanel>
         </ScrollViewer>
 
-    </Grid>
+    </StackPanel>
 </Window>
