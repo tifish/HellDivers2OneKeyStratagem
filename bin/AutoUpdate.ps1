@@ -22,8 +22,8 @@ $packPath = "$env:TEMP\$appName.7z"
 # Try to download from multiple mirrors
 $mirrors = @(
     $downloadUrl,
-    $downloadUrl -replace "^https://github.com/", "https://ghfast.top/https://github.com/",
-    $downloadUrl -replace "^https://github.com/", "https://gh-proxy.com/github.com/"
+    ($downloadUrl -replace "^https://github.com/", "https://ghfast.top/https://github.com/"),
+    ($downloadUrl -replace "^https://github.com/", "https://gh-proxy.com/github.com/")
 )
 
 $downloaded = $false
@@ -52,15 +52,19 @@ if (-not (Test-Path $packPath)) {
     Exit
 }
 
-# Delete old Libs directory
+# Delete old binaries
 Remove-Item -Recurse -Force -Path "$PSScriptRoot\Libs"
+Remove-Item -Force -Path "$PSScriptRoot\*.dll"
+Remove-Item -Force -Path "$PSScriptRoot\*.pdb"
+Remove-Item -Force -Path "$PSScriptRoot\*.deps.json"
+Remove-Item -Force -Path "$PSScriptRoot\*.runtimeconfig.json"
 
 # Copy 7za.exe to temporary directory
 $sevenZipTmp = "$env:TEMP\7za.exe"
 Copy-Item -Path "$PSScriptRoot\7Zip\7za.exe" -Destination $sevenZipTmp -Force
 
 # Extract .7z in to $PSScriptRoot
-& "$sevenZipTmp" x $packPath -o"$PSScriptRoot" -y
+& "$sevenZipTmp" x $packPath -o"$PSScriptRoot" -x!Nssm -y
 
 # Remove 7za.exe from temporary directory
 Remove-Item -Force -Path $sevenZipTmp
