@@ -1,36 +1,79 @@
-﻿# Wait for HellDivers2OneKeyStratagem.exe to exit
-$process = Get-Process -Name "HellDivers2OneKeyStratagem" -ErrorAction SilentlyContinue
+﻿$appName = "HellDivers2OneKeyStratagem"
+
+# Wait for .exe to exit
+$process = Get-Process -Name $appName -ErrorAction SilentlyContinue
 if ($process) {
+    Write-Host "Waiting for $appName to exit..."
     $process.WaitForExit()
 }
 
 # Check if there are any command line arguments
 if ($args.Count -eq 0) {
     Write-Host "No command line arguments provided. Exiting..."
+    Pause
     Exit
 }
 
 # Get the first command line argument as the download URL
 $downloadUrl = $args[0]
-# Download HellDivers2OneKeyStratagem.7z to system temp directory
-$packPath = "$env:TEMP\HellDivers2OneKeyStratagem.7z"
-Invoke-WebRequest -Uri $downloadUrl -OutFile $packPath
+# Download .7z to system temp directory
+$packPath = "$env:TEMP\$appName.7z"
 
-# Check if $packPath exists
-if (-not (Test-Path $packPath)) {
-    Write-Host "$packPath file not found. Exiting..."
+# Try to download from multiple mirrors
+$mirrors = @(
+    $downloadUrl,
+    $downloadUrl -replace "^https://github.com/", "https://ghfast.top/https://github.com/",
+    $downloadUrl -replace "^https://github.com/", "https://gh-proxy.com/github.com/"
+)
+
+$downloaded = $false
+foreach ($url in $mirrors) {
+    Write-Host "Trying to download update from $url..."
+    try {
+        Invoke-WebRequest -Uri $url -OutFile $packPath -ErrorAction Stop
+        $downloaded = $true
+        break
+    }
+    catch {
+        Write-Host "Failed to download $url. Error: $($_.Exception.Message)"
+    }
+}
+
+if (-not $downloaded) {
+    Write-Host "All download attempts failed. Exiting..."
+    Pause
     Exit
 }
 
-# Delete all directories and files except Settings directory
-Get-ChildItem -Path $PSScriptRoot `
-| Where-Object { $_.Name -ne "Settings" -and $_.Name -ne "7Zip" } `
-| Remove-Item -Recurse -Force
+# Check if $packPath exists
+if (-not (Test-Path $packPath)) {
+    Write-Host "Failed to download $downloadUrl. Exiting..."
+    Pause
+    Exit
+}
 
-# Extract HellDivers2OneKeyStratagem.7z in to $PSScriptRoot
-& {
-    7Zip\7za.exe x $packPath -o"$PSScriptRoot" -x!7Zip -y
-} -ErrorAction SilentlyContinue
+# Delete old Libs directory
+Remove-Item -Recurse -Force -Path "$PSScriptRoot\Libs"
 
-# Start HellDivers2OneKeyStratagem.exe
-Start-Process -FilePath "$PSScriptRoot\HellDivers2OneKeyStratagem.exe"
+# Copy 7za.exe to temporary directory
+$sevenZipTmp = "$env:TEMP\7za.exe"
+Copy-Item -Path "$PSScriptRoot\7Zip\7za.exe" -Destination $sevenZipTmp -Force
+
+# Extract .7z in to $PSScriptRoot
+& "$sevenZipTmp" x $packPath -o"$PSScriptRoot" -y
+
+# Remove 7za.exe from temporary directory
+Remove-Item -Force -Path $sevenZipTmp
+
+# Delete downloaded pack file
+Write-Host "Cleaning up temporary files..."
+Remove-Item -Force -Path $packPath
+
+# Start .exe
+Write-Host "Starting $appName..."
+if ($args.Count -gt 1) {
+    Start-Process -FilePath "$PSScriptRoot\$appName.exe" -ArgumentList $args[1..$args.Length]
+}
+else {
+    Start-Process -FilePath "$PSScriptRoot\$appName.exe"
+}
