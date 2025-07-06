@@ -259,9 +259,10 @@ public partial class MainViewModel : ObservableObject
 
     private async void OnWindowTitleChanged(object? sender, WindowTitleChangedEventArgs e)
     {
-        var oldProcessIsActive = e.OldWindowTitle == HellDivers2Title;
-        var newProcessIsActive = e.NewWindowTitle == HellDivers2Title || ActiveWindowMonitor.CurrentProcessFileName == AppSettings.ExeFileName;
+        var oldProcessIsActive = e.OldWindowTitle == HellDivers2Title || e.OldWindowTitle == _mainWindow.Title;
+        var newProcessIsActive = e.NewWindowTitle == HellDivers2Title || e.NewWindowTitle == _mainWindow.Title;
 
+        // Start/Stop speech by window title
         if (oldProcessIsActive && !newProcessIsActive)
         {
             await StopSpeechTrigger();
@@ -277,6 +278,7 @@ public partial class MainViewModel : ObservableObject
             await ResetVoiceCommand();
         }
 
+        // Start/Stop hotkey by window title
         if (e.OldWindowTitle == HellDivers2Title)
         {
             HotkeyGroupManager.Enabled = false;
