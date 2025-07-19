@@ -172,6 +172,7 @@
             <local:MyHorizontalStackPanel>
                 <ComboBox ItemsSource="{Binding StratagemSets}" SelectedIndex="{Binding CurrentStratagemSetIndex}" />
                 <Button Command="{Binding SaveStratagemSetCommand}" Content="{l:Localize SaveConfiguration}" />
+                <Button Command="{Binding SaveAsNewStratagemSetCommand}" Content="{l:Localize SaveAsNewConfiguration}" />
                 <Button Command="{Binding DeleteStratagemSetCommand}" Content="{l:Localize DeleteConfiguration}" />
             </local:MyHorizontalStackPanel>
 

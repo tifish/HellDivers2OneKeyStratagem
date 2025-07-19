@@ -943,6 +943,26 @@ public partial class MainViewModel : ObservableObject
     private void SaveStratagemSet()
     {
         var keyStratagemString = GetKeyStratagemString();
+
+        if (CurrentStratagemSetIndex == -1)
+        {
+            StratagemSets.Add(keyStratagemString);
+            CurrentStratagemSetIndex = StratagemSets.Count - 1;
+        }
+        else
+        {
+            var index = CurrentStratagemSetIndex;
+            StratagemSets[index] = keyStratagemString;
+            CurrentStratagemSetIndex = index;
+        }
+
+        SettingsChanged = true;
+    }
+
+    [RelayCommand]
+    private void SaveAsNewStratagemSet()
+    {
+        var keyStratagemString = GetKeyStratagemString();
         if (StratagemSets.Contains(keyStratagemString))
             return;
 

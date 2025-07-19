@@ -19,6 +19,7 @@ UseHotkeyToCallOut	Use hotkey to call out	开启快捷键呼叫
 SettingHotkeyStratagemsViaMicrophone	Support for setting hotkey stratagems via microphone	支持通过语音设置快捷键战略
 ShowSpeechRecognitionInfoWindow	Show speech recognition info window	显示语音信息窗口
 SaveConfiguration	Save configuration	保存配置
+SaveAsNewConfiguration	Save as new configuration	保存为新配置
 DeleteConfiguration	Delete configuration	删除配置
 ClickOnStratagemExplain	Left click to select strategy, right click to customize microphone call name	左键选择战略，右键自定义麦克风呼叫名字
 CalibrateRecognition	Calibrate recognition	校准语音识别
