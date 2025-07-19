@@ -561,6 +561,8 @@ public partial class MainViewModel : ObservableObject
             StratagemSets.Clear();
             foreach (var stratagemSet in Settings.StratagemSets.Skip(1))
                 StratagemSets.Add(stratagemSet);
+
+            CurrentStratagemSetIndex = StratagemSets.IndexOf(Settings.StratagemSets[0]);
         }
 
         SpeechConfidence = Math.Round(Settings.VoiceConfidence, 3);
@@ -963,8 +965,12 @@ public partial class MainViewModel : ObservableObject
     private void SaveAsNewStratagemSet()
     {
         var keyStratagemString = GetKeyStratagemString();
-        if (StratagemSets.Contains(keyStratagemString))
+        var index = StratagemSets.IndexOf(keyStratagemString);
+        if (index != -1)
+        {
+            CurrentStratagemSetIndex = index;
             return;
+        }
 
         StratagemSets.Add(keyStratagemString);
         CurrentStratagemSetIndex = StratagemSets.Count - 1;
@@ -1252,6 +1258,9 @@ public partial class MainViewModel : ObservableObject
 
     partial void OnCurrentStratagemSetIndexChanged(int value)
     {
+        if (IsLoading)
+            return;
+
         if (value < 0 || value >= StratagemSets.Count)
             return;
 
