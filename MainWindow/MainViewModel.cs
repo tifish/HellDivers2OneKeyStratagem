@@ -212,11 +212,13 @@ public partial class MainViewModel : ObservableObject
     private bool _isClosing;
 
     [RelayCommand]
-    private void WindowClosing()
+    private async Task WindowClosing()
     {
         if (_isClosing)
             return;
         _isClosing = true;
+
+        await CheckAndSaveSettings();
 
         // Kill the current process to ensure it can be forcibly closed to avoid the situation where it cannot be exited
         var currentProcess = Process.GetCurrentProcess();
