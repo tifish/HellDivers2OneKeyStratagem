@@ -215,10 +215,9 @@ public partial class MainViewModel : ObservableObject
             return;
         _isClosing = true;
 
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            desktop.Shutdown();
-        }
+        // Kill the current process to ensure it can be forcibly closed to avoid the situation where it cannot be exited
+        var currentProcess = Process.GetCurrentProcess();
+        currentProcess.Kill();
     }
 
     private static bool KillOtherInstances()
