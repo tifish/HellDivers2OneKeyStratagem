@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Layout;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EdgeTtsSharp;
@@ -204,6 +205,8 @@ public partial class MainViewModel : ObservableObject
             IconManager.ConvertAllIcons();
             _mainWindow.Close();
         }
+
+        Dispatcher.UIThread.Post(_mainWindow.AddWindowHeightAndCenterWindow);
     }
 
     private bool _isClosing;
@@ -464,8 +467,6 @@ public partial class MainViewModel : ObservableObject
         InitSettingsToUI();
         SetHotkeyGroup();
         LoadVoiceNames();
-
-        _mainWindow.HasContentSizeChanged = true;
 
         ResetVoiceCommand().ConfigureAwait(false);
         LoadGeneratingVoiceStyles().ConfigureAwait(false);
