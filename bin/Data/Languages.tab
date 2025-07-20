@@ -48,3 +48,14 @@ None	None	无
 FailedToKillOtherInstances	Unable to exit the previously running program. Functionality may be abnormal. Please clean it up manually before starting again.	无法退出之前运行的程序，功能可能会不正常，请手工清理后再启动。
 SpeechRecognitionInfoWindowClickThrough	Click through	点击穿透
 SpeechSettings	Speech settings	语音设置
+Unknown	Unknown	未知
+Gun	Gun	枪械
+Cannon	Cannon	大炮
+Orbital	Orbital	轨道
+Eagle	Eagle	飞鹰
+Pack	Pack	背包
+Vehicle	Vehicle	载具
+Sentry	Sentry	炮台
+Mines	Mines	地雷
+Mission	Mission	任务
+Melee	Melee	近战

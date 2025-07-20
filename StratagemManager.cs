@@ -5,14 +5,13 @@ namespace HellDivers2OneKeyStratagem;
 
 public static class StratagemManager
 {
-    public static readonly Dictionary<string, List<Stratagem>> Groups = [];
+    public static readonly Dictionary<StratagemType, List<Stratagem>> Groups = [];
 
     private static readonly Dictionary<string, Stratagem> _stratagemDictionary = [];
-    private static readonly List<Stratagem> _stratagems = [];
-    public static List<Stratagem> Stratagems => _stratagems;
+    public static List<Stratagem> Stratagems { get; private set; } = [];
     private static readonly Dictionary<string, string> _systemAliasesDictionary = [];
     public static IEnumerable<string> StratagemAlias => _stratagemDictionary.Keys.Concat(_userAliasStratagemDictionary.Keys);
-    public static int Count => _stratagems.Count;
+    public static int Count => Stratagems.Count;
 
     private static readonly string StratagemsFile = Path.Combine(AppSettings.DataDirectory, "Stratagems.tab");
 
@@ -38,49 +37,61 @@ public static class StratagemManager
         };
 
         Groups.Clear();
-        _stratagems.Clear();
+        Stratagems.Clear();
         _stratagemDictionary.Clear();
         _systemAliasesDictionary.Clear();
-        List<Stratagem>? currentGroup = null;
 
         foreach (var line in File.ReadLines(StratagemsFile).Skip(1))
         {
             var items = line.Split('\t');
-            if (items.Length != 5)
+            if (items.Length != 6)
                 throw new InvalidOperationException($"Invalid line: {line}");
 
-            if (items[0] != "")
+            if (items[0] == "")
+                continue;
+
+            var stratagem = new Stratagem
             {
-                if (currentGroup == null)
-                    throw new InvalidOperationException($"No group found for stratagem {items[nameColumn]}");
+                KeySequence = items[0],
+                RawIconName = items[3],
+            };
+            if (Enum.TryParse<StratagemColor>(items[4], out var color))
+                stratagem.Color = color;
+            if (Enum.TryParse<StratagemType>(items[5], out var type))
+                stratagem.Type = type;
 
-                var stratagem = new Stratagem
-                {
-                    KeySequence = items[0],
-                    RawIconName = items[3],
-                };
-                if (Enum.TryParse<StratagemType>(items[4], out var type))
-                    stratagem.Type = type;
+            var names = items[nameColumn].Split('|');
+            stratagem.Name = names[0];
 
-                var names = items[nameColumn].Split('|');
-                stratagem.Name = names[0];
+            var enNames = items[2].Split('|');
+            stratagem.Id = enNames[0];
 
-                var enNames = items[2].Split('|');
-                stratagem.Id = enNames[0];
+            Stratagems.Add(stratagem);
+            _systemAliasesDictionary[stratagem.Name] = items[nameColumn];
 
-                _stratagems.Add(stratagem);
-                _systemAliasesDictionary[stratagem.Name] = items[nameColumn];
+            foreach (var name in names)
+                if (name != "")
+                    _stratagemDictionary.Add(name, stratagem);
+        }
 
-                currentGroup.Add(stratagem);
+        GroupStratagems();
+    }
 
-                foreach (var name in names)
-                    if (name != "")
-                        _stratagemDictionary.Add(name, stratagem);
-            }
-            else
+    private static void GroupStratagems()
+    {
+        Groups.Clear();
+
+        foreach (var stratagemColor in Enum.GetValues<StratagemColor>())
+        {
+            foreach (var stratagem in Stratagems)
             {
-                currentGroup = [];
-                Groups.Add(items[nameColumn], currentGroup);
+                if (stratagem.Color != stratagemColor)
+                    continue;
+
+                if (Groups.TryGetValue(stratagem.Type, out var group))
+                    group.Add(stratagem);
+                else
+                    Groups[stratagem.Type] = [stratagem];
             }
         }
     }

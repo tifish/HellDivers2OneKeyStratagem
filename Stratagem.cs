@@ -2,7 +2,7 @@
 
 namespace HellDivers2OneKeyStratagem;
 
-public enum StratagemType
+public enum StratagemColor
 {
     Unknown,
     R,
@@ -11,11 +11,27 @@ public enum StratagemType
     Y,
 }
 
+public enum StratagemType
+{
+    Unknown,
+    Gun,
+    Cannon,
+    Orbital,
+    Eagle,
+    Pack,
+    Vehicle,
+    Sentry,
+    Mines,
+    Mission,
+    Melee,
+}
+
 public class Stratagem
 {
     public string Name = "";
     public string KeySequence = "";
     public string RawIconName = "";
+    public StratagemColor Color = StratagemColor.Unknown;
     public StratagemType Type = StratagemType.Unknown;
     public string Id = "";
 

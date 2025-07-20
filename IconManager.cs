@@ -40,13 +40,13 @@ public static class IconManager
             if (stratagem.RawIconName == "")
                 continue;
 
-            ConvertIcon(stratagem.Type, stratagem.RawIconName, stratagem.Id);
+            ConvertIcon(stratagem.Color, stratagem.RawIconName, stratagem.Id);
         }
 
-        ConvertIcon(StratagemType.Y, "0x28da0bb825911c9a", "None");
+        ConvertIcon(StratagemColor.Y, "0x28da0bb825911c9a", "None");
     }
 
-    private static void ConvertIcon(StratagemType stratagemType, string rawIconName, string iconName)
+    private static void ConvertIcon(StratagemColor stratagemType, string rawIconName, string iconName)
     {
         var rawIconPath = Path.Join(AppSettings.RawIconsDirectory, $"{rawIconName}.png");
         var iconPath = Path.Join(AppSettings.IconsDirectory, $"{iconName}.png");
@@ -80,22 +80,22 @@ public static class IconManager
                     {
                         switch (stratagemType)
                         {
-                            case StratagemType.R:
+                            case StratagemColor.R:
                                 ptr[offset + 2] = (byte)(218 * r / 255);
                                 ptr[offset + 1] = (byte)(110 * r / 255);
                                 ptr[offset] = (byte)(94 * r / 255);
                                 break;
-                            case StratagemType.B:
+                            case StratagemColor.B:
                                 ptr[offset + 2] = (byte)(90 * r / 255);
                                 ptr[offset + 1] = (byte)(188 * r / 255);
                                 ptr[offset] = (byte)(212 * r / 255);
                                 break;
-                            case StratagemType.G:
+                            case StratagemColor.G:
                                 ptr[offset + 2] = (byte)(116 * r / 255);
                                 ptr[offset + 1] = (byte)(160 * r / 255);
                                 ptr[offset] = (byte)(96 * r / 255);
                                 break;
-                            case StratagemType.Y:
+                            case StratagemColor.Y:
                                 ptr[offset + 2] = (byte)(208 * r / 255);
                                 ptr[offset + 1] = (byte)(186 * r / 255);
                                 ptr[offset] = (byte)(118 * r / 255);

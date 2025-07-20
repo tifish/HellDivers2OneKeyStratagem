@@ -476,7 +476,7 @@ public partial class MainViewModel : ObservableObject
     {
         _mainWindow.StratagemGroupsContainer.Children.Clear();
 
-        foreach (var (groupName, stratagems) in StratagemManager.Groups)
+        foreach (var (stratagemType, stratagems) in StratagemManager.Groups)
         {
             var border = new Border
             {
@@ -496,6 +496,7 @@ public partial class MainViewModel : ObservableObject
             };
             border.Child = groupContainer;
 
+            var groupName = Localizer.Get(Enum.GetName(stratagemType) ?? "Unknown");
             var groupLabel = new Label { Content = groupName, HorizontalAlignment = HorizontalAlignment.Center };
             groupContainer.Children.Add(groupLabel);
 

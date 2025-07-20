@@ -19,10 +19,6 @@ public partial class MainWindow : Window
         try
         {
             InitializeComponent();
-
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
         finally
         {

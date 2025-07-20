@@ -1,91 +1,91 @@
-﻿Keys	zh	en	RawIconName	Type
-	爱国行政中心	Patriotic Administration Center		
-↓ ← ↓ ↑ →	机枪	Machine Gun	0x4ac3ccfffba4fa71	B
-↓ ← → ↑ ↓	反器材步枪|反器材	Anti-Material Rifle|Anti-Material	0xe9ee8e33bd31752e	B
-↓ ← ↓ ↑ ↑ ←	盟友	Stalwart	0x2927b1eaa64d86fb	B
-↓ ↓ ← ↑ →	消耗性反坦克武器|次抛	Expandable Anti-Tank|Anti-Tank	0xcf20900c57479ca6	B
-↓ ← → → ←	无后座力步枪|无后座力	Recoilless Rifle|Recoilless	0x938467b5fb78f74b	B
-↓ ← ↑ ↓ ↑	火焰喷射器|喷火器	Flamethrower	0x37666bd2f5547999	B
-↓ ← ↓ ↑ ↑ →	机炮	Autocannon	0xbb3d4d369252c9d2	B
-↓ ← ↑ ↓ ↓	重机枪	Heavy Machine Gun	0x267af54d199b9b65	B
-↓ ↑ ↑ ← →	空爆火箭发射器|空爆火箭	Airburst Rocket Launcher|Airburst Rocket	0x840b878e77d6f2d2	B
-↓ ← ↑ ↓ →	突击兵	Commando	0x8fa2534b83773256	B
-↓ → ↓ ↑ ← →	磁轨炮	Railgun	0x5a963eb78223547e	B
-↓ ↓ ↑ ↓ ↓	飞矛	Spear	0x49c7f8beeaebb0e7	B
-↓ ↓ ↑ ↓ →	StA-X3 W.A.S.P.发射器|飞弹发射器	StA-X3 W.A.S.P. Launcher	0x80083f2a80f0a521	B
-	轨道加农炮	Orbital Cannons		
-→ ↓ ← ↑ ↑	加特林火力网|轨道加特林	Orbital Gatling Barrage|Orbital Gatling	0xcc1ae3ee1883f5e4	R
-→ → →	轨道空爆攻击|轨道空爆	Orbital Airburst Attack|Orbital Airburst	0xaf257d46099b5b1b	R
-→ → ↓ ← → ↓	轨道120MM高爆火力网|轨道120	Orbital 120MM HE Barrage|Orbital 120	0x9c9b3dce316f1256	R
-→ ↓ ↑ ↑ ← ↓ ↓	轨道380MM高爆火力网|轨道380	Orbital 380MM HE Barrage|Orbital 380	0x90080a083b5cb566	R
-→ ↓ → ↓ → ↓	轨道游走火力网|轨道游走	Orbital Walking Barrage|Orbital Walking	0x94ae892dadb6abed	R
-→ ↓ ↑ → ↓	轨道激光炮|轨道激光	Orbital Laser	0x5e4086c313b3bb84	R
-→ → ↓ ← → ↑	轨道凝固汽油弹火力网|轨道汽油弹	Orbital Napalm Barrage	0x1393c79c3a21bc90	R
-→ ↑ ↓ ↓ →	轨道炮攻击|轨道炮	Orbital Railcannon Strike|Orbital Railcannon	0x802bae2545d65292	R
-	机库	Hangar		
-↑ → →	飞鹰机枪扫射|飞鹰机枪	Eagle Strafing Run|Eagle Strafing	0x39032a0ee6990e4a	R
-↑ → ↓ →	飞鹰空袭	Eagle Airstrike	0xae1ff433380f2b1a	R
-↑ → ↓ ↓ →	飞鹰集束炸弹|飞鹰集束	Eagle Cluster Bomb|Eagle Cluster	0x9665eaa5ebb73b41	R
-↑ → ↓ ↑	飞鹰凝固汽油弹空袭|飞鹰汽油弹|飞鹰燃烧弹	Eagle Napalm Airstrike|Eagle Napalm	0x3ec6a98542325181	R
-↓ ↑ ↑ ↓ ↑	喷射背包|飞行背包	Jump Pack|Jetpack|Flight Pack	0x06d8aed112c0702e	B
-↑ → ↑ ↓	飞鹰烟雾攻击|飞鹰烟雾	Eagle Smoke Strike|Eagle Smoke	0xe768c8e161674303	R
-↑ → ↑ ←	飞鹰110MM火箭巢|飞鹰110	Eagle 110mm Rocket Pods|Eagle 110	0x3aede94d73a6369b	R
-↑ → ↓ ↓ ↓	飞鹰500KG炸弹|飞鹰500	Eagle 500KG Bom|Eagle 500	0xf96a659ebffdfbe4	R
-← ↓ → ↓ → ↓ ↑	快速侦查载具	Fast Recon Vehicle	0x4269783e5c3f1157	B
-	舰桥	Bridge		
-→ → ↑	轨道精准攻击|轨道精准	Orbital Precision Strike|Orbital Precision	0x53031033ee7a60e3	R
-→ → ↓ →	轨道毒气攻击|轨道毒气	Orbital Gas Strike|Orbital Gas	0x78f1e50b852cfb79	R
-→ → ← ↓	轨道电磁冲击波攻击|轨道电磁波|轨道电磁	Orbital EMS Strike|Orbital EMS	0x866864809c2204c9	R
-→ → ↓ ↑	轨道烟雾攻击|轨道烟雾	Orbital Smoke Strike|Orbital Smoke	0xa9944fd09947310f	R
-↓ ↑ ← → → ←	重机枪部署支架|机枪支架	HMG Emplacement	0xbd881825d4655014	G
-↓ ↓ ← → ← →	防护罩生成中继器|防护罩生成器	Shield Generator Relay	0xcf6ee0ff5baaa7d9	G
-↓ ↑ → ↑ ← →	特斯拉塔|特斯拉	Tesla Tower|Tesla	0xc494423c82545847	G
-	工程港	Engineering Bay		
-↓ ← ↑ →	反步兵雷区|地雷	Anti-Personnel Minefield|Mines	0x70ffbe63c3c5252a	G
-↓ ← ↓ ↑ ↑ ↓	补给背包	Supply Pack	0xe91ac7a0f72ac1fd	B
-↓ ← ↑ ← ↓	榴弹发射器|榴弹	Grenade Launcher|Grenade	0xc7cd49c76480b2b3	B
-↓ ← ↓ ↑ ←	激光大炮|激光炮	Laser Cannon|Laser	0xc423870a1f604d7e	B
-↓ ← ← ↓	燃烧地雷	Incendiary Mines	0xa3b1d523adcfa2c3	G
-↓ ↑ ← ↑ → →	护卫犬漫游车|激光狗|漫游车	Guard Dog Rover|Laser Dog|Rover	0x1832a7793911eb74	B
-↓ ← ↓ ↓ ↑ ←	防弹护盾背包	Ballistic Shield Backpack|Ballistic Shield	0x4825c710f80da053	B
-↓ → ↓ ↑ ← ←	电弧发射器|电弧枪	Arc Thrower|Arc Gun	0xd29b6f004139c1ea	B
-↓ ← ↑ ↑	反坦克地雷	Anti-tank Mines	0xbbc50c4f93b693d2	G
-↓ ↓ ↑ ← →	类星体加农炮|类星体|星体炮	Quasar Cannon|Quasar	0x9493d2068b2ed250	B
-↓ ↑ ← → ← →	防护罩生成包|防护罩背包|防护罩|蛋壳	Shield Generator Pack|Shield Generator|Shield	0xe2c2f655e0d20d76	B
-↓ ← ← →	毒气地雷	Gas Mines	0xdfca79c9dca2b66d	G
-	机械工坊	Robotics Workshop		
-↓ ↑ → → ↑	哨戒机枪	Machine Gun Sentry	0x2d59fd6c06ddfecb	G
-↓ ↑ → ←	加特林哨戒炮|加特林炮	Gatling Sentry	0x4b577c74635a7555	G
-↓ ↑ → → ↓	迫击哨戒炮|迫击炮	Mortar Sentry	0x564c07b6a4144fb3	G
-↓ ↑ ← ↑ → ↓	护卫犬	Guard Dog	0x835d14dea199741e	B
-↓ ↑ → ↑ ← ↑	自动哨戒炮|哨戒炮	AutoCannon Sentry	0xdcca83a50e2bbb6f	G
-↓ ↑ → → ←	火箭哨戒炮|火箭炮	Rocket Sentry	0x07b12e63de39aac9	G
-↓ ↑ → ↓ →	电磁冲击波迫击哨戒炮|电磁炮	EMS Mortar Sentry	0xf33c816df715686a	G
-← ↓ → ↑ ← ↓ ↓	爱国者外骨骼装甲|爱国者	Patriot Exosuit|Patriot	0x396eca60a6e80e17	B
-← ↓ → ↑ ← ↓ ↑	解放者外骨骼装甲|解放者	Emancipator Exosuit|Emancipator	0xcca47e13fc4682e8	B
-	任务	Mission		
-↑ ↑ ← ↑ →	飞鹰重新武装|飞鹰武装|重新武装	Eagle Rearm	0x6389c0bd365cb3a1	Y
-↑ ↓ → ← ↑	增援|救人|救队友|救援	Reinforce|Rescue|Help	0x908edccc198159e6	Y
-↑ ↓ → ↑	SOS信标|信标|求救	SOS Beacon	0x1af3051a292e5d7d	Y
-↓ ↓ ↑ →	重新补给|补给	Resupply|Supply	0x89fb769b9cf03e58	Y
-↓ ↑ ← ↓ ↑ → ↓ ↑	地狱火炸弹|地狱火	Hellbomb	0x6a5f72ebc8c9737f	Y
-↓ ↓ ↓ ↑ ↑	运送超级固态硬盘|固态硬盘	SSSD Delivery	0xcc4ad13bc7a30912	Y
-↑ ↑ ← → ↓ ↓	地震探测仪	Seismic Probe	0x2689ffb6c960ecfb	Y
-← → ↑ ↑ ↑	上传重要数据|上传数据	Upload Data	0xcc4ad13bc7a30912	Y
-→ ↑ ↑ ↓	超级地球大炮|超级大炮|地球大炮	SEAF Artillery	0x53031033ee7a60e3	Y
-↓ ↑ ↓ ↑	超级地球旗帜|超级旗帜|地球旗帜	Super Earth Flag	0x48fb504253472482	Y
-← ↑ ↓ → ↓ ↓	虫窝破裂者钻机|虫窝破裂者|破裂者钻机	Hive Breaker Drill	0x0a8458713904d40b	Y
-	化学专家/都市传奇...	Chemical Agents/Urban Legends...		
-↓ ← ↑ ↓ ←	灭菌器	Sterilizer	0x5952182c76b51d1c	B
-↓ ↑ ← ↑ → ↑	护卫犬腐息|毒气狗	Guard Dog Dog Breath	0x94e071518262045d	B
-↓ ↑ ← → ↑ ↑	定向护盾	Directional Shield	0x4518898df9888368	B
-↓ ↑ → ↓ ↑ ↑	火焰喷射哨戒炮|火焰哨戒炮|火焰炮	Flame Sentry	0x89509cecadff38e7	G
-↓ ↑ ← → → →	反坦克炮台|反坦克炮	Anti-Tank Emplacement	0x6be43825767c4437	G
-↓ → ↑ ↑ ↑	便携式地狱火炸弹|便携式地狱火|便携地狱火	Portable Hellbomb	0x1e8f939183a990bd	B
-↓ ↑ ↑ ↓ ← →	悬浮背包	Hover Pack	0xf245740ed2931b16	B
-↓ ← → → ↑	唯一真旗	One True Flag	0x4966b6a9fb422ab5	B
-↓ ↑ ← ↑ → ←	护卫犬K-9	Guard Dog K-9	0x6c030b6f244be563	B
-← → ↑ ← →	缓和使者	De-escalator	0xe2191f8010434fdd	B
-↓ ↑ → ↓ ↑ →	激光哨戒炮	Laser Sentry	0xee6a25e8c10f59b0	G
-↓ ← → ↓ ← →	传送背包	Warp Pack	0x9b34a00d7838336b	B
-↓ ← ↑ ← →	纪元	Epoch	0x45660fc429e7d2d4	B
+﻿Keys	zh	en	RawIconName	Color	Type
+	爱国行政中心	Patriotic Administration Center			
+↓ ← ↓ ↑ →	机枪	Machine Gun	0x4ac3ccfffba4fa71	B	Gun
+↓ ← → ↑ ↓	反器材步枪|反器材	Anti-Material Rifle|Anti-Material	0xe9ee8e33bd31752e	B	Gun
+↓ ← ↓ ↑ ↑ ←	盟友	Stalwart	0x2927b1eaa64d86fb	B	Gun
+↓ ↓ ← ↑ →	消耗性反坦克武器|次抛	Expandable Anti-Tank|Anti-Tank	0xcf20900c57479ca6	B	Cannon
+↓ ← → → ←	无后座力步枪|无后座力	Recoilless Rifle|Recoilless	0x938467b5fb78f74b	B	Cannon
+↓ ← ↑ ↓ ↑	火焰喷射器|喷火器	Flamethrower	0x37666bd2f5547999	B	Gun
+↓ ← ↓ ↑ ↑ →	机炮	Autocannon	0xbb3d4d369252c9d2	B	Cannon
+↓ ← ↑ ↓ ↓	重机枪	Heavy Machine Gun	0x267af54d199b9b65	B	Gun
+↓ ↑ ↑ ← →	空爆火箭发射器|空爆火箭	Airburst Rocket Launcher|Airburst Rocket	0x840b878e77d6f2d2	B	Cannon
+↓ ← ↑ ↓ →	突击兵	Commando	0x8fa2534b83773256	B	Cannon
+↓ → ↓ ↑ ← →	磁轨炮	Railgun	0x5a963eb78223547e	B	Cannon
+↓ ↓ ↑ ↓ ↓	飞矛	Spear	0x49c7f8beeaebb0e7	B	Cannon
+↓ ↓ ↑ ↓ →	StA-X3 W.A.S.P.发射器|飞弹发射器	StA-X3 W.A.S.P. Launcher	0x80083f2a80f0a521	B	Cannon
+	轨道加农炮	Orbital Cannons			
+→ ↓ ← ↑ ↑	加特林火力网|轨道加特林	Orbital Gatling Barrage|Orbital Gatling	0xcc1ae3ee1883f5e4	R	Orbital
+→ → →	轨道空爆攻击|轨道空爆	Orbital Airburst Attack|Orbital Airburst	0xaf257d46099b5b1b	R	Orbital
+→ → ↓ ← → ↓	轨道120MM高爆火力网|轨道120	Orbital 120MM HE Barrage|Orbital 120	0x9c9b3dce316f1256	R	Orbital
+→ ↓ ↑ ↑ ← ↓ ↓	轨道380MM高爆火力网|轨道380	Orbital 380MM HE Barrage|Orbital 380	0x90080a083b5cb566	R	Orbital
+→ ↓ → ↓ → ↓	轨道游走火力网|轨道游走	Orbital Walking Barrage|Orbital Walking	0x94ae892dadb6abed	R	Orbital
+→ ↓ ↑ → ↓	轨道激光炮|轨道激光	Orbital Laser	0x5e4086c313b3bb84	R	Orbital
+→ → ↓ ← → ↑	轨道凝固汽油弹火力网|轨道汽油弹	Orbital Napalm Barrage	0x1393c79c3a21bc90	R	Orbital
+→ ↑ ↓ ↓ →	轨道炮攻击|轨道炮	Orbital Railcannon Strike|Orbital Railcannon	0x802bae2545d65292	R	Orbital
+	机库	Hangar			
+↑ → →	飞鹰机枪扫射|飞鹰机枪	Eagle Strafing Run|Eagle Strafing	0x39032a0ee6990e4a	R	Eagle
+↑ → ↓ →	飞鹰空袭	Eagle Airstrike	0xae1ff433380f2b1a	R	Eagle
+↑ → ↓ ↓ →	飞鹰集束炸弹|飞鹰集束	Eagle Cluster Bomb|Eagle Cluster	0x9665eaa5ebb73b41	R	Eagle
+↑ → ↓ ↑	飞鹰凝固汽油弹空袭|飞鹰汽油弹|飞鹰燃烧弹	Eagle Napalm Airstrike|Eagle Napalm	0x3ec6a98542325181	R	Eagle
+↓ ↑ ↑ ↓ ↑	喷射背包|飞行背包	Jump Pack|Jetpack|Flight Pack	0x06d8aed112c0702e	B	Pack
+↑ → ↑ ↓	飞鹰烟雾攻击|飞鹰烟雾	Eagle Smoke Strike|Eagle Smoke	0xe768c8e161674303	R	Eagle
+↑ → ↑ ←	飞鹰110MM火箭巢|飞鹰110	Eagle 110mm Rocket Pods|Eagle 110	0x3aede94d73a6369b	R	Eagle
+↑ → ↓ ↓ ↓	飞鹰500KG炸弹|飞鹰500	Eagle 500KG Bom|Eagle 500	0xf96a659ebffdfbe4	R	Eagle
+← ↓ → ↓ → ↓ ↑	快速侦查载具	Fast Recon Vehicle	0x4269783e5c3f1157	B	Vehicle
+	舰桥	Bridge			
+→ → ↑	轨道精准攻击|轨道精准	Orbital Precision Strike|Orbital Precision	0x53031033ee7a60e3	R	Orbital
+→ → ↓ →	轨道毒气攻击|轨道毒气	Orbital Gas Strike|Orbital Gas	0x78f1e50b852cfb79	R	Orbital
+→ → ← ↓	轨道电磁冲击波攻击|轨道电磁波|轨道电磁	Orbital EMS Strike|Orbital EMS	0x866864809c2204c9	R	Orbital
+→ → ↓ ↑	轨道烟雾攻击|轨道烟雾	Orbital Smoke Strike|Orbital Smoke	0xa9944fd09947310f	R	Orbital
+↓ ↑ ← → → ←	重机枪部署支架|机枪支架	HMG Emplacement	0xbd881825d4655014	G	Sentry
+↓ ↓ ← → ← →	防护罩生成中继器|防护罩生成器	Shield Generator Relay	0xcf6ee0ff5baaa7d9	G	Sentry
+↓ ↑ → ↑ ← →	特斯拉塔|特斯拉	Tesla Tower|Tesla	0xc494423c82545847	G	Sentry
+	工程港	Engineering Bay			
+↓ ← ↑ →	反步兵雷区|地雷	Anti-Personnel Minefield|Mines	0x70ffbe63c3c5252a	G	Mines
+↓ ← ↓ ↑ ↑ ↓	补给背包	Supply Pack	0xe91ac7a0f72ac1fd	B	Pack
+↓ ← ↑ ← ↓	榴弹发射器|榴弹	Grenade Launcher|Grenade	0xc7cd49c76480b2b3	B	Gun
+↓ ← ↓ ↑ ←	激光大炮|激光炮	Laser Cannon|Laser	0xc423870a1f604d7e	B	Gun
+↓ ← ← ↓	燃烧地雷	Incendiary Mines	0xa3b1d523adcfa2c3	G	Mines
+↓ ↑ ← ↑ → →	护卫犬漫游车|激光狗|漫游车	Guard Dog Rover|Laser Dog|Rover	0x1832a7793911eb74	B	Pack
+↓ ← ↓ ↓ ↑ ←	防弹护盾背包	Ballistic Shield Backpack|Ballistic Shield	0x4825c710f80da053	B	Pack
+↓ → ↓ ↑ ← ←	电弧发射器|电弧枪	Arc Thrower|Arc Gun	0xd29b6f004139c1ea	B	Gun
+↓ ← ↑ ↑	反坦克地雷	Anti-tank Mines	0xbbc50c4f93b693d2	G	Mines
+↓ ↓ ↑ ← →	类星体加农炮|类星体|星体炮	Quasar Cannon|Quasar	0x9493d2068b2ed250	B	Cannon
+↓ ↑ ← → ← →	防护罩生成包|防护罩背包|防护罩|蛋壳	Shield Generator Pack|Shield Generator|Shield	0xe2c2f655e0d20d76	B	Pack
+↓ ← ← →	毒气地雷	Gas Mines	0xdfca79c9dca2b66d	G	Mines
+	机械工坊	Robotics Workshop			
+↓ ↑ → → ↑	哨戒机枪	Machine Gun Sentry	0x2d59fd6c06ddfecb	G	Sentry
+↓ ↑ → ←	加特林哨戒炮|加特林炮	Gatling Sentry	0x4b577c74635a7555	G	Sentry
+↓ ↑ → → ↓	迫击哨戒炮|迫击炮	Mortar Sentry	0x564c07b6a4144fb3	G	Sentry
+↓ ↑ ← ↑ → ↓	护卫犬	Guard Dog	0x835d14dea199741e	B	Pack
+↓ ↑ → ↑ ← ↑	自动哨戒炮|哨戒炮	AutoCannon Sentry	0xdcca83a50e2bbb6f	G	Sentry
+↓ ↑ → → ←	火箭哨戒炮|火箭炮	Rocket Sentry	0x07b12e63de39aac9	G	Sentry
+↓ ↑ → ↓ →	电磁冲击波迫击哨戒炮|电磁炮	EMS Mortar Sentry	0xf33c816df715686a	G	Sentry
+← ↓ → ↑ ← ↓ ↓	爱国者外骨骼装甲|爱国者	Patriot Exosuit|Patriot	0x396eca60a6e80e17	B	Vehicle
+← ↓ → ↑ ← ↓ ↑	解放者外骨骼装甲|解放者	Emancipator Exosuit|Emancipator	0xcca47e13fc4682e8	B	Vehicle
+	任务	Mission			
+↑ ↑ ← ↑ →	飞鹰重新武装|飞鹰武装|重新武装	Eagle Rearm	0x6389c0bd365cb3a1	Y	Eagle
+↑ ↓ → ← ↑	增援|救人|救队友|救援	Reinforce|Rescue|Help	0x908edccc198159e6	Y	Mission
+↑ ↓ → ↑	SOS信标|信标|求救	SOS Beacon	0x1af3051a292e5d7d	Y	Mission
+↓ ↓ ↑ →	重新补给|补给	Resupply|Supply	0x89fb769b9cf03e58	Y	Mission
+↓ ↑ ← ↓ ↑ → ↓ ↑	地狱火炸弹|地狱火	Hellbomb	0x6a5f72ebc8c9737f	Y	Mission
+↓ ↓ ↓ ↑ ↑	运送超级固态硬盘|固态硬盘	SSSD Delivery	0xcc4ad13bc7a30912	Y	Mission
+↑ ↑ ← → ↓ ↓	地震探测仪	Seismic Probe	0x2689ffb6c960ecfb	Y	Mission
+← → ↑ ↑ ↑	上传重要数据|上传数据	Upload Data	0xcc4ad13bc7a30912	Y	Mission
+→ ↑ ↑ ↓	超级地球大炮|超级大炮|地球大炮	SEAF Artillery	0x53031033ee7a60e3	Y	Mission
+↓ ↑ ↓ ↑	超级地球旗帜|超级旗帜|地球旗帜	Super Earth Flag	0x48fb504253472482	Y	Mission
+← ↑ ↓ → ↓ ↓	虫窝破裂者钻机|虫窝破裂者|破裂者钻机	Hive Breaker Drill	0x0a8458713904d40b	Y	Mission
+	新战争债券...	New Warbonds...			
+↓ ← ↑ ↓ ←	灭菌器	Sterilizer	0x5952182c76b51d1c	B	Gun
+↓ ↑ ← ↑ → ↑	护卫犬腐息|毒气狗	Guard Dog Dog Breath	0x94e071518262045d	B	Pack
+↓ ↑ ← → ↑ ↑	定向护盾	Directional Shield	0x4518898df9888368	B	Pack
+↓ ↑ → ↓ ↑ ↑	火焰喷射哨戒炮|火焰哨戒炮|火焰炮	Flame Sentry	0x89509cecadff38e7	G	Sentry
+↓ ↑ ← → → →	反坦克炮台|反坦克炮	Anti-Tank Emplacement	0x6be43825767c4437	G	Sentry
+↓ → ↑ ↑ ↑	便携式地狱火炸弹|便携式地狱火|便携地狱火	Portable Hellbomb	0x1e8f939183a990bd	B	Pack
+↓ ↑ ↑ ↓ ← →	悬浮背包	Hover Pack	0xf245740ed2931b16	B	Pack
+↓ ← → → ↑	唯一真旗	One True Flag	0x4966b6a9fb422ab5	B	Melee
+↓ ↑ ← ↑ → ←	护卫犬K-9	Guard Dog K-9	0x6c030b6f244be563	B	Pack
+← → ↑ ← →	缓和使者	De-escalator	0xe2191f8010434fdd	B	Cannon
+↓ ↑ → ↓ ↑ →	激光哨戒炮	Laser Sentry	0xee6a25e8c10f59b0	G	Sentry
+↓ ← → ↓ ← →	传送背包	Warp Pack	0x9b34a00d7838336b	B	Pack
+↓ ← ↑ ← →	纪元	Epoch	0x45660fc429e7d2d4	B	Cannon
