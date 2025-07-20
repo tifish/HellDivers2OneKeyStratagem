@@ -43,8 +43,8 @@
 	工程港	Engineering Bay			
 ↓ ← ↑ →	反步兵雷区|地雷	Anti-Personnel Minefield|Mines	0x70ffbe63c3c5252a	G	Mines
 ↓ ← ↓ ↑ ↑ ↓	补给背包	Supply Pack	0xe91ac7a0f72ac1fd	B	Pack
-↓ ← ↑ ← ↓	榴弹发射器|榴弹	Grenade Launcher|Grenade	0xc7cd49c76480b2b3	B	Gun
-↓ ← ↓ ↑ ←	激光大炮|激光炮	Laser Cannon|Laser	0xc423870a1f604d7e	B	Gun
+↓ ← ↑ ← ↓	榴弹发射器|榴弹	Grenade Launcher|Grenade	0xc7cd49c76480b2b3	B	Cannon
+↓ ← ↓ ↑ ←	激光大炮|激光炮	Laser Cannon|Laser	0xc423870a1f604d7e	B	Cannon
 ↓ ← ← ↓	燃烧地雷	Incendiary Mines	0xa3b1d523adcfa2c3	G	Mines
 ↓ ↑ ← ↑ → →	护卫犬漫游车|激光狗|漫游车	Guard Dog Rover|Laser Dog|Rover	0x1832a7793911eb74	B	Pack
 ↓ ← ↓ ↓ ↑ ←	防弹护盾背包	Ballistic Shield Backpack|Ballistic Shield	0x4825c710f80da053	B	Pack
@@ -83,7 +83,7 @@
 ↓ ↑ ← → → →	反坦克炮台|反坦克炮	Anti-Tank Emplacement	0x6be43825767c4437	G	Sentry
 ↓ → ↑ ↑ ↑	便携式地狱火炸弹|便携式地狱火|便携地狱火	Portable Hellbomb	0x1e8f939183a990bd	B	Pack
 ↓ ↑ ↑ ↓ ← →	悬浮背包	Hover Pack	0xf245740ed2931b16	B	Pack
-↓ ← → → ↑	唯一真旗	One True Flag	0x4966b6a9fb422ab5	B	Melee
+↓ ← → → ↑	唯一真旗	One True Flag	0x4966b6a9fb422ab5	B	Gun
 ↓ ↑ ← ↑ → ←	护卫犬K-9	Guard Dog K-9	0x6c030b6f244be563	B	Pack
 ← → ↑ ← →	缓和使者	De-escalator	0xe2191f8010434fdd	B	Cannon
 ↓ ↑ → ↓ ↑ →	激光哨戒炮	Laser Sentry	0xee6a25e8c10f59b0	G	Sentry
