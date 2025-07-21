@@ -1,4 +1,7 @@
 ﻿using Avalonia.Threading;
+using JeekTools;
+
+namespace HellDivers2OneKeyStratagem;
 
 public static class ActiveWindowMonitor
 {

@@ -5,6 +5,8 @@ using GlobalHotKeys;
 using GlobalHotKeys.Native.Types;
 using HotKeyManager = GlobalHotKeys.HotKeyManager;
 
+namespace HellDivers2OneKeyStratagem;
+
 public static class HotkeyGroupManager
 {
     private static HotKeyManager? _hotKeyManager;

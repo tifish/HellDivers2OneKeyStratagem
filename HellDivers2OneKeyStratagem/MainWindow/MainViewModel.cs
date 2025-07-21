@@ -9,6 +9,7 @@ using EdgeTtsSharp;
 using EdgeTtsSharp.Structures;
 using GlobalHotKeys;
 using Jeek.Avalonia.Localization;
+using JeekTools;
 using Microsoft.Extensions.Logging;
 using NAudio.Wave;
 using System.Collections.ObjectModel;
@@ -22,7 +23,7 @@ public partial class MainViewModel : ObservableObject
 {
     public static MainViewModel Instance { get; } = new();
 
-    private static readonly ILogger _logger = LogFactory.CreateLogger<MainViewModel>();
+    private static readonly ILogger Log = LogManager.CreateLogger(nameof(MainViewModel));
 
     private MainWindow _mainWindow = null!;
 
@@ -242,7 +243,7 @@ public partial class MainViewModel : ObservableObject
                     catch (Exception ex)
                     {
                         // 记录错误但继续执行
-                        _logger.LogError("Kill process {ProcessId} error: {Message}", process.Id, ex.Message);
+                        Log.LogError("Kill process {ProcessId} error: {Message}", process.Id, ex.Message);
                         return false;
                     }
                 }
@@ -251,7 +252,7 @@ public partial class MainViewModel : ObservableObject
         catch (Exception ex)
         {
             // 如果进程检查过程出错，记录错误但允许程序继续运行
-            _logger.LogError("Check other instances error: {Message}", ex.Message);
+            Log.LogError("Check other instances error: {Message}", ex.Message);
             return false;
         }
 
@@ -724,7 +725,7 @@ public partial class MainViewModel : ObservableObject
         Settings.StratagemSets.Add(GetKeyStratagemString());
         foreach (var item in StratagemSets)
             Settings.StratagemSets.Add(item);
-        await AppSettings.SaveAsync();
+        await AppSettings.Save();
 
         SettingsChanged = false;
     }
@@ -1120,7 +1121,7 @@ public partial class MainViewModel : ObservableObject
             {
                 retryCount++;
                 GenerateVoiceMessage = $"生成民主语音超时（第{retryCount}次重试）：{filePath}";
-                _logger.ZLogError(ex, $"生成民主语音超时（第{retryCount}次重试）：{filePath}");
+                Log.ZLogError(ex, $"生成民主语音超时（第{retryCount}次重试）：{filePath}");
 
                 if (retryCount < maxRetries)
                 {
@@ -1152,7 +1153,7 @@ public partial class MainViewModel : ObservableObject
         catch (Exception ex)
         {
             GenerateVoiceMessage = "民主语音生成失败...";
-            _logger.ZLogError(ex, $"民主语音生成失败");
+            Log.ZLogError(ex, $"民主语音生成失败");
         }
     }
 

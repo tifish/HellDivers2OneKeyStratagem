@@ -76,4 +76,8 @@
     <PackageReference Include="ZLogger" Version="2.5.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\JeekTools.NET\JeekTools.csproj" />
+  </ItemGroup>
+
 </Project>

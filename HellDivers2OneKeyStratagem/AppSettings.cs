@@ -1,6 +1,7 @@
 ﻿global using static HellDivers2OneKeyStratagem.SettingsContainer;
 using System.Text.Json.Serialization;
 using Avalonia.Controls;
+using JeekTools;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -17,34 +18,19 @@ public class AppSettings
 
     private static readonly JsonFile<AppSettings> _settingsFile = new(SettingsFile);
 
-    public static void Load()
+    public static async Task Load()
     {
-        var settings = _settingsFile.Load();
+        var settings = await _settingsFile.Load();
         if (settings != null)
             Settings = settings;
     }
 
-    public static async Task LoadAsync()
-    {
-        var settings = await _settingsFile.LoadAsync();
-        if (settings != null)
-            Settings = settings;
-    }
-
-    public static void Save()
+    public static async Task Save()
     {
         if (Design.IsDesignMode)
             return;
 
-        _settingsFile.Save(Settings);
-    }
-
-    public static async Task SaveAsync()
-    {
-        if (Design.IsDesignMode)
-            return;
-
-        await _settingsFile.SaveAsync(Settings);
+        await _settingsFile.Save(Settings);
     }
 
     public string TriggerKey { get; set; } = "LeftCtrl";

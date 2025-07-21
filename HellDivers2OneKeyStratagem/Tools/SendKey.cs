@@ -2,6 +2,8 @@
 using Avalonia.Input;
 using Avalonia.Win32.Input;
 
+namespace HellDivers2OneKeyStratagem;
+
 public static class SendKey
 {
     // keybd_event

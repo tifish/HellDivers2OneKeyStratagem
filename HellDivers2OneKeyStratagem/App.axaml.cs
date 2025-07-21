@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Jeek.Avalonia.Localization;
+using JeekTools;
 
 namespace HellDivers2OneKeyStratagem;
 
@@ -15,7 +16,7 @@ public class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        AppSettings.Load();
+        AsyncHelper.RunSync(AppSettings.Load);
         if (Settings.Locale == "")
             Settings.Locale = CultureInfo.CurrentCulture.Name;
 

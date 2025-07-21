@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using JeekTools;
 
 namespace HellDivers2OneKeyStratagem;
 

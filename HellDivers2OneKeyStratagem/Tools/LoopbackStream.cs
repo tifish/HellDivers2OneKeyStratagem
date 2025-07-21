@@ -1,5 +1,7 @@
 ﻿using System.Collections.Concurrent;
 
+namespace HellDivers2OneKeyStratagem;
+
 public class LoopbackStream
 {
     public Stream ReaderStream { get; }
