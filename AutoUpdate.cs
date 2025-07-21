@@ -1,7 +1,4 @@
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Windows;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 
@@ -11,7 +8,7 @@ public static class AutoUpdate
 {
     public static async Task<bool> HasUpdate()
     {
-        var headers = await HttpHelper.GetHeaders(Settings.UpdateUrl);
+        var headers = await HttpHelper.GetHeaders(AppSettings.UpdateUrl);
 
         var updateTime = headers?.LastModified;
         if (updateTime == null)
@@ -28,7 +25,7 @@ public static class AutoUpdate
         {
             FileName = "powershell.exe",
             Arguments = $"""
-                        -ExecutionPolicy Bypass -File "AutoUpdate.ps1" "{Settings.UpdateUrl}"
+                        -ExecutionPolicy Bypass -File "AutoUpdate.ps1" "{AppSettings.UpdateUrl}"
                         """,
             WorkingDirectory = AppSettings.ExeDirectory,
             UseShellExecute = true,

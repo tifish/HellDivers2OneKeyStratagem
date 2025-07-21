@@ -73,7 +73,7 @@ public class AppSettings
     public double VoiceConfidence { get; set; } = 0.6f;
     public string WakeUpWord { get; set; } = "";
     public bool EnableHotkeyTrigger { get; set; } = true;
-    public string UpdateUrl { get; set; } = "https://github.com/tifish/HellDivers2OneKeyStratagem/releases/download/latest_release/HellDivers2OneKeyStratagem.7z";
+    public const string UpdateUrl = "https://github.com/tifish/HellDivers2OneKeyStratagem/releases/download/latest_release/HellDivers2OneKeyStratagem.7z";
 }
 
 public static class SettingsContainer

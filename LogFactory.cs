@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
 using ZLogger;
 using ZLogger.Providers;

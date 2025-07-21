@@ -43,8 +43,14 @@
                         <local:MyHorizontalBlock>
                             <Label Content="{l:Localize UILanguage}" />
                             <ComboBox ItemsSource="{Binding Locales}" SelectedItem="{Binding CurrentLocale}" />
+
                             <Label Content="{l:Localize SpeechLanguage}" />
                             <ComboBox ItemsSource="{Binding SpeechLocales}" SelectedItem="{Binding CurrentSpeechLocale}" />
+
+                            <Button
+                                Command="{Binding CheckForUpdateCommand}"
+                                Content="{l:Localize CheckForUpdate}"
+                                IsEnabled="{Binding !IsCheckingForUpdate}" />
                         </local:MyHorizontalBlock>
 
                         <local:MyHorizontalBlock>
@@ -66,15 +72,6 @@
                             <CheckBox Content="{l:Localize PlayNameWhenCalling}" IsChecked="{Binding PlayVoiceWhenCall}" />
                             <ComboBox ItemsSource="{Binding VoiceNames}" SelectedItem="{Binding CurrentVoiceName}" />
                             <Button Command="{Binding RefreshVoiceNamesCommand}" Content="{l:Localize Refresh}" />
-                        </local:MyHorizontalBlock>
-
-                        <local:MyHorizontalBlock>
-                            <Label Content="{l:Localize UpdateUrl}" />
-                            <TextBox Text="{Binding UpdateUrl}" />
-                            <Button
-                                Command="{Binding CheckForUpdateCommand}"
-                                Content="{l:Localize CheckForUpdate}"
-                                IsEnabled="{Binding !IsCheckingForUpdate}" />
                         </local:MyHorizontalBlock>
 
                     </StackPanel>

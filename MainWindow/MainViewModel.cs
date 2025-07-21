@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Threading;
@@ -576,8 +575,6 @@ public partial class MainViewModel : ObservableObject
         EnableHotkeyTrigger = Settings.EnableHotkeyTrigger;
 
         EnableSetKeyBySpeech = Settings.EnableSetKeyBySpeech;
-
-        UpdateUrl = Settings.UpdateUrl;
     }
 
     private string GetKeyStratagemString()
@@ -833,19 +830,6 @@ public partial class MainViewModel : ObservableObject
         Settings.VoiceName = CurrentVoiceName;
         LoadVoiceNames();
     }
-
-    [ObservableProperty]
-    public partial string UpdateUrl { get; set; } = "";
-
-    partial void OnUpdateUrlChanged(string value)
-    {
-        if (IsLoading)
-            return;
-
-        Settings.UpdateUrl = value;
-        SettingsChanged = true;
-    }
-
 
     [ObservableProperty]
     public partial bool IsCheckingForUpdate { get; set; }
