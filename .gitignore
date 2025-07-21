@@ -1,8 +1,8 @@
 /.idea
 /.vs
 /.vscode
-/obj
-/*.user
+obj
+*.user
 /bin/HellDivers2OneKeyStratagem.*
 /bin/*.dll
 /bin/Settings
