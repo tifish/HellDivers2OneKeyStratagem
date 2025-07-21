@@ -1,45 +1,45 @@
 name: Build and Release
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
 
 permissions:
-  contents: write # This grants write permissions to the contents scope
+    contents: write # This grants write permissions to the contents scope
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  RELEASE_TAG: "latest_release"
-  PROJECT_NAME: "HellDivers2OneKeyStratagem"
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    RELEASE_TAG: "latest_release"
+    PROJECT_NAME: "Helldivers2OneKeyStratagem"
 
 jobs:
-  build_and_release:
-    runs-on: windows-latest
+    build_and_release:
+        runs-on: windows-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          submodules: true
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  submodules: true
 
-      - name: Build
-        run: dotnet build --configuration Release ${{ env.PROJECT_NAME }}.sln
+            - name: Build
+              run: dotnet build --configuration Release ${{ env.PROJECT_NAME }}.sln
 
-      - name: Pack files
-        run: |
-          cd bin
-          7Zip\7za.exe a -r ..\${{ env.PROJECT_NAME }}.7z *
-          cd ..
+            - name: Pack files
+              run: |
+                  cd bin
+                  7Zip\7za.exe a -r ..\${{ env.PROJECT_NAME }}.7z *
+                  cd ..
 
-      - name: Delete release and tag
-        run: gh release delete ${{ env.RELEASE_TAG }} --cleanup-tag -y
-        continue-on-error: true
+            - name: Delete release and tag
+              run: gh release delete ${{ env.RELEASE_TAG }} --cleanup-tag -y
+              continue-on-error: true
 
-      - name: Create a new tag and release
-        run: gh release create ${{ env.RELEASE_TAG }} --generate-notes
+            - name: Create a new tag and release
+              run: gh release create ${{ env.RELEASE_TAG }} --generate-notes
 
-      - name: Upload pack
-        run: gh release upload ${{ env.RELEASE_TAG }} ${{ env.PROJECT_NAME }}.7z --clobber
+            - name: Upload pack
+              run: gh release upload ${{ env.RELEASE_TAG }} ${{ env.PROJECT_NAME }}.7z --clobber

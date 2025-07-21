@@ -1,0 +1,39 @@
+<Window
+    x:Class="Helldivers2OneKeyStratagem.EditAliasesDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:local="clr-namespace:Helldivers2OneKeyStratagem"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="{l:Localize EditCustomName}"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    CanResize="False"
+    SizeToContent="WidthAndHeight"
+    TransparencyLevelHint="AcrylicBlur"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+
+    <StackPanel Margin="20,10,20,10">
+        <local:MyHorizontalBlock>
+            <Label Content="{l:Localize DefaultNames}" />
+            <TextBox Name="SystemAliasesTextBox" Width="400" />
+        </local:MyHorizontalBlock>
+        <local:MyHorizontalBlock>
+            <Label Content="{l:Localize CustomNames}" />
+            <TextBox Name="UserAliasesTextBox" Width="400" />
+        </local:MyHorizontalBlock>
+        <local:MyHorizontalStackPanel HorizontalAlignment="Center">
+            <Button
+                Name="OkButton"
+                Click="OkButton_OnClick"
+                Content="{l:Localize OK}" />
+            <Button
+                Name="CancelButton"
+                Click="CancelButton_OnClick"
+                Content="{l:Localize Cancel}" />
+        </local:MyHorizontalStackPanel>
+    </StackPanel>
+
+</Window>

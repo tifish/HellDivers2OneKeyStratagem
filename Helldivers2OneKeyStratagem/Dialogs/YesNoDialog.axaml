@@ -1,0 +1,32 @@
+﻿<Window
+    x:Class="Helldivers2OneKeyStratagem.YesNoDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:local="clr-namespace:Helldivers2OneKeyStratagem"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    CanResize="False"
+    SizeToContent="WidthAndHeight"
+    TransparencyLevelHint="AcrylicBlur"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+
+    <StackPanel Margin="20,10,20,10">
+        <local:MyHorizontalBlock>
+            <Label Name="MessageLabel" />
+        </local:MyHorizontalBlock>
+        <local:MyHorizontalStackPanel HorizontalAlignment="Center">
+            <Button
+                Name="YesButton"
+                Click="YesButton_OnClick"
+                Content="{l:Localize Yes}" />
+            <Button
+                Name="NoButton"
+                Click="NoButton_OnClick"
+                Content="{l:Localize No}" />
+        </local:MyHorizontalStackPanel>
+    </StackPanel>
+</Window>

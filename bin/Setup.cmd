@@ -5,6 +5,6 @@ setlocal
 
 powershell.exe -ExecutionPolicy Bypass -File "%~dpn0.ps1" 8 WindowsDesktop
 
-start "" "%~dp0HellDivers2OneKeyStratagem.exe"
+start "" "%~dp0Helldivers2OneKeyStratagem.exe"
 
 endlocal

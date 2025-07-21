@@ -1,6 +1,6 @@
-# HellDivers2OneKeyStratagem
+# Helldivers 2 One Key Stratagem
 
-A HellDivers 2 game helper. You can call stragagems with voice or hotkeys.
+A Helldivers 2 game helper. You can call stragagems with voice or hotkeys.
 
 ## 中文
 

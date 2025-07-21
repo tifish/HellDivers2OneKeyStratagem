@@ -1,4 +1,4 @@
-﻿$appName = "HellDivers2OneKeyStratagem"
+﻿$appName = "Helldivers2OneKeyStratagem"
 
 # Wait for .exe to exit
 $process = Get-Process -Name $appName -ErrorAction SilentlyContinue

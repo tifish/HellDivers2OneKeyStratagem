@@ -1,0 +1,28 @@
+﻿<Window
+    x:Class="Helldivers2OneKeyStratagem.CalibrateVoiceDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:l="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:local="clr-namespace:Helldivers2OneKeyStratagem"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="{l:Localize CalibrateRecognition}"
+    x:DataType="local:CalibrateVoiceDialog"
+    CanResize="False"
+    SizeToContent="WidthAndHeight"
+    TransparencyLevelHint="AcrylicBlur"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+
+    <StackPanel Margin="20,10,20,10">
+        <local:MyHorizontalStackPanel>
+            <Label
+                Name="MessageLabel"
+                Content="飞鹰空袭"
+                FontSize="32" />
+        </local:MyHorizontalStackPanel>
+        <local:MyHorizontalStackPanel HorizontalAlignment="Center">
+            <Button Click="CloseButton_OnClick" Content="{l:Localize Close}" />
+        </local:MyHorizontalStackPanel>
+    </StackPanel>
+</Window>

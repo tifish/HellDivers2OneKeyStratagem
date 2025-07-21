@@ -1,0 +1,29 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Helldivers2OneKeyStratagem">
+
+    <Design.PreviewWith>
+        <controls:HotkeyStratagemPanel />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|HotkeyStratagemPanel">
+        <!--  Set Defaults  -->
+        <Setter Property="Template">
+            <ControlTemplate>
+
+                <Border
+                    Name="Border"
+                    Padding="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="1">
+                    <StackPanel MinWidth="64" Background="Transparent">
+                        <Label HorizontalAlignment="Center" Content="{TemplateBinding HotkeyName}" />
+                        <controls:StratagemControl Name="StratagemControl" />
+                    </StackPanel>
+                </Border>
+
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
