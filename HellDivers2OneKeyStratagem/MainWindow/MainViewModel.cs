@@ -106,6 +106,18 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
+    public partial bool DisableMirrorDownload { get; set; }
+
+    partial void OnDisableMirrorDownloadChanged(bool value)
+    {
+        if (IsLoading)
+            return;
+
+        Settings.DisableMirrorDownload = value;
+        SettingsChanged = true;
+    }
+
+    [ObservableProperty]
     public partial ObservableCollection<string> TriggerKeys { get; set; } = ["LeftCtrl", "LeftAlt", "Q"];
 
     [ObservableProperty]
@@ -207,6 +219,11 @@ public partial class MainViewModel : ObservableObject
         }
 
         Dispatcher.UIThread.Post(_mainWindow.AddWindowHeightAndCenterWindow);
+        Dispatcher.UIThread.Post(async () =>
+        {
+            if (await AutoUpdate.HasUpdate())
+                await AutoUpdate.Update(false);
+        });
     }
 
     private bool _isClosing;
@@ -218,6 +235,11 @@ public partial class MainViewModel : ObservableObject
             return;
         _isClosing = true;
 
+        await ExitApplication();
+    }
+
+    public async Task ExitApplication()
+    {
         await CheckAndSaveSettings();
 
         // Kill the current process to ensure it can be forcibly closed to avoid the situation where it cannot be exited
@@ -576,6 +598,8 @@ public partial class MainViewModel : ObservableObject
         EnableHotkeyTrigger = Settings.EnableHotkeyTrigger;
 
         EnableSetKeyBySpeech = Settings.EnableSetKeyBySpeech;
+
+        DisableMirrorDownload = Settings.DisableMirrorDownload;
     }
 
     private string GetKeyStratagemString()
@@ -832,35 +856,23 @@ public partial class MainViewModel : ObservableObject
         LoadVoiceNames();
     }
 
-    [ObservableProperty]
-    public partial bool IsCheckingForUpdate { get; set; }
-
     [RelayCommand]
     private async Task CheckForUpdate()
     {
-        IsCheckingForUpdate = true;
-
-        try
+        if (await AutoUpdate.HasUpdate())
         {
-            if (await AutoUpdate.HasUpdate())
-            {
-                if (await new YesNoDialog(
-                            Localizer.Get("Info"),
-                            Localizer.Get("NewVersionDetectedWantUpdate"))
-                        .ShowDialog<bool>(_mainWindow))
-                    AutoUpdate.Update();
-            }
-            else
-            {
-                await new MessageDialog(
+            if (await new YesNoDialog(
                         Localizer.Get("Info"),
-                        Localizer.Get("YouHaveTheLatestVersion"))
-                    .ShowDialog<bool>(_mainWindow);
-            }
+                        Localizer.Get("NewVersionDetectedWantUpdate"))
+                    .ShowDialog<bool>(_mainWindow))
+                await AutoUpdate.Update(false);
         }
-        finally
+        else
         {
-            IsCheckingForUpdate = false;
+            await new MessageDialog(
+                    Localizer.Get("Info"),
+                    Localizer.Get("YouHaveTheLatestVersion"))
+                .ShowDialog<bool>(_mainWindow);
         }
     }
 

@@ -1,40 +1,76 @@
 using System.Diagnostics;
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using JeekTools;
 
 namespace HellDivers2OneKeyStratagem;
 
 public static class AutoUpdate
 {
+    public static string DownloadUrl { get; private set; } = "";
+    public static DateTime? RemoteTime { get; private set; } = null;
+    public static DateTime? LocalTime { get; private set; } = null;
+
     public static async Task<bool> HasUpdate()
     {
-        var headers = await HttpHelper.GetHeaders(AppSettings.UpdateUrl);
+        try
+        {
+            DownloadUrl = "";
+            RemoteTime = null;
+            LocalTime = null;
 
-        var updateTime = headers?.LastModified;
-        if (updateTime == null)
+            if (Settings.DisableMirrorDownload)
+            {
+                DownloadUrl = AppSettings.UpdateUrl;
+            }
+            else
+            {
+                // Get the fastest mirror
+                var mirror = await GitHubMirrors.GetFastestMirror(AppSettings.UpdateUrl);
+                if (mirror == "")
+                    return false;
+
+                DownloadUrl = mirror;
+            }
+
+            // Try to get the headers from the mirror
+            var headers = await HttpHelper.GetHeaders(DownloadUrl);
+            if (headers == null)
+                return false;
+
+            RemoteTime = headers.LastModified;
+
+            LocalTime = File.GetLastWriteTime(AppSettings.ExePath);
+
+            return RemoteTime - LocalTime > TimeSpan.FromMinutes(1);
+        }
+        catch
+        {
             return false;
-
-        var dllTime = File.GetLastWriteTime(AppSettings.ExePath);
-
-        return updateTime - dllTime > TimeSpan.FromMinutes(1);
+        }
     }
 
-    public static bool Update()
+    public static async Task<bool> Update(bool hideMainWindow)
     {
-        Process.Start(new ProcessStartInfo
+        try
         {
-            FileName = "powershell.exe",
-            Arguments = $"""
-                        -ExecutionPolicy Bypass -File "AutoUpdate.ps1" "{AppSettings.UpdateUrl}"
+            if (DownloadUrl == "")
+                return false;
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "powershell.exe",
+                Arguments = $"""
+                        -ExecutionPolicy Bypass -File "AutoUpdate.ps1" "{DownloadUrl}" {(hideMainWindow ? "/hide" : "")}
                         """,
-            WorkingDirectory = AppSettings.ExeDirectory,
-            UseShellExecute = true,
-        });
+                WorkingDirectory = AppSettings.ExeDirectory,
+                UseShellExecute = true,
+            });
 
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
-            lifetime.MainWindow?.Close();
-
-        return true;
+            await MainViewModel.Instance.ExitApplication();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

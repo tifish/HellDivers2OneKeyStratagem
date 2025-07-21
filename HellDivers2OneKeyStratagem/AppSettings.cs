@@ -60,6 +60,7 @@ public class AppSettings
     public string WakeUpWord { get; set; } = "";
     public bool EnableHotkeyTrigger { get; set; } = true;
     public const string UpdateUrl = "https://github.com/tifish/HellDivers2OneKeyStratagem/releases/download/latest_release/HellDivers2OneKeyStratagem.7z";
+    public bool DisableMirrorDownload { get; set; } = false;
 }
 
 public static class SettingsContainer
