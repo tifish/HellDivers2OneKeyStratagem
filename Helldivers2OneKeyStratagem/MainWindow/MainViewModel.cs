@@ -281,7 +281,7 @@ public partial class MainViewModel : ObservableObject
         return true;
     }
 
-    private const string Helldivers2Title = "Helldivers™ 2";
+    private const string Helldivers2Title = "HELLDIVERS™ 2";
 
     private async void OnWindowTitleChanged(object? sender, WindowTitleChangedEventArgs e)
     {
