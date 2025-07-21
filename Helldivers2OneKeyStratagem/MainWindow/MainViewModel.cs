@@ -222,7 +222,15 @@ public partial class MainViewModel : ObservableObject
         Dispatcher.UIThread.Post(async () =>
         {
             if (await AutoUpdate.HasUpdate())
-                await AutoUpdate.Update(false);
+            {
+                if (await new YesNoDialog(
+                                    Localizer.Get("Info"),
+                                    Localizer.Get("NewVersionDetectedWantUpdate"))
+                                .ShowDialog<bool>(_mainWindow))
+                {
+                    await AutoUpdate.Update(false);
+                }
+            }
         });
     }
 
